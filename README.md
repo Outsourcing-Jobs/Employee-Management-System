@@ -146,6 +146,7 @@ Prerequisites:
 ### steps : 
 
 #### 1 Clone the repository : 
+https://github.com/HaiBarca03/Employee-Management-System.git
 
 ```
 

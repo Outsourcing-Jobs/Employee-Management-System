@@ -6,9 +6,16 @@ on:
       - prod
     paths:
       - 'server/**'
+  pull_request:
+    branches:
+      - prod
+    types: [closed]
+    paths:
+      - 'server/**'
 
 jobs:
   deploy-process:
+    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.merged == true)
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -22,30 +29,12 @@ jobs:
             --header 'authorization: Bearer ${{ secrets.RENDER_API_KEY }}' \
             --header 'content-type: application/json' \
             --data '[
-              {
-                "key": "CLIENT_URL",
-                "value": "${{ secrets.CLIENT_URL }}"
-              },
-              {
-                "key": "MAILTRAP_TOKEN",
-                "value": "${{ secrets.MAILTRAP_TOKEN }}"
-              },
-              {
-                "key": "JWT_SECRET",
-                "value": "${{ secrets.JWT_SECRET }}"
-              },
-              {
-                "key": "MONGODB_URI",
-                "value": "${{ secrets.MONGODB_URI }}"
-              },
-              {
-                "key": "PORT",
-                "value": "10000"
-              },
-              {
-                "key": "NODE_ENV",
-                "value": "production"
-              }
+              { "key": "CLIENT_URL", "value": "${{ secrets.CLIENT_URL }}" },
+              { "key": "MAILTRAP_TOKEN", "value": "${{ secrets.MAILTRAP_TOKEN }}" },
+              { "key": "JWT_SECRET", "value": "${{ secrets.JWT_SECRET }}" },
+              { "key": "MONGODB_URI", "value": "${{ secrets.MONGODB_URI }}" },
+              { "key": "PORT", "value": "10000" },
+              { "key": "NODE_ENV", "value": "production" }
             ]'
 
       - name: Trigger Render Deploy

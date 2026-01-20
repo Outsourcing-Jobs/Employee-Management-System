@@ -66,6 +66,10 @@ app.use("/api/v1/corporate-calendar", CorporateCalendarRouter)
 
 app.use("/api/v1/balance", BalanceRouter)
 
+app.get('/ping', (req, res) => {
+  res.status(200).send('pong');
+});
+
 app.listen(process.env.PORT, async () => {
   await ConnectDB()
   console.log(`Server running on http://localhost:${process.env.PORT}`)

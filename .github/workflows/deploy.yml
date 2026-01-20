@@ -3,7 +3,9 @@ name: DevOps Deployment to Render
 on:
   push:
     branches:
-      - prods
+      - prod
+  paths:
+      - 'server/**'
 
 jobs:
   security-check:

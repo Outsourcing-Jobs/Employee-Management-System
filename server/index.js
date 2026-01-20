@@ -67,7 +67,11 @@ app.use("/api/v1/corporate-calendar", CorporateCalendarRouter)
 app.use("/api/v1/balance", BalanceRouter)
 
 app.get('/ping', (req, res) => {
-  res.status(200).send('pong');
+  res.status(200).json({
+    message: 'pong',
+    timestamp: new Date().toISOString(),
+    status: 'Server is running smoothly on Render!'
+  });
 });
 
 app.listen(process.env.PORT, async () => {

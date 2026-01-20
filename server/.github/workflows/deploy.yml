@@ -1,0 +1,69 @@
+name: DevOps Deployment to Render
+
+on:
+  push:
+    branches:
+      - prods
+
+jobs:
+  security-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check for secrets (Gitleaks)
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  deploy-process:
+    needs: security-check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Sync Environment Variables to Render
+        run: |
+          curl --request PATCH \
+            --url https://api.render.com/v1/services/${{ secrets.RENDER_SERVICE_ID }}/env-vars \
+            --header 'accept: application/json' \
+            --header 'authorization: Bearer ${{ secrets.RENDER_API_KEY }}' \
+            --header 'content-type: application/json' \
+            --data '[
+              {
+                "key": "CLIENT_URL",
+                "value": "${{ secrets.CLIENT_URL }}"
+              },
+              {
+                "key": "MAILTRAP_TOKEN",
+                "value": "${{ secrets.MAILTRAP_TOKEN }}"
+              },
+              {
+                "key": "JWT_SECRET",
+                "value": "${{ secrets.JWT_SECRET }}"
+              },
+              {
+                "key": "MONGODB_URI",
+                "value": "${{ secrets.MONGODB_URI }}"
+              },
+              {
+                "key": "PORT",
+                "value": "10000"
+              },
+              {
+                "key": "NODE_ENV",
+                "value": "production"
+              }
+            ]'
+
+      - name: Trigger Render Deploy
+        run: |
+          curl --request POST \
+            --url https://api.render.com/v1/services/${{ secrets.RENDER_SERVICE_ID }}/deploys \
+            --header 'accept: application/json' \
+            --header 'authorization: Bearer ${{ secrets.RENDER_API_KEY }}' \
+            --header 'content-type: application/json'

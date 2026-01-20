@@ -10,13 +10,13 @@ export const HandleCreateNotice = async (req, res) => {
         if (audience === "Department-Specific") {
 
             if (!title || !content || !audience || !departmentID || !HRID) {
-                return res.status(404).json({ success: false, message: "All fields must be provided" })
+                return res.status(404).json({ success: false, message: "Vui lòng cung cấp đầy đủ tất cả các trường thông tin" })
             }
 
             const department = await Department.findById(departmentID)
 
             if (!department) {
-                return res.status(404).json({ success: false, message: "Department not found" })
+                return res.status(404).json({ success: false, message: "Không tìm thấy phòng ban" })
             }
 
             const checknotice = await Notice.findOne({
@@ -28,7 +28,7 @@ export const HandleCreateNotice = async (req, res) => {
             })
 
             if (checknotice) {
-                return res.status(400).json({ success: false, message: "Specific Notice Record Already Exists" })
+                return res.status(400).json({ success: false, message: "Thông báo cụ thể này đã tồn tại" })
             }
 
             const notice = await Notice.create({
@@ -43,18 +43,18 @@ export const HandleCreateNotice = async (req, res) => {
             department.notice.push(notice._id)
             await department.save()
 
-            return res.status(200).json({ success: true, message: "Specific Notice Created Successfully", data: notice })
+            return res.status(200).json({ success: true, message: "Tạo thông báo cho phòng ban thành công", data: notice })
         }
 
         if (audience === "Employee-Specific") {
             if (!title || !content || !audience || !employeeID || !HRID) {
-                return res.status(404).json({ success: false, message: "All fields must be provided" })
+                return res.status(404).json({ success: false, message: "Vui lòng cung cấp đầy đủ tất cả các trường thông tin" })
             }
 
             const employee = await Employee.findById(employeeID)
 
             if (!employee) {
-                return res.status(404).json({ success: false, message: "Employee not found" })
+                return res.status(404).json({ success: false, message: "Không tìm thấy nhân viên" })
             }
 
             const checknotice = await Notice.findOne({
@@ -66,7 +66,7 @@ export const HandleCreateNotice = async (req, res) => {
             })
 
             if (checknotice) {
-                return res.status(400).json({ success: false, message: "Specific Notice Record Already Exists" })
+                return res.status(400).json({ success: false, message: "Thông báo cụ thể này đã tồn tại" })
             }
 
             const notice = await Notice.create({
@@ -81,12 +81,12 @@ export const HandleCreateNotice = async (req, res) => {
             employee.notice.push(notice._id)
             await employee.save()
 
-            return res.status(200).json({ success: true, message: "Specific Notice Created Successfully", data: notice })
+            return res.status(200).json({ success: true, message: "Tạo thông báo cho nhân viên thành công", data: notice })
         }
 
     }
     catch (error) {
-        return res.status(500).json({ success: false, message: "Internal Server Error", error: error })
+        return res.status(500).json({ success: false, message: "Lỗi máy chủ nội bộ", error: error })
     }
 }
 
@@ -107,10 +107,10 @@ export const HandleAllNotice = async (req, res) => {
             }
         }
 
-        return res.status(200).json({ success: true, message: "All notice records retrieved successfully", data: data })
+        return res.status(200).json({ success: true, message: "Lấy danh sách thông báo thành công", data: data })
 
     } catch (error) {
-        return res.status(500).json({ success: false, message: "Internal Server Error", error: error })
+        return res.status(500).json({ success: false, message: "Lỗi máy chủ nội bộ", error: error })
     }
 }
 
@@ -121,14 +121,14 @@ export const HandleNotice = async (req, res) => {
         const notice = await Notice.findOne({ _id: noticeID, organizationID: req.ORGID })
 
         if (!notice) {
-            return res.status(404).json({ success: false, message: "Notice not found" })
+            return res.status(404).json({ success: false, message: "Không tìm thấy thông báo" })
         }
 
         await notice.populate("employee department createdby", "firstname lastname department name description")
-        return res.status(200).json({ success: true, message: "Notice record retrieved successfully", data: notice })
+        return res.status(200).json({ success: true, message: "Lấy chi tiết thông báo thành công", data: notice })
 
     } catch (error) {
-        return res.status(500).json({ success: false, message: "Internal Server Error", error: error })
+        return res.status(500).json({ success: false, message: "Lỗi máy chủ nội bộ", error: error })
     }
 }
 
@@ -139,13 +139,13 @@ export const HandleUpdateNotice = async (req, res) => {
         const notice = await Notice.findByIdAndUpdate(noticeID, UpdatedData, { new: true })
 
         if (!notice) {
-            return res.status(404).json({ success: false, message: "Notice not found" })
+            return res.status(404).json({ success: false, message: "Không tìm thấy thông báo" })
         }
 
-        return res.status(200).json({ success: true, message: "Salary record updated successfully", data: notice })
+        return res.status(200).json({ success: true, message: "Cập nhật thông báo thành công", data: notice })
 
     } catch (error) {
-        return res.status(500).json({ success: false, message: "Internal Server Error", error: error })
+        return res.status(500).json({ success: false, message: "Lỗi máy chủ nội bộ", error: error })
     }
 }
 
@@ -156,29 +156,31 @@ export const HandleDeleteNotice = async (req, res) => {
         const notice = await Notice.findById(noticeID)
 
         if (!notice) {
-            return res.status(404).json({ success: false, message: "Notice Record Not Found" })
+            return res.status(404).json({ success: false, message: "Không tìm thấy bản ghi thông báo" })
         }
 
         if (notice.employee) {
             const employee = await Employee.findById(notice.employee)
-            employee.notice.splice(employee.notice.indexOf(noticeID), 1)
-
-            await employee.save()
+            if (employee) {
+                employee.notice.splice(employee.notice.indexOf(noticeID), 1)
+                await employee.save()
+            }
             await notice.deleteOne()
 
-            return res.status(200).json({ success: true, message: "Notice deleted successfully" })
+            return res.status(200).json({ success: true, message: "Xóa thông báo thành công" })
         }
 
         if (notice.department) {
             const department = await Department.findById(notice.department)
-            department.notice.splice(department.notice.indexOf(noticeID), 1)
-
-            await department.save()
+            if (department) {
+                department.notice.splice(department.notice.indexOf(noticeID), 1)
+                await department.save()
+            }
             await notice.deleteOne()
 
-            return res.status(200).json({ success: true, message: "Notice deleted successfully" })
+            return res.status(200).json({ success: true, message: "Xóa thông báo thành công" })
         }
     } catch (error) {
-        return res.status(500).json({ success: false, message: "internal server error", error: error })
+        return res.status(500).json({ success: false, message: "Lỗi máy chủ nội bộ", error: error })
     }
 }

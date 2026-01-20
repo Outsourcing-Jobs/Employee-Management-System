@@ -7,19 +7,19 @@ export const HandleCreateGenerateRequest = async (req, res) => {
         const { requesttitle, requestconent, employeeID } = req.body
 
         if (!requesttitle || !requestconent || !employeeID) {
-            return res.status(400).json({ success: false, message: "All fields are required" })
+            return res.status(400).json({ success: false, message: "Tất cả các trường thông tin là bắt buộc" })
         }
 
         const employee = await Employee.findOne({ _id: employeeID, organizationID: req.ORGID })
 
         if (!employee) {
-            return res.status(404).json({ success: false, message: "Employee not found" })
+            return res.status(404).json({ success: false, message: "Không tìm thấy nhân viên" })
         }
 
         const department = await Department.findOne({ _id: employee.department, organizationID: req.ORGID })
 
         if (!department) {
-            return res.status(404).json({ success: false, message: "Department not found" })
+            return res.status(404).json({ success: false, message: "Không tìm thấy phòng ban" })
         }
 
         const generaterequest = await GenerateRequest.findOne({
@@ -30,7 +30,7 @@ export const HandleCreateGenerateRequest = async (req, res) => {
         })
 
         if (generaterequest) {
-            return res.status(409).json({ success: false, message: "Request already exists" })
+            return res.status(409).json({ success: false, message: "Yêu cầu này đã tồn tại" })
         }
 
         const newGenerateRequest = await GenerateRequest.create({
@@ -44,18 +44,18 @@ export const HandleCreateGenerateRequest = async (req, res) => {
         employee.generaterequest.push(newGenerateRequest._id)
         await employee.save()
 
-        return res.status(200).json({ success: true, message: "Request Generated Successfully", data: newGenerateRequest })
+        return res.status(200).json({ success: true, message: "Gửi yêu cầu thành công", data: newGenerateRequest })
     } catch (error) {
-        return res.status(500).json({ success: false, message: "Internal Server Error", error: error })
+        return res.status(500).json({ success: false, message: "Lỗi máy chủ nội bộ", error: error })
     }
 }
 
 export const HandleAllGenerateRequest = async (req, res) => {
     try {
         const requestes = await GenerateRequest.find({ organizationID: req.ORGID }).populate("employee department", "firstname lastname name")
-        return res.status(200).json({ success: true, message: "All requestes retrieved successfully", data: requestes })
+        return res.status(200).json({ success: true, message: "Lấy danh sách yêu cầu thành công", data: requestes })
     } catch (error) {
-        return res.status(500).json({ success: false, message: "Internal Server Error", error: error })
+        return res.status(500).json({ success: false, message: "Lỗi máy chủ nội bộ", error: error })
     }
 }
 
@@ -64,12 +64,12 @@ export const HandleGenerateRequest = async (req, res) => {
         const { requestID } = req.params
         const request = await GenerateRequest.findOne({ _id: requestID, organizationID: req.ORGID }).populate("employee department", "firstname lastname name")
         if (!request) {
-            return res.status(404).json({ success: false, message: "Request not found" })
+            return res.status(404).json({ success: false, message: "Không tìm thấy yêu cầu" })
         }
-        return res.status(200).json({ success: true, message: "Request retrieved successfully", data: request })
+        return res.status(200).json({ success: true, message: "Lấy thông tin yêu cầu thành công", data: request })
     }
     catch (error) {
-        return res.status(500).json({ success: false, message: "Internal Server Error", error: error })
+        return res.status(500).json({ success: false, message: "Lỗi máy chủ nội bộ", error: error })
     }
 }
 
@@ -79,12 +79,12 @@ export const HandleUpdateRequestByEmployee = async (req, res) => {
         const request = await GenerateRequest.findByIdAndUpdate(requestID, { requesttitle, requestconent }, { new: true })
 
         if (!request) {
-            return res.status(404).json({ success: false, message: "Request not found" })
+            return res.status(404).json({ success: false, message: "Không tìm thấy yêu cầu để cập nhật" })
         }
 
-        return res.status(200).json({ success: true, message: "Request updated successfully", data: request })
+        return res.status(200).json({ success: true, message: "Cập nhật yêu cầu thành công", data: request })
     } catch (error) {
-        return res.status(500).json({ success: false, message: "Internal Server Error", error: error })
+        return res.status(500).json({ success: false, message: "Lỗi máy chủ nội bộ", error: error })
     }
 }
 
@@ -95,12 +95,12 @@ export const HandleUpdateRequestByHR = async (req, res) => {
         const request = await GenerateRequest.findByIdAndUpdate(requestID, { approvedby, status }, { new: true })
 
         if (!request) {
-            return res.status(404).json({ success: false, message: "Request not found" })
+            return res.status(404).json({ success: false, message: "Không tìm thấy yêu cầu" })
         }
 
-        return res.status(200).json({ success: true, message: "Request updated successfully", data: request })
+        return res.status(200).json({ success: true, message: "Cập nhật trạng thái yêu cầu thành công", data: request })
     } catch (error) {
-        return res.status(500).json({ error: error, success: false, message: "Internal Server Error" })
+        return res.status(500).json({ error: error, success: false, message: "Lỗi máy chủ nội bộ" })
     }
 }
 
@@ -108,12 +108,10 @@ export const HandleUpdateRequestByHR = async (req, res) => {
 export const HandleDeleteRequest = async (req, res) => {
     try {
         const { requestID } = req.params
-        const request = await GenerateRequest.findOne({ _id: requestID, organizationID: req.ORGID }
-
-        )
+        const request = await GenerateRequest.findOne({ _id: requestID, organizationID: req.ORGID })
 
         if (!request) {
-            return res.status(404).json({ success: false, message: "Request not found" })
+            return res.status(404).json({ success: false, message: "Không tìm thấy yêu cầu để xóa" })
         }
 
         const employee = await Employee.findById(request.employee)
@@ -124,8 +122,8 @@ export const HandleDeleteRequest = async (req, res) => {
 
         await request.deleteOne()
 
-        return res.status(200).json({ success: true, message: "Request deleted successfully" })
+        return res.status(200).json({ success: true, message: "Xóa yêu cầu thành công" })
     } catch (error) {
-        return res.status(500).json({ success: false, message: "Internal Server Error", error: error })
+        return res.status(500).json({ success: false, message: "Lỗi máy chủ nội bộ", error: error })
     }
 }

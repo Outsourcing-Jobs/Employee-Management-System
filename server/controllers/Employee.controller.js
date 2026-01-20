@@ -7,7 +7,7 @@ export const HandleAllEmployees = async (req, res) => {
         const employees = await Employee.find({ organizationID: req.ORGID }).populate("department", "name").select("firstname lastname email contactnumber department attendance notice salary leaverequest generaterequest isverified")
         return res.status(200).json({ success: true, data: employees, type: "AllEmployees" })
     } catch (error) {
-        return res.status(500).json({ success: false, error: error, message: "internal server error" })
+        return res.status(500).json({ success: false, error: error, message: "Lỗi máy chủ nội bộ" })
     }
 }
 
@@ -16,7 +16,7 @@ export const HandleAllEmployeesIDS = async (req, res) => {
         const employees = await Employee.find({ organizationID: req.ORGID }).populate("department", "name").select("firstname lastname department")
         return res.status(200).json({ success: true, data: employees, type: "AllEmployeesIDS" })
     } catch (error) {
-        return res.status(500).json({ success: false, error: error, message: "internal server error" })
+        return res.status(500).json({ success: false, error: error, message: "Lỗi máy chủ nội bộ" })
     }
 }
 
@@ -26,13 +26,13 @@ export const HandleEmployeeByHR = async (req, res) => {
         const employee = await Employee.findOne({ _id: employeeId, organizationID: req.ORGID }).select("firstname lastname email contactnumber department attendance notice salary leaverequest generaterequest")
 
         if (!employee) {
-            return res.status(404).json({ success: false, message: "employee not found" })
+            return res.status(404).json({ success: false, message: "Không tìm thấy nhân viên" })
         }
         
         return res.status(200).json({ success: true, data: employee, type: "GetEmployee" })
     }
     catch (error) {
-        return res.status(404).json({ success: false, error: error, message: "employee not found" }) 
+        return res.status(404).json({ success: false, error: error, message: "Không tìm thấy nhân viên" }) 
     }
 }
 
@@ -41,13 +41,13 @@ export const HandleEmployeeByEmployee = async (req, res) => {
         const employee = await Employee.findOne({ _id: req.EMid, organizationID: req.ORGID }).select("firstname lastname email contactnumber department attendance notice salary leaverequest generaterequest")
 
         if (!employee) {
-            return res.status(404).json({ success: false, message: "employee not found" })
+            return res.status(404).json({ success: false, message: "Không tìm thấy nhân viên" })
         }
 
-        return res.json({ success: true, message: "Employee Data Fetched Successfully", data: employee })
+        return res.json({ success: true, message: "Lấy dữ liệu nhân viên thành công", data: employee })
 
     } catch (error) {
-        return res.json({ success: false, message: "Internal Server Error", error: error })
+        return res.json({ success: false, message: "Lỗi máy chủ nội bộ", error: error })
     }
 }
 
@@ -58,14 +58,14 @@ export const HandleEmployeeUpdate = async (req, res) => {
         const checkeemployee = await Employee.findById(employeeId)
 
         if (!checkeemployee) {
-            return res.status(404).json({ success: false, message: "employee not found" })
+            return res.status(404).json({ success: false, message: "Không tìm thấy nhân viên" })
         }
 
         const employee = await Employee.findByIdAndUpdate(employeeId, updatedEmployee, { new: true }).select("firstname lastname email contactnumber department")
-        return res.status(200).json({ success: true, data: employee })
+        return res.status(200).json({ success: true, message: "Cập nhật nhân viên thành công", data: employee })
 
     } catch (error) {
-        return res.status(500).json({ success: false, error: error, message: "internal server error" })
+        return res.status(500).json({ success: false, error: error, message: "Lỗi máy chủ nội bộ" })
     }
 }
 
@@ -75,7 +75,7 @@ export const HandleEmployeeDelete = async (req, res) => {
         const employee = await Employee.findOne({ _id: employeeId })
 
         if (!employee) {
-            return res.status(404).json({ success: false, message: "employee not found" })
+            return res.status(404).json({ success: false, message: "Không tìm thấy nhân viên" })
         }
 
         const department = await Department.findById(employee.department)
@@ -88,7 +88,7 @@ export const HandleEmployeeDelete = async (req, res) => {
         const organization = await Organization.findById(employee.organizationID)
 
         if (!organization) {
-            return res.status(404).json({ success: false, message: "organization not found" })
+            return res.status(404).json({ success: false, message: "Không tìm thấy tổ chức" })
         }
 
         organization.employees.splice(organization.employees.indexOf(employeeId), 1)
@@ -96,8 +96,8 @@ export const HandleEmployeeDelete = async (req, res) => {
         await organization.save()
         await employee.deleteOne()
 
-        return res.status(200).json({ success: true, message: "Employee deleted successfully", type : "EmployeeDelete" })
+        return res.status(200).json({ success: true, message: "Xóa nhân viên thành công", type : "EmployeeDelete" })
     } catch (error) {
-        return res.status(500).json({ success: false, error: error, message: "internal server error" })
+        return res.status(500).json({ success: false, error: error, message: "Lỗi máy chủ nội bộ" })
     }
 }

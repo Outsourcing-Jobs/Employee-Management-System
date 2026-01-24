@@ -54,17 +54,95 @@ const fullSeed = async () => {
         })));
 
         // 3. Nhân viên
+        const ho = [
+            "Nguyễn", "Trần", "Lê", "Phạm", "Hoàng", "Huỳnh",
+            "Phan", "Vũ", "Võ", "Đặng", "Bùi", "Đỗ",
+            "Hồ", "Ngô", "Dương", "Lý", "Đinh", "Trịnh",
+            "Mai", "Tạ", "Châu", "Tôn", "Quách"
+        ];
+
+        const tenNam = [
+            "Anh", "Hải", "Dũng", "Tuấn", "Nam", "Long",
+            "Phong", "Khôi", "Hùng", "Khoa", "Thành",
+            "Tài", "Đạt", "Bảo", "Sơn", "Trung", "Thắng",
+            "Hoàng", "Phúc", "Vinh", "Toàn", "Quân",
+            "Lộc", "Nhật", "Kiên", "Cường", "Thiện",
+            "Hiếu", "Tín", "Khánh", "Hào", "Bình"
+        ];
+
+        const tenNu = [
+            "Hà", "Linh", "Trang", "Mai", "Lan", "Hương",
+            "Ngọc", "Thảo", "Vy", "Yến", "Nhung",
+            "Phương", "Trâm", "Chi", "Quỳnh", "My",
+            "Diệu", "Tuyết", "Ánh", "Bích", "Loan",
+            "Oanh", "Hạnh", "Nhi", "Thư", "An",
+            "Kim", "Huyền", "Thu", "Mỹ", "Tâm"
+        ];
+
+        const tenDemNam = [
+            "Văn", "Hữu", "Đức", "Minh", "Quang",
+            "Công", "Xuân", "Hoàng", "Thanh",
+            "Ngọc", "Phúc", "Gia", "Trung",
+            "Anh", "Khánh", "Tuấn"
+        ];
+
+        const tenDemNu = [
+            "Thị", "Ngọc", "Thanh", "Xuân", "Hoài",
+            "Tuệ", "Kim", "Thu", "Bích", "Mỹ",
+            "Diệu", "Hồng", "Ánh", "Phương",
+            "Mai", "Lan"
+        ];
+
+        function removeVietnameseTones(str) {
+            return str
+                .normalize("NFD")
+                .replace(/[\u0300-\u036f]/g, "")
+                .replace(/đ/g, "d")
+                .replace(/Đ/g, "D")
+                .replace(/\s+/g, "");
+        }
+
+        function randomPhoneVN() {
+            const prefixes = ["03", "05", "07", "08", "09"];
+            const prefix = prefixes[Math.floor(Math.random() * prefixes.length)];
+            return prefix + Math.floor(10000000 + Math.random() * 90000000);
+        }
+
+        const hashedPasswordEmployee = await bcrypt.hash("Employee@123", 10);
         const emps = [];
+
         for (const d of depts) {
             for (let i = 0; i < 5; i++) {
+
+                const isMale = Math.random() < 0.5;
+
+                const firstName = ho[Math.floor(Math.random() * ho.length)];
+                const middleName = isMale
+                    ? tenDemNam[Math.floor(Math.random() * tenDemNam.length)]
+                    : tenDemNu[Math.floor(Math.random() * tenDemNu.length)];
+
+                const lastName = isMale
+                    ? tenNam[Math.floor(Math.random() * tenNam.length)]
+                    : tenNu[Math.floor(Math.random() * tenNu.length)];
+
+                const fullName = `${firstName} ${middleName} ${lastName}`;
+                const emailName = removeVietnameseTones(fullName).toLowerCase();
+
                 emps.push({
-                    firstname: faker.person.firstName(), lastname: faker.person.lastName(),
-                    email: faker.internet.email().toLowerCase(), password: hashedPassword,
-                    contactnumber: faker.phone.number(), role: "Employee",
-                    department: d._id, organizationID: newOrg._id, isverified: true
+                    firstname: firstName,
+                    lastname: `${middleName} ${lastName}`,
+                    gender: isMale, 
+                    email: `${emailName}${i}@fpt.com`,
+                    password: hashedPasswordEmployee,
+                    contactnumber: randomPhoneVN(),
+                    role: "Employee",
+                    department: d._id,
+                    organizationID: newOrg._id,
+                    isverified: true
                 });
             }
         }
+
         const savedEmps = await Employee.insertMany(emps);
 
         // 4. Tuyển dụng & Ứng viên

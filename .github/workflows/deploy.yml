@@ -30,7 +30,9 @@ jobs:
             --header 'content-type: application/json' \
             --data '[
               { "key": "CLIENT_URL", "value": "${{ secrets.CLIENT_URL }}" },
-              { "key": "MAILTRAP_TOKEN", "value": "${{ secrets.MAILTRAP_TOKEN }}" },
+              { "key": "BREVO_SENDER_EMAIL", "value": "${{ secrets.BREVO_SENDER_EMAIL }}" },
+              { "key": "BREVO_SENDER_NAME", "value": "${{ secrets.BREVO_SENDER_NAME }}" },
+              { "key": "BREVO_API_KEY", "value": "${{ secrets.BREVO_API_KEY }}" },
               { "key": "JWT_SECRET", "value": "${{ secrets.JWT_SECRET }}" },
               { "key": "MONGODB_URI", "value": "${{ secrets.MONGODB_URI }}" },
               { "key": "PORT", "value": "10000" },

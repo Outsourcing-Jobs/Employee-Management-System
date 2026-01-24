@@ -1,45 +1,96 @@
+import { Attendance } from "../models/Attendance.model.js"
 import { Employee } from "../models/Employee.model.js"
 import { Salary } from "../models/Salary.model.js"
 
+const calculateWorkingDays = (attendance, month, year) => {
+    let workingDays = 0
+
+    if (!attendance || !attendance.attendancelog) return 0
+
+    attendance.attendancelog.forEach(log => {
+        const logDate = new Date(log.logdate)
+
+        const logMonth = logDate.getMonth() + 1
+        const logYear = logDate.getFullYear()
+
+        if (logMonth === month && logYear === year) {
+            if (log.logstatus === 'Present' || log.logstatus === 'Leave') {
+                workingDays += 1
+            }
+        }
+    })
+
+    return workingDays
+}
+
+
 export const HandleCreateSalary = async (req, res) => {
     try {
-        const { employeeID, basicpay, bonusePT, deductionPT, duedate, currency } = req.body
+        const {
+            employeeID,
+            dailyRate,      
+            bonusePT,
+            deductionPT,
+            duedate,
+            currency,
+            salaryMonth,
+            salaryYear
+        } = req.body
 
-        if (!employeeID || !basicpay || !bonusePT || !deductionPT || !duedate || !currency) {
-            return res.status(400).json({ success: false, message: "Tất cả các trường thông tin là bắt buộc" })
+        if (
+            !employeeID || !dailyRate || !bonusePT ||
+            !deductionPT || !duedate || !currency ||
+            !salaryMonth || !salaryYear
+        ) {
+            return res.status(400).json({
+                success: false,
+                message: "Thiếu thông tin bắt buộc"
+            })
         }
 
         const employee = await Employee.findById(employeeID)
-
         if (!employee) {
             return res.status(404).json({ success: false, message: "Không tìm thấy nhân viên" })
         }
 
-        const bonuses = (basicpay * bonusePT) / 100
-        const deductions = (basicpay * deductionPT) / 100
-        const netpay = (basicpay + bonuses) - deductions
-
-        const salarycheck = await Salary.findOne({
+        // 👉 Lấy attendance
+        const attendance = await Attendance.findOne({
             employee: employeeID,
-            basicpay: basicpay,
-            bonuses: bonuses,
-            deductions: deductions,
-            netpay: netpay,
-            currency: currency,
-            duedate: new Date(duedate),
+            organizationID: req.ORGID
         })
 
-        if (salarycheck) {
-            return res.status(400).json({ success: false, message: "Bản ghi lương cụ thể này đã tồn tại cho nhân viên" })
+        const workingDays = calculateWorkingDays(attendance, salaryMonth, salaryYear)
+
+        const basicpay = workingDays * dailyRate
+        const bonuses = (basicpay * bonusePT) / 100
+        const deductions = (basicpay * deductionPT) / 100
+        const netpay = basicpay + bonuses - deductions
+
+        const existedSalary = await Salary.findOne({
+            employee: employeeID,
+            salaryMonth,
+            salaryYear,
+            organizationID: req.ORGID
+        })
+
+        if (existedSalary) {
+            return res.status(400).json({
+                success: false,
+                message: "Bảng lương tháng này đã tồn tại"
+            })
         }
 
         const salary = await Salary.create({
             employee: employeeID,
-            basicpay: basicpay,
-            bonuses: bonuses,
-            deductions: deductions,
-            netpay: netpay,
-            currency: currency,
+            salaryMonth,
+            salaryYear,
+            workingDays,
+            dailyRate,
+            basicpay,
+            bonuses,
+            deductions,
+            netpay,
+            currency,
             duedate: new Date(duedate),
             organizationID: req.ORGID
         })
@@ -47,10 +98,18 @@ export const HandleCreateSalary = async (req, res) => {
         employee.salary.push(salary._id)
         await employee.save()
 
-        return res.status(200).json({ success: true, message: "Tạo bảng lương thành công", data: salary })
+        return res.status(200).json({
+            success: true,
+            message: "Tạo bảng lương theo tháng thành công",
+            data: salary
+        })
 
     } catch (error) {
-        return res.status(500).json({ success: false, message: "Lỗi máy chủ nội bộ", error: error.message })
+        return res.status(500).json({
+            success: false,
+            message: "Lỗi máy chủ nội bộ",
+            error: error.message
+        })
     }
 }
 

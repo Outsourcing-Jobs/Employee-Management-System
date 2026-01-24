@@ -54,7 +54,7 @@ export const HRDepartmentTabs = () => {
     const { toast } = useToast()
     const HRDepartmentState = useSelector((state) => state.HRDepartmentPageReducer)
     const dispatch = useDispatch()
-    const [department, setdepartment] = useState("All Departments")
+    const [department, setdepartment] = useState("Tất cả phòng ban")
 
     const departments = []
 
@@ -75,15 +75,15 @@ export const HRDepartmentTabs = () => {
         if (HRDepartmentState.error.status) {
             toast({
                 variant: "destructive",
-                title: "Uh oh! Something went wrong.",
+                title: "Rất tiếc! Đã xảy ra lỗi.",
                 description: `${HRDepartmentState.error.message}`,
             })
         }
 
         if (HRDepartmentState.success.status) {
             toast({
-                title: <p className="text-xl m-1">Success!</p>,
-                description: <div className="flex justify-center items-center gap-2">
+                title: <p className="m-1 text-xl">Thành công!</p>,
+                description: <div className="flex items-center justify-center gap-2">
                     <img src="../../src/assets/HR-Dashboard/correct.png" alt="" className="w-6" />
                     <p className="font-bold">{HRDepartmentState.success.message}</p>
                 </div>,
@@ -108,29 +108,29 @@ export const HRDepartmentTabs = () => {
 
     return (
         <div className="flex flex-col gap-4 bg-blue-50 min-[250px]:p-1 sm:p-4 rounded-lg h-[100%] overflow-auto">
-            <div className="Dropdown-container flex justify-between items-center">
+            <div className="flex items-center justify-between Dropdown-container">
                 <div className="drop-down-select flex items-center gap-2 min-[250px]:flex-col sm:flex-row">
                     <h1 className="font-bold sm:text-sm lg:text-lg min-[250px]:hidden sm:flex">Department : </h1>
                     <ComboDropDown DepartmentData={departments} CurrentDepartment={department} SetCurrentDepartment={setdepartment} />
                 </div>
                 <div className="update-delete-department">
-                    {department !== "All Departments" ?
+                    {department !== "Tất cả phòng ban" ?
                         <DropdownMenu>
                             <DropdownMenuTrigger>
                                 <Button className="bg-blue-700 hover:bg-blue-900">
                                     <img src="../../src/assets/HR-Dashboard/settings.png" alt="" className="w-5" />
-                                    <span className="min-[250px]:hidden sm:flex">Settings</span></Button>
+                                    <span className="min-[250px]:hidden sm:flex">Cài đặt</span></Button>
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent className="flex flex-col justify-center items-center p-2">
+                            <DropdownMenuContent className="flex flex-col items-center justify-center p-2">
                                 {/* <DropdownMenuLabel>Update or Delete The Department</DropdownMenuLabel> */}
-                                <div className="buttons flex flex-col gap-2">
-                                    <Button className="bg-blue-700 text-white font-bold text-sm hover:bg-blue-900">
+                                <div className="flex flex-col gap-2 buttons">
+                                    <Button className="text-sm font-bold text-white bg-blue-700 hover:bg-blue-900">
                                         <img src="../../src/assets/HR-Dashboard/update.png" alt="" className="w-5" />
-                                        Update
+                                        Cập nhật 
                                     </Button>
-                                    <Button className="bg-red-700 text-white font-bold text-sm hover:bg-red-900">
+                                    <Button className="text-sm font-bold text-white bg-red-700 hover:bg-red-900">
                                         <img src="../../src/assets/HR-Dashboard/delete.png" alt="" className="w-5" />
-                                        Delete
+                                       Xóa
                                     </Button>
                                 </div>
                             </DropdownMenuContent>
@@ -139,7 +139,7 @@ export const HRDepartmentTabs = () => {
             </div>
             <div className={`department-container min-[250px]:px-1 sm:px-4 rounded-lg flex flex-col gap-4 h-[100%]`}>
                 {
-                    department === "All Departments" ? <AllDepartments DepartmentData={HRDepartmentState} SetCurrentDepartment={setdepartment} /> :
+                    department === "Tất cả phòng ban" ? <AllDepartments DepartmentData={HRDepartmentState} SetCurrentDepartment={setdepartment} /> :
                         <DepartmentContent CurrentDepartmentData={HRDepartmentState.data ? HRDepartmentState.data.find((item) => item.name == department) : null} />
                 }
             </div>
@@ -156,22 +156,22 @@ export const ComboDropDown = ({ DepartmentData, CurrentDepartment, SetCurrentDep
     return (
         <div className="departments-container">
             <Popover open={open} onOpenChange={setOpen}>
-                <PopoverTrigger asChild className="border-2 border-blue-500 w-4">
+                <PopoverTrigger asChild className="w-4 border-2 border-blue-500">
                     <Button
                         variant="outline"
                         role="combobox"
                         aria-expanded={open}
-                        className="w-auto justify-between"
+                        className="justify-between w-auto"
                     >
                         {CurrentDepartment}
-                        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                        <ChevronsUpDown className="w-4 h-4 ml-2 opacity-50 shrink-0" />
                     </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0">
                     <Command>
-                        <CommandInput placeholder="Search Departments..." />
+                        <CommandInput placeholder="Tìm kiếm phòng ban..." />
                         <CommandList>
-                            <CommandEmpty>No Departments found.</CommandEmpty>
+                            <CommandEmpty>Không tìm thấy phòng ban.</CommandEmpty>
                             <CommandGroup className="sm:text-sm lg:text-lg">
                                 {DepartmentData.map((department) => (
                                     <CommandItem
@@ -179,7 +179,7 @@ export const ComboDropDown = ({ DepartmentData, CurrentDepartment, SetCurrentDep
                                         value={department.value}
                                         onSelect={(currentValue) => {
                                             console.log("this is the current value", currentValue)
-                                            SetCurrentDepartment(currentValue === CurrentDepartment ? "All Departments" : currentValue)
+                                            SetCurrentDepartment(currentValue === CurrentDepartment ? "Tất cả phòng ban" : currentValue)
                                             setOpen(false)
                                         }}
                                     >
@@ -203,8 +203,8 @@ export const ComboDropDown = ({ DepartmentData, CurrentDepartment, SetCurrentDep
 
 
 export const DepartmentContent = ({ CurrentDepartmentData }) => {
-    const table_headings_employees = ["Full Name", "Email", "Contact Number", "Remove Employee"]
-    const table_headings_notice = ["Title", "Audience", "Createdby", "View Notice"]
+    const table_headings_employees = ["Họ và tên", "Email", "Số điện thoại", "Xóa nhân viên"];
+    const table_headings_notice = ["Tiêu đề", "Đối tượng", "Người tạo", "Xem thông báo"];
 
     return (
         <>
@@ -218,10 +218,10 @@ export const DepartmentContent = ({ CurrentDepartmentData }) => {
                 <div className="tabs-with-button flex justify-between items-center min-[250px]:flex-col-reverse sm:flex-row">
                     <TabsList className="min-[250px]:max-w-[250px] md:max-w-[300px] bg-blue-200 text-blue-700 my-3 min-[250px]:flex min-[250px]:flex-col min-[250px]:py-14 min-[350px]:flex min-[350px]:flex-row min-[350px]:py-6">
                         <TabsTrigger value="account" className="px-4 py-2 font-bold m-2 min-[250px]:text-xs md:text-sm">
-                            <span className="text-blue-700">{CurrentDepartmentData.employees.length} Employees</span>
+                            <span className="text-blue-700">{CurrentDepartmentData.employees.length} Nhân viên </span>
                         </TabsTrigger>
                         <TabsTrigger value="password" className="px-4 py-2 font-bold m-2 min-[250px]:text-xs md:text-sm">
-                            <span className="text-blue-700">{CurrentDepartmentData.notice.length} Notice</span>
+                            <span className="text-blue-700">{CurrentDepartmentData.notice.length} Thông báo</span>
                         </TabsTrigger>
                     </TabsList>
                     <div className="edd-employees-dialog-box">
@@ -244,10 +244,10 @@ export const DepartmentContent = ({ CurrentDepartmentData }) => {
 export const AllDepartments = ({ DepartmentData, SetCurrentDepartment }) => {
     return (
         <>
-            {DepartmentData.data ? DepartmentData.data.map((department) => <div key={department.name} className="department-data border-2 border-blue-700 p-4 rounded-lg flex flex-col gap-4">
+            {DepartmentData.data ? DepartmentData.data.map((department) => <div key={department.name} className="flex flex-col gap-4 p-4 border-2 border-blue-700 rounded-lg department-data">
                 <div className="department-heading-description flex justify-between items-center min-[250px]:items-center sm:items-start">
                     <h1 className="font-bold min-[250px]:text-xl sm:text-2xl lg:text-4xl">{department.name}</h1>
-                    <Button className="bg-blue-700 border-2 border-blue-700 text-white font-bold hover:bg-white hover:text-blue-700" onClick={() => SetCurrentDepartment(department.name)}>View</Button>
+                    <Button className="font-bold text-white bg-blue-700 border-2 border-blue-700 hover:bg-white hover:text-blue-700" onClick={() => SetCurrentDepartment(department.name)}>Xem chi tiết</Button>
                 </div>
                 <p className="font-bold min-[250px]:text-xs  sm:text-sm lg:text-lg min-[250px]:text-center sm:text-start">
                     {department.description}

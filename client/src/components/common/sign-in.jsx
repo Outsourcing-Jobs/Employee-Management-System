@@ -11,17 +11,17 @@ export const SignIn = ({ image, handlesigninform, handlesigninsubmit, targetedst
                     <img
                         alt="Your Company"
                         src={image}
-                        className="mx-auto h-auto w-auto"
+                        className="w-auto h-auto mx-auto"
                     />
                 </div>
                 <div className="my-5 sm:mx-auto sm:w-full sm:max-w-sm lg:mx-10">
-                    <h2 className="mb-5 text-center text-2xl/9 font-bold tracking-tight text-gray-900">
-                        Sign in to your account
+                    <h2 className="mb-5 font-bold tracking-tight text-center text-gray-900 text-2xl/9">
+                    Đăng nhập vào tài khoản
                     </h2>
                     <form className="space-y-6" onSubmit={handlesigninsubmit}>
                         <div>
-                            <label htmlFor="email" className="block text-sm/6 font-medium text-gray-900">
-                                Email address
+                            <label htmlFor="email" className="block font-medium text-gray-900 text-sm/6">
+                            Địa chỉ Email
                             </label>
                             <div className="mt-2">
                                 <input
@@ -39,13 +39,13 @@ export const SignIn = ({ image, handlesigninform, handlesigninsubmit, targetedst
 
                         <div> 
                             <div className="flex items-center justify-between">
-                                <label htmlFor="password" className="block text-sm/6 font-medium text-gray-900">
-                                    Password
+                                <label htmlFor="password" className="block font-medium text-gray-900 text-sm/6">
+                                Mật khẩu
                                 </label>
                                 <div className="text-sm">
                                     <Link to={redirectpath}>
                                         <a className="font-semibold text-indigo-600 hover:text-indigo-500">
-                                            Forgot password? 
+                                        Quên mật khẩu? 
                                         </a>
                                     </Link>
                                 </div>
@@ -69,7 +69,7 @@ export const SignIn = ({ image, handlesigninform, handlesigninsubmit, targetedst
                                 type="submit"
                                 className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                             >
-                                Sign in
+                                Đăng nhập
                             </button>
                         </div>
                     </form>

@@ -30,13 +30,13 @@ export const HREmployeesPage = () => {
 
     return (
         <div className="employee-page-content w-full mx-auto my-10 flex flex-col gap-5 h-[94%]">
-            <div className="employees-heading flex justify-between items-center md:pe-5">
-                <h1 className="min-[250px]:text-xl md:text-4xl font-bold">Employees</h1>
+            <div className="flex items-center justify-between employees-heading md:pe-5">
+                <h1 className="min-[250px]:text-xl md:text-4xl font-bold">Nhân viên </h1>
                 <div className="employee-crate-button">
                     <AddEmployeesDialogBox />
                 </div>
             </div>
-            <div className="employees-data flex flex-col gap-4 md:pe-5 overflow-auto">
+            <div className="flex flex-col gap-4 overflow-auto employees-data md:pe-5">
                 <ListWrapper>
                     <HeadingBar table_layout={"grid-cols-5"} table_headings={table_headings} />
                 </ListWrapper>

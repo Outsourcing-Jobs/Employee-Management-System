@@ -1,6 +1,6 @@
 export const KeyDetailsBox = ({image, dataname, data}) => {
     return (
-        <div className="keydetail-box-container w-full">
+        <div className="w-full keydetail-box-container">
             <div className="keydetails-content m-2 flex border-2 items-center justify-between border-[#3635ff] rounded-lg 2xl:p-4 sm:p-2 lg:p-3 min-[250px]:p-2">
 
                 <div className="data-name-group flex flex-col min-[250px]:p-4 sm:p-2 2xl:gap-2 md:gap-1">
@@ -13,7 +13,7 @@ export const KeyDetailsBox = ({image, dataname, data}) => {
                 </div>
 
                 <div className="data-image">
-                    <img src={image} alt="Employees" className="min-[250px]:max-w-[50px] sm:max-w-[40px] md:max-w-[40px] lg:max-w-[40px] xl:max-w-[70px]"/>
+                    <img src={image} alt="Nhân viên " className="min-[250px]:max-w-[50px] sm:max-w-[40px] md:max-w-[40px] lg:max-w-[40px] xl:max-w-[70px]"/>
                 </div>
 
             </div>

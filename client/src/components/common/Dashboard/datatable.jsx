@@ -162,17 +162,17 @@ export const DataTable = ({ noticedata }) => {
 
     return (
 
-        <div className="overflow-auto h-full">
-            <div className="notices-heading mx-3 my-2">
-                <p className="min-[250px]:text-xl xl:text-3xl font-bold min-[250px]:text-center sm:text-start">Recent Notices</p>
+        <div className="h-full overflow-auto">
+            <div className="mx-3 my-2 notices-heading">
+                <p className="min-[250px]:text-xl xl:text-3xl font-bold min-[250px]:text-center sm:text-start">Thông báo gần đây</p>
             </div>
             <Table>
                 <TableHeader>
                     <TableRow>
-                        <TableHead className="w-[100px]">Notice ID</TableHead>
-                        <TableHead>Title</TableHead>
-                        <TableHead>Audience</TableHead>
-                        <TableHead className="text-right">Created By</TableHead>
+                        <TableHead className="w-[100px]">Mã thông báo</TableHead>
+                        <TableHead>Tiêu đề</TableHead>
+                        <TableHead>Đối tượng</TableHead>
+                        <TableHead className="text-right">Người tạo</TableHead>
                     </TableRow>
                 </TableHeader>
 

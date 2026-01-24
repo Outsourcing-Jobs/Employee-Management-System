@@ -30,11 +30,11 @@ export const SalaryChart = ({ balancedata }) => {
     }
     const chartConfig = {
         desktop: {
-            label: "Salaries Paid",
+            label: "Số dư khả dụng",
             color: "hsl(var(--chart-1))",
         },
         mobile: {
-            label: "Available Balance",
+            label: "Lương đã chi trả",
             color: "hsl(var(--chart-2))",
         },
     }
@@ -48,13 +48,13 @@ export const SalaryChart = ({ balancedata }) => {
     return (
         <div className="salary-container flex flex-col min-[250px]:gap-3 sm:gap-1 h-auto">
             <div className="heading px-2 my-2 min-[250px]:px-3">
-                <h1 className="min-[250px]:text-xl xl:text-3xl font-bold min-[250px]:text-center sm:text-start">Balance Chart</h1>
+                <h1 className="min-[250px]:text-xl xl:text-3xl font-bold min-[250px]:text-center sm:text-start">Biểu đồ số dư</h1>
             </div>
             <Card className="mx-2">
                 <CardHeader>
-                    <CardTitle className="min-[250px]:text-xs sm:text-md md:text-lg lg:text-xl">Available Salary Amount : {chartData.length > 0 ? chartData[chartData.length - 1]["AvailableAmount"] : 0}</CardTitle>
+                    <CardTitle className="min-[250px]:text-xs sm:text-md md:text-lg lg:text-xl">Tổng ngân sách lương hiện có : {chartData.length > 0 ? chartData[chartData.length - 1]["AvailableAmount"] : 0}</CardTitle>
                     <CardDescription className="min-[250px]:text-xs sm:text-md md:text-lg lg:text-xl">
-                        Salaries Chart
+                    Thống kê chi trả lương
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -73,7 +73,7 @@ export const SalaryChart = ({ balancedata }) => {
                                 tickLine={false}
                                 axisLine={false}
                                 tickMargin={8}
-                                tickFormatter={(value) => value.slice(0, 3)}
+                                tickFormatter={(value) => value}
                             />
                             <ChartTooltip
                                 cursor={false}
@@ -101,11 +101,11 @@ export const SalaryChart = ({ balancedata }) => {
                     </ChartContainer>
                 </CardContent>
                 <CardFooter>
-                    <div className="flex w-full items-start gap-2 text-sm">
+                    <div className="flex items-start w-full gap-2 text-sm">
                         <div className="grid gap-2">
                             <div className="flex items-center gap-2 font-medium leading-none">
-                                Trending up by {trendingUp} % this month
-                                <TrendingUp className="h-4 w-4" />
+                                {trendingUp >= 0 ? `Tăng trưởng ${trendingUp}%` : `Giảm ${Math.abs(trendingUp)}%`} so với tháng trước
+                                <TrendingUp className={`h-4 w-4 ${trendingUp < 0 ? 'rotate-180' : ''}`} />
                             </div>
                             <div className="flex items-center gap-2 leading-none text-muted-foreground">
                                 {chartData.length > 0 ? `${chartData[0]["month"]} 2024 - ${chartData[chartData.length - 1]["month"]} 2024` : null}

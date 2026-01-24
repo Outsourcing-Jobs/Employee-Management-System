@@ -50,67 +50,67 @@ export const AddEmployeesDialogBox = () => {
             <Dialog>
                 <DialogTrigger className="bg-blue-800 border-2 border-blue-800 md:px-4 md:py-2 md:text-lg min-[250px]:px-2 min-[250px]:py-1 min-[250px]:text-sm text-white font-bold rounded-lg hover:bg-white hover:text-blue-800">Add Employees</DialogTrigger>
                 <DialogContent className="max-w-[315px] sm:max-w-[50vw] 2xl:max-w-[45vw]">
-                    <div className="add-employees-container flex flex-col gap-5">
+                    <div className="flex flex-col gap-5 add-employees-container">
                         <div className="heading">
-                            <h1 className="font-bold text-2xl">Add Employee Info</h1>
+                            <h1 className="text-2xl font-bold">Thêm thông tin nhân viên</h1>
                         </div>
                         <div className="form-container grid md:grid-cols-2 min-[250px]:grid-cols-1 gap-4">
-                            <div className="form-group flex flex-col gap-3">
-                                <div className="label-input-field flex flex-col gap-1">
-                                    <label htmlFor="firstname" className="md:text-md lg:text-lg font-bold">First Name</label>
+                            <div className="flex flex-col gap-3 form-group">
+                                <div className="flex flex-col gap-1 label-input-field">
+                                    <label htmlFor="firstname" className="font-bold md:text-md lg:text-lg">Họ và tên đệm</label>
                                     <input type="text"
                                         id="firstname"
-                                        className="border-2 border-gray-700 rounded px-2 py-1"
+                                        className="px-2 py-1 border-2 border-gray-700 rounded"
                                         name="firstname"
                                         value={formdata.firstname}
                                         onChange={handleformchange} />
                                 </div>
-                                <div className="label-input-field flex flex-col gap-1">
-                                    <label htmlFor="lastname" className="md:text-md lg:text-lg font-bold">Last Name</label>
+                                <div className="flex flex-col gap-1 label-input-field">
+                                    <label htmlFor="lastname" className="font-bold md:text-md lg:text-lg">Tên</label>
                                     <input type="text"
                                         id="lastanme"
-                                        className="border-2 border-gray-700 rounded px-2 py-1"
+                                        className="px-2 py-1 border-2 border-gray-700 rounded"
                                         name="lastname"
                                         value={formdata.lastname}
                                         onChange={handleformchange} />
                                 </div>
-                                <div className="label-input-field flex flex-col gap-1">
-                                    <label htmlFor="email" className="md:text-md lg:text-lg font-bold">Email</label>
+                                <div className="flex flex-col gap-1 label-input-field">
+                                    <label htmlFor="email" className="font-bold md:text-md lg:text-lg">Email</label>
                                     <input type="email"
-                                        id="email" required={true} className="border-2 border-gray-700 rounded px-2 py-1"
+                                        id="email" required={true} className="px-2 py-1 border-2 border-gray-700 rounded"
                                         name="email"
                                         value={formdata.email}
                                         onChange={handleformchange} />
                                 </div>
                             </div>
-                            <div className="form-group flex flex-col gap-3">
-                                <div className="label-input-field flex flex-col gap-1">
-                                    <label htmlFor="contactnumber" className="md:text-md lg:text-lg font-bold">Contact Number</label>
+                            <div className="flex flex-col gap-3 form-group">
+                                <div className="flex flex-col gap-1 label-input-field">
+                                    <label htmlFor="contactnumber" className="font-bold md:text-md lg:text-lg">Số điện thoại</label>
                                     <input type="number"
-                                        id="contactnumber" className="border-2 border-gray-700 rounded px-2 py-1"
+                                        id="contactnumber" className="px-2 py-1 border-2 border-gray-700 rounded"
                                         name="contactnumber"
                                         value={formdata.contactnumber}
                                         onChange={handleformchange} />
                                 </div>
-                                <div className="label-input-field flex flex-col gap-1">
-                                    <label htmlFor="text-password" className="md:text-md lg:text-lg font-bold">Password</label>
+                                <div className="flex flex-col gap-1 label-input-field">
+                                    <label htmlFor="text-password" className="font-bold md:text-md lg:text-lg">Mật khẩu</label>
                                     <input type="text"
-                                        id="text-password" className="border-2 border-gray-700 rounded px-2 py-1"
+                                        id="text-password" className="px-2 py-1 border-2 border-gray-700 rounded"
                                         name="textpassword"
                                         value={formdata.textpassword}
                                         onChange={handleformchange} />
                                 </div>
-                                <div className="label-input-field flex flex-col gap-1">
-                                    <label htmlFor="password" className="md:text-md lg:text-lg font-bold">Confirm Password</label>
+                                <div className="flex flex-col gap-1 label-input-field">
+                                    <label htmlFor="password" className="font-bold md:text-md lg:text-lg">Xác nhận mật khẩu</label>
                                     <input type="password"
-                                        id="password" required={true} className="border-2 border-gray-700 rounded px-2 py-1"
+                                        id="password" required={true} className="px-2 py-1 border-2 border-gray-700 rounded"
                                         name="password"
                                         value={formdata.password}
                                         onChange={handleformchange} />
                                 </div>
                             </div>
                         </div>
-                        <div className="add-button flex items-center justify-center">
+                        <div className="flex items-center justify-center add-button">
                             <FormSubmitToast formdata={formdata} />
                         </div>
                     </div>
@@ -134,57 +134,57 @@ export const EmployeeDetailsDialogBox = ({ EmployeeID }) => {
                     <DialogTrigger className="btn-sm btn-blue-700 text-md border-2 border-blue-800 min-[250px]:px-2 min-[250px]:py-1 sm:px-1 sm:py-0.5 xl:px-2 xl:py-1 rounded-md hover:bg-blue-800 hover:text-white">View</DialogTrigger>
                 </div>
                 <DialogContent className="max-w-[315px] lg:max-w-[55vw] 2xl:max-w-[45vw]">
-                    <div className="employee-data-container flex flex-col gap-4">
-                        <div className="employee-profile-logo flex items-center gap-3">
+                    <div className="flex flex-col gap-4 employee-data-container">
+                        <div className="flex items-center gap-3 employee-profile-logo">
                             <div className="logo border-2 border-blue-800 rounded-[50%] flex justify-center items-center">
-                                <p className="font-bold text-2xl text-blue-700 p-2">{`${employeeData.firstname.slice(0, 1).toUpperCase()} ${employeeData.lastname.slice(0, 1).toUpperCase()}`}</p>
+                                <p className="p-2 text-2xl font-bold text-blue-700">{`${employeeData.firstname.slice(0, 1).toUpperCase()} ${employeeData.lastname.slice(0, 1).toUpperCase()}`}</p>
                             </div>
                             <div className="employee-fullname">
-                                <p className="font-bold text-2xl">{`${employeeData.firstname} ${employeeData.lastname}`}</p>
+                                <p className="text-2xl font-bold">{`${employeeData.firstname} ${employeeData.lastname}`}</p>
                             </div>
                         </div>
                         <div className="employees-all-details grid lg:grid-cols-2 min-[250px]:gap-2 lg:gap-10">
-                            <div className="details-group-1 flex flex-col gap-3">
-                                <div className="label-value-pair flex items-center gap-2">
-                                    <label className="font-bold md:text-sm xl:text-lg">First Name :</label>
+                            <div className="flex flex-col gap-3 details-group-1">
+                                <div className="flex items-center gap-2 label-value-pair">
+                                    <label className="font-bold md:text-sm xl:text-lg">Họ và tên đệm :</label>
                                     <p className="md:text-sm xl:text-lg">{employeeData.firstname}</p>
                                 </div>
-                                <div className="label-value-pair flex items-center gap-2">
-                                    <label className="font-bold md:text-sm xl:text-lg">Last Name :</label>
+                                <div className="flex items-center gap-2 label-value-pair">
+                                    <label className="font-bold md:text-sm xl:text-lg">Tên :</label>
                                     <p className="md:text-sm xl:text-lg">{employeeData.lastname}</p>
                                 </div>
-                                <div className="label-value-pair flex items-center gap-2">
+                                <div className="flex items-center gap-2 label-value-pair">
                                     <label className="font-bold md:text-sm xl:text-lg">Email :</label>
                                     <p className="md:text-sm xl:text-lg">{employeeData.email}</p>
                                 </div>
-                                <div className="label-value-pair flex items-center gap-2">
-                                    <label className="font-bold md:text-sm xl:text-lg">Contact Number :</label>
+                                <div className="flex items-center gap-2 label-value-pair">
+                                    <label className="font-bold md:text-sm xl:text-lg">Số điện thoại :</label>
                                     <p className="md:text-sm xl:text-lg">{employeeData.contactnumber}</p>
                                 </div>
-                                <div className="label-value-pair flex items-center gap-2">
-                                    <label className="font-bold md:text-sm xl:text-lg">Department :</label>
+                                <div className="flex items-center gap-2 label-value-pair">
+                                    <label className="font-bold md:text-sm xl:text-lg">Phòng ban :</label>
                                     <p className="md:text-sm xl:text-lg">{employeeData.department ? employeeData.department.name : "Not Specified"}</p>
                                 </div>
                             </div>
-                            <div className="details-group-1 flex flex-col gap-3">
-                                <div className="label-value-pair flex items-center gap-2">
-                                    <label className="font-bold md:text-sm xl:text-lg">Notices :</label>
+                            <div className="flex flex-col gap-3 details-group-1">
+                                <div className="flex items-center gap-2 label-value-pair">
+                                    <label className="font-bold md:text-sm xl:text-lg">Thông báo :</label>
                                     <p className="md:text-sm xl:text-lg">{employeeData.notice.length}</p>
                                 </div>
-                                <div className="label-value-pair flex items-center gap-2">
-                                    <label className="font-bold md:text-sm xl:text-lg">Salary Records :</label>
+                                <div className="flex items-center gap-2 label-value-pair">
+                                    <label className="font-bold md:text-sm xl:text-lg">Bản ghi lương :</label>
                                     <p className="md:text-sm xl:text-lg">{employeeData.salary.length}</p>
                                 </div>
-                                <div className="label-value-pair flex items-center gap-2">
-                                    <label className="font-bold md:text-sm xl:text-lg">Leave Requests :</label>
+                                <div className="flex items-center gap-2 label-value-pair">
+                                    <label className="font-bold md:text-sm xl:text-lg">Yêu cầu nghỉ phép :</label>
                                     <p className="md:text-sm xl:text-lg">{employeeData.leaverequest.length}</p>
                                 </div>
-                                <div className="label-value-pair flex items-center gap-2">
-                                    <label className="font-bold md:text-sm xl:text-lg">Requests :</label>
+                                <div className="flex items-center gap-2 label-value-pair">
+                                    <label className="font-bold md:text-sm xl:text-lg">Yêu cầu chung :</label>
                                     <p className="md:text-sm xl:text-lg">{employeeData.generaterequest.length}</p>
                                 </div>
-                                <div className="label-value-pair flex items-center gap-2">
-                                    <label className="font-bold md:text-sm xl:text-lg">Email Verify :</label>
+                                <div className="flex items-center gap-2 label-value-pair">
+                                    <label className="font-bold md:text-sm xl:text-lg">Xác minh Email :</label>
                                     <p className="md:text-sm xl:text-lg">{employeeData.isverified ? "Verified" : "Not Verified"}</p>
                                 </div>
                             </div>
@@ -205,16 +205,16 @@ export const DeleteEmployeeDialogBox = ({ EmployeeID }) => {
     return (
         <div className="delete-employee-dialog-container">
             <Dialog>
-                <DialogTrigger className="btn-sm btn-blue-700 text-md border-2 border-blue-800 min-[250px]:px-2 min-[250px]:py-1 sm:px-1 sm:py-0.5 xl:px-2 xl:py-1 rounded-md hover:bg-blue-800 hover:text-white">Delete</DialogTrigger>
+                <DialogTrigger className="btn-sm btn-blue-700 text-md border-2 border-blue-800 min-[250px]:px-2 min-[250px]:py-1 sm:px-1 sm:py-0.5 xl:px-2 xl:py-1 rounded-md hover:bg-blue-800 hover:text-white">Xóa</DialogTrigger>
                 <DialogContent className="max-w-[315px] lg:max-w-[35vw] 2xl:max-w-[30vw]">
-                    <div className="flex flex-col justify-center items-center gap-4">
-                        <p className="text-lg font-bold min-[250px]:text-center">Are you sure you want to delete this employee?</p>
-                        <div className="delete-employee-button-group flex gap-2">
+                    <div className="flex flex-col items-center justify-center gap-4">
+                        <p className="text-lg font-bold min-[250px]:text-center">Bạn có chắc chắn muốn xóa nhân viên này không?</p>
+                        <div className="flex gap-2 delete-employee-button-group">
                             <DialogClose asChild>
-                                <Button className="btn-sm btn-blue-700 text-md border-2 min-[250px]:px-2 min-[250px]:py-1 sm:px-1 sm:py-0.5 xl:px-2 xl:py-1 rounded-md bg-red-700 border-red-700 hover:bg-transparent hover:text-red-700" onClick={() => DeleteEmployee(EmployeeID)}>Delete</Button>
+                                <Button className="btn-sm btn-blue-700 text-md border-2 min-[250px]:px-2 min-[250px]:py-1 sm:px-1 sm:py-0.5 xl:px-2 xl:py-1 rounded-md bg-red-700 border-red-700 hover:bg-transparent hover:text-red-700" onClick={() => DeleteEmployee(EmployeeID)}>Xóa</Button>
                             </DialogClose>
                             <DialogClose asChild>
-                                <Button className="btn-sm btn-blue-700 text-md border-2 min-[250px]:px-2 min-[250px]:py-1 sm:px-1 sm:py-0.5 xl:px-2 xl:py-1 rounded-md bg-green-700 border-green-700 hover:bg-transparent hover:text-green-700">Cancel</Button>
+                                <Button className="btn-sm btn-blue-700 text-md border-2 min-[250px]:px-2 min-[250px]:py-1 sm:px-1 sm:py-0.5 xl:px-2 xl:py-1 rounded-md bg-green-700 border-green-700 hover:bg-transparent hover:text-green-700">Hủy</Button>
                             </DialogClose>
                         </div>
                     </div>
@@ -258,24 +258,24 @@ export const CreateDepartmentDialogBox = () => {
         <Dialog>
             <DialogTrigger className="min-[250px]:text-sm sm:text-lg min-[250px]:px-2 min-[250px]:py-1 sm:px-4 sm:py-2 bg-blue-700 font-bold text-white rounded-lg border-2 border-blue-700 hover:bg-white hover:text-blue-700">Create Department</DialogTrigger>
             <DialogContent className="max-w-[315px] lg:max-w-[35vw] 2xl:max-w-[30vw]">
-                <div className="create-department-container flex flex-col gap-4">
+                <div className="flex flex-col gap-4 create-department-container">
                     <div className="create-department-heading">
-                        <h1 className="font-bold text-2xl">Create Department</h1>
+                        <h1 className="text-2xl font-bold">Create Department</h1>
                     </div>
-                    <div className="create-department-form flex flex-col gap-4">
-                        <div className="form-group flex flex-col gap-3">
-                            <div className="label-input-field flex flex-col gap-1">
-                                <label htmlFor="departmentname" className="md:text-md lg:text-lg font-bold">Department Name</label>
+                    <div className="flex flex-col gap-4 create-department-form">
+                        <div className="flex flex-col gap-3 form-group">
+                            <div className="flex flex-col gap-1 label-input-field">
+                                <label htmlFor="departmentname" className="font-bold md:text-md lg:text-lg">Department Name</label>
                                 <input type="text"
                                     id="departmentname"
                                     name="name"
                                     value={formdata.name}
                                     onChange={handleformchange}
                                     placeholder="Enter Department Name"
-                                    className="border-2 border-gray-700 rounded px-2 py-1" />
+                                    className="px-2 py-1 border-2 border-gray-700 rounded" />
                             </div>
-                            <div className="label-input-field flex flex-col gap-1">
-                                <label htmlFor="departmentdescription" className="md:text-md lg:text-lg font-bold">Department Description</label>
+                            <div className="flex flex-col gap-1 label-input-field">
+                                <label htmlFor="departmentdescription" className="font-bold md:text-md lg:text-lg">Department Description</label>
                                 <textarea
                                     id="departmentdescription"
                                     name="description"
@@ -285,11 +285,11 @@ export const CreateDepartmentDialogBox = () => {
                                     placeholder="Write Your Department Description Here"></textarea>
                             </div>
                         </div>
-                        <div className="create-department-button flex justify-center items-center">
+                        <div className="flex items-center justify-center create-department-button">
                             {
-                                (formdata.name.trim().length === 0 || formdata.description.trim().length === 0) ? <Button className="btn-sm btn-blue-700 text-md border-2 bg-blue-700 border-blue-700 px-2 py-1 rounded-md hover:bg-white hover:text-blue-700" onClick={() => ShowToast()}>Create</Button> :
+                                (formdata.name.trim().length === 0 || formdata.description.trim().length === 0) ? <Button className="px-2 py-1 bg-blue-700 border-2 border-blue-700 rounded-md btn-sm btn-blue-700 text-md hover:bg-white hover:text-blue-700" onClick={() => ShowToast()}>Create</Button> :
                                     <DialogClose asChild>
-                                        <Button className="btn-sm btn-blue-700 text-md border-2 bg-blue-700 border-blue-700 px-2 py-1 rounded-md hover:bg-white hover:text-blue-700" onClick={() => CreateDepartment()}>Create</Button>
+                                        <Button className="px-2 py-1 bg-blue-700 border-2 border-blue-700 rounded-md btn-sm btn-blue-700 text-md hover:bg-white hover:text-blue-700" onClick={() => CreateDepartment()}>Create</Button>
                                     </DialogClose>
                             }
                         </div>
@@ -348,19 +348,19 @@ export const EmployeesIDSDialogBox = ({ DepartmentID }) => {
             <Dialog>
                 <DialogTrigger className="px-4 py-2 font-bold m-2 bg-blue-600 text-white border-2 border-blue-600 rounded-lg hover:bg-white hover:text-blue-700 min-[250px]:text-xs md:text-sm lg:text-lg" onClick={() => dispatch(fetchEmployeesIDs({ apiroute: "GETALL" }))}>Add Employees</DialogTrigger>
                 <DialogContent className="max-w-[315px] lg:max-w-[35vw] 2xl:max-w-[30vw]">
-                    {EmployeesIDState.isLoading ? <Loading height={"h-auto"} /> : <div className="employeeID-checkbox-container flex flex-col gap-4">
+                    {EmployeesIDState.isLoading ? <Loading height={"h-auto"} /> : <div className="flex flex-col gap-4 employeeID-checkbox-container">
                         <div>
-                            <h1 className="font-bold text-2xl">Select Employees</h1>
+                            <h1 className="text-2xl font-bold">Select Employees</h1>
                         </div>
                         <div className="employeeID-checkbox-group">
-                            <Command className="rounded-lg border shadow-md w-full">
+                            <Command className="w-full border rounded-lg shadow-md">
                                 <CommandInput placeholder="Type a Employee Name..." />
                                 <CommandList>
                                     <CommandEmpty>No results found.</CommandEmpty>
                                     <CommandGroup heading="All Employees">
                                         {EmployeesIDState.data ? EmployeesIDState.data.map((item, index) => <CommandItem key={index}>
-                                            <div className="employeeID-checkbox flex justify-center items-center gap-2">
-                                                <input type="checkbox" id={`EmployeeID-${index + 1}`} className="border-2 border-gray-700 w-4 h-4" onClick={() => SelectEmployees(item._id)} checked={SelectedEmployeesData.employeeIDArray.includes(item._id)} disabled={item.department ? true : false} />
+                                            <div className="flex items-center justify-center gap-2 employeeID-checkbox">
+                                                <input type="checkbox" id={`EmployeeID-${index + 1}`} className="w-4 h-4 border-2 border-gray-700" onClick={() => SelectEmployees(item._id)} checked={SelectedEmployeesData.employeeIDArray.includes(item._id)} disabled={item.department ? true : false} />
                                                 <label htmlFor={`EmployeeID-${index + 1}`} className="text-lg">{`${item.firstname} ${item.lastname}`} <span className="text-xs mx-0.5 overflow-hidden text-ellipsis">{item.department ? `(${item.department.name})` : null}</span> </label>
                                             </div>
                                         </CommandItem>) : null}
@@ -368,10 +368,10 @@ export const EmployeesIDSDialogBox = ({ DepartmentID }) => {
                                 </CommandList>
                             </Command>
                         </div>
-                        <div className="employeeID-checkbox-button-group flex justify-center items-center gap-2">
-                            <Button className="btn-sm btn-blue-700 text-md border-2 bg-blue-700 border-blue-700 px-2 py-1 rounded-lg hover:bg-white hover:text-blue-700" onClick={() => SetEmployees()}>Add</Button>
+                        <div className="flex items-center justify-center gap-2 employeeID-checkbox-button-group">
+                            <Button className="px-2 py-1 bg-blue-700 border-2 border-blue-700 rounded-lg btn-sm btn-blue-700 text-md hover:bg-white hover:text-blue-700" onClick={() => SetEmployees()}>Add</Button>
                             <DialogClose asChild>
-                                <Button className="btn-sm btn-blue-700 text-md border-2 bg-blue-700 border-blue-700 px-2 py-1 rounded-lg hover:bg-white hover:text-blue-700" onClick={() => ClearSelectedEmployeesData()}>Cancel</Button>
+                                <Button className="px-2 py-1 bg-blue-700 border-2 border-blue-700 rounded-lg btn-sm btn-blue-700 text-md hover:bg-white hover:text-blue-700" onClick={() => ClearSelectedEmployeesData()}>Cancel</Button>
                             </DialogClose>
                         </div>
                     </div>}
@@ -394,9 +394,9 @@ export const RemoveEmployeeFromDepartmentDialogBox = ({ DepartmentName, Departme
             <Dialog>
                 <DialogTrigger className="btn-sm btn-blue-700 text-md border-2 border-blue-800 min-[250px]:px-2 min-[250px]:py-1 sm:px-1 sm:py-0.5 xl:px-2 xl:py-1 rounded-md hover:bg-blue-800 hover:text-white">Remove</DialogTrigger>
                 <DialogContent className="max-w-[315px] lg:max-w-[35vw] 2xl:max-w-[30vw]">
-                    <div className="flex flex-col justify-center items-center gap-4">
+                    <div className="flex flex-col items-center justify-center gap-4">
                         <p className="text-lg font-bold min-[250px]:text-center">{`Are you sure you want to remove this employee from ${DepartmentName} department ?`}</p>
-                        <div className="delete-employee-button-group flex gap-2">
+                        <div className="flex gap-2 delete-employee-button-group">
                             <DialogClose asChild>
                                 <Button className="btn-sm btn-blue-700 text-md border-2 min-[250px]:px-2 min-[250px]:py-1 sm:px-1 sm:py-0.5 xl:px-2 xl:py-1 rounded-md bg-red-700 border-red-700 hover:bg-transparent hover:text-red-700" onClick={() => RemoveEmployee(EmployeeID)}>Remove</Button>
                             </DialogClose>

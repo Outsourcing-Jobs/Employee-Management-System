@@ -14,10 +14,12 @@ export const HeadingBar = ({ table_layout, table_headings }) => {
     return (
         <div className={`heading-container grid min-[250px]:grid-cols-2 sm:${table_layout ? table_layout : `grid-cols-5`} rounded-lg gap-4 overflow-auto`}>
             {
-                table_headings.map((item) => <div className={`heading-content text-white bg-blue-800 font-bold min-[250px]:text-xs xl:text-xl min-[250px]:p-1 sm:p-2 rounded-lg text-center flex justify-center items-center 
-                ${(["Email", "Department", "Contact Number"].includes(item)) ? `min-[250px]:hidden sm:flex` : ""}`}>
-                    {item}
-                </div>)
+                table_headings.map((item) => (
+                    <div key={item} className={`heading-content text-white bg-blue-800 font-bold min-[250px]:text-xs xl:text-xl min-[250px]:p-1 sm:p-2 rounded-lg text-center flex justify-center items-center 
+                    ${(["Email", "Phòng ban", "Số điện thoại"].includes(item)) ? `min-[250px]:hidden sm:flex` : ""}`}>
+                        {item}
+                    </div>
+                ))
             }
         </div>
     )
@@ -42,13 +44,13 @@ export const ListItems = ({ TargetedState }) => {
                     {item.email}
                 </div>
                 <div className="heading-content font-bold min-[250px]:text-sm sm:text-xs lg:text-sm xl:text-lg p-2 rounded-lg text-center overflow-hidden text-ellipsis min-[250px]:hidden sm:block">
-                    {item.department ? item.department.name : "Not Specified"}
+                    {item.department ? item.department.name : "Chưa xác định"}
                 </div>
                 <div className="heading-content font-bold min-[250px]:text-sm sm:text-xs lg:text-sm  xl:text-lg p-2 rounded-lg text-center overflow-hidden text-ellipsis min-[250px]:hidden sm:block">
                     {item.contactnumber}
                 </div>
                 <div className="heading-content text-blue-800 font-bold min-[250px]:text-xs xl:text-lg p-2 rounded-lg text-center flex justify-center items-center min-[250px]:gap-1 xl:gap-2">
-                    {/* <button className="btn-sm btn-blue-700 text-md border-2 border-blue-800 px-2 py-1 rounded-md hover:bg-blue-800 hover:text-white">View</button> */}
+                    {/* <button className="px-2 py-1 border-2 border-blue-800 rounded-md btn-sm btn-blue-700 text-md hover:bg-blue-800 hover:text-white">View</button> */}
                     <EmployeeDetailsDialogBox EmployeeID={item._id} />
                     <DeleteEmployeeDialogBox EmployeeID={item._id} />
                 </div>

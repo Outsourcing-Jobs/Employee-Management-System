@@ -11,7 +11,7 @@ export const Verify_Email_Component = ({ value, handleCodeValue, handleOTPsubmit
         <div className="verifyemail flex h-[100vh] justify-center items-center">
             <div className="verify-email flex flex-col justify-center items-center gap-5 border-4 border-blue-700 min-[250px]:border-2 rounded-lg p-4 box-border">
                 <div className="heading-email min-[250px]:text-center">
-                    Enter Your 6 Digit Verification Code Here
+                Nhập mã xác thực gồm 6 chữ số của bạn tại đây
                 </div>
                 <div className="otp-box-content">
                     <InputOTP maxLength={6} pattern={REGEXP_ONLY_DIGITS_AND_CHARS} value={value} onChange={(value) => handleCodeValue(value)}>
@@ -28,7 +28,7 @@ export const Verify_Email_Component = ({ value, handleCodeValue, handleOTPsubmit
                     </InputOTP>
                 </div>
                 <div className="submit-button">
-                    <Button className="bg-blue-700 border-2 border-blue-700 font-bold text-white hover:text-blue-700 hover:bg-white" onClick={handleOTPsubmit}>Submit</Button>
+                    <Button className="font-bold text-white bg-blue-700 border-2 border-blue-700 hover:text-blue-700 hover:bg-white" onClick={handleOTPsubmit}>Xác nhận</Button>
                 </div>
             </div>
         </div>

@@ -1,7 +1,7 @@
 import { Employee } from "../models/Employee.model.js"
 import bcrypt from 'bcrypt'
 import { GenerateVerificationToken } from "../utils/generateverificationtoken.js"
-import { SendVerificationEmail, SendWelcomeEmail, SendForgotPasswordEmail, SendResetPasswordConfimation } from "../mailtrap/emails.js"
+import { SendVerificationEmail, SendWelcomeEmail, SendForgotPasswordEmail, SendResetPasswordConfimation } from "../mail/mail.service.js"
 import { GenerateJwtTokenAndSetCookiesEmployee } from "../utils/generatejwttokenandsetcookies.js"
 import crypto from "crypto"
 import { Organization } from "../models/Organization.model.js"

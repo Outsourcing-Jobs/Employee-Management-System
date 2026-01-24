@@ -2,7 +2,7 @@ import { HumanResources } from "../models/HR.model.js"
 import bcrypt from 'bcrypt'
 import crypto from 'crypto'
 import { GenerateJwtTokenAndSetCookiesHR } from "../utils/generatejwttokenandsetcookies.js"
-import { SendVerificationEmail, SendWelcomeEmail, SendForgotPasswordEmail, SendResetPasswordConfimation } from "../mailtrap/emails.js"
+import { SendVerificationEmail, SendWelcomeEmail, SendForgotPasswordEmail, SendResetPasswordConfimation } from "../mail/mail.service.js"
 import { GenerateVerificationToken } from "../utils/generateverificationtoken.js"
 import { Organization } from "../models/Organization.model.js"
 
@@ -11,11 +11,11 @@ export const HandleHRSignup = async (req, res) => {
         const { firstname, lastname, email, password, contactnumber, name, description, OrganizationURL, OrganizationMail } = req.body
 
         if (!name || !description || !OrganizationURL || !OrganizationMail) {
-            throw new Error("All Fields are required")
+            throw new Error("Vui lòng nhập đầy đủ thông tin tổ chức")
         }
 
         if (!firstname || !lastname || !email || !password || !contactnumber) {
-            throw new Error("All Fields are required")
+            throw new Error("Vui lòng nhập đầy đủ thông tin cá nhân")
         }
 
         const organization = await Organization.findOne({ name: name, OrganizationURL: OrganizationURL, OrganizationMail: OrganizationMail })
@@ -23,7 +23,7 @@ export const HandleHRSignup = async (req, res) => {
         const HR = await HumanResources.findOne({ email: email })
 
         if (HR) {
-            return res.status(400).json({ success: false, message: "HR already exists, please go to the login page or create new HR", type: "signup" })
+            return res.status(400).json({ success: false, message: "Tài khoản HR đã tồn tại, vui lòng đăng nhập hoặc tạo tài khoản mới", type: "signup" })
         }
 
         if (!organization && !HR) {
@@ -55,7 +55,7 @@ export const HandleHRSignup = async (req, res) => {
 
             GenerateJwtTokenAndSetCookiesHR(res, newHR._id, newHR.role, newOrganization._id)
             const VerificationEmailStatus = await SendVerificationEmail(email, verificationcode)
-            return res.status(201).json({ success: true, message: "Organization Created Successfully & HR Registered Successfully", VerificationEmailStatus: VerificationEmailStatus, type: "signup", HRid: newHR._id })
+            return res.status(201).json({ success: true, message: "Tạo tổ chức và đăng ký tài khoản HR thành công", VerificationEmailStatus: VerificationEmailStatus, type: "signup", HRid: newHR._id })
         }
 
         if (organization && !HR) {
@@ -80,7 +80,7 @@ export const HandleHRSignup = async (req, res) => {
 
             GenerateJwtTokenAndSetCookiesHR(res, newHR._id, newHR.role, organization._id)
             const VerificationEmailStatus = await SendVerificationEmail(email, verificationcode)
-            return res.status(201).json({ success: true, message: "HR Registered Successfully", type: "signup", VerificationEmailStatus: VerificationEmailStatus, HRid: newHR._id })
+            return res.status(201).json({ success: true, message: "Đăng ký tài khoản HR vào tổ chức thành công", type: "signup", VerificationEmailStatus: VerificationEmailStatus, HRid: newHR._id })
         }
 
     } catch (error) {
@@ -94,7 +94,7 @@ export const HandleHRVerifyEmail = async (req, res) => {
         const HR = await HumanResources.findOne({ verificationtoken: verificationcode, organizationID: req.ORGID, verificationtokenexpires: { $gt: Date.now() } })
 
         if (!HR) {
-            return res.status(401).json({ success: false, message: "Invalid or Expired Verifiation Code", type: "HRverifyemail" })
+            return res.status(401).json({ success: false, message: "Mã xác thực không hợp lệ hoặc đã hết hạn", type: "HRverifyemail" })
         }
 
         HR.isverified = true;
@@ -103,7 +103,7 @@ export const HandleHRVerifyEmail = async (req, res) => {
         await HR.save()
 
         const SendWelcomeEmailStatus = await SendWelcomeEmail(HR.email, HR.firstname, HR.lastname, HR.role)
-        return res.status(200).json({ success: true, message: "Email Verified successfully", SendWelcomeEmailStatus: SendWelcomeEmailStatus, type: "HRverifyemail" })
+        return res.status(200).json({ success: true, message: "Xác thực Email thành công", SendWelcomeEmailStatus: SendWelcomeEmailStatus, type: "HRverifyemail" })
     } catch (error) {
         return res.status(500).json({ success: false, message: error.message, type: "HRverifyemail" })
     }
@@ -116,31 +116,31 @@ export const HandleHRLogin = async (req, res) => {
         const HR = await HumanResources.findOne({ email: email })
 
         if (!HR) {
-            return res.status(400).json({ success: false, message: "Invaild Credentials, Please Add Correct One", type: "HRLogin" })
+            return res.status(400).json({ success: false, message: "Thông tin đăng nhập không chính xác, vui lòng thử lại", type: "HRLogin" })
         }
 
         const isMatch = await bcrypt.compare(password, HR.password)
 
         if (!isMatch) {
-            return res.status(400).json({ success: false, message: "Invaild Credentials, Please Add Correct One", type: "HRLogin" })
+            return res.status(400).json({ success: false, message: "Thông tin đăng nhập không chính xác, vui lòng thử lại", type: "HRLogin" })
         }
 
         GenerateJwtTokenAndSetCookiesHR(res, HR._id, HR.role, HR.organizationID)
         HR.lastlogin = new Date()
         await HR.save()
-        return res.status(200).json({ success: true, message: "HR Login Successfull", type: "HRLogin" })
+        return res.status(200).json({ success: true, message: "Đăng nhập quyền quản trị (HR) thành công", type: "HRLogin" })
     }
     catch (error) {
-        return res.status(500).json({ success: false, message: "Internal Server Error", error: error, type: "HRLogin" })
+        return res.status(500).json({ success: false, message: "Lỗi máy chủ nội bộ", error: error, type: "HRLogin" })
     }
 }
 
 export const HandleHRLogout = async (req, res) => {
     try {
         res.clearCookie("HRtoken")
-        return res.status(200).json({ success: true, message: "HR Logged Out Successfully" })
+        return res.status(200).json({ success: true, message: "Đăng xuất tài khoản HR thành công" })
     } catch (error) {
-        return res.status(500).json({ success: false, message: "Internal server Error", error: error })
+        return res.status(500).json({ success: false, message: "Lỗi máy chủ nội bộ", error: error })
     }
 }
 
@@ -148,11 +148,11 @@ export const HandleHRCheck = async (req, res) => {
     try {
         const HR = await HumanResources.findOne({ _id: req.HRid, organizationID: req.ORGID })
         if (!HR) {
-            return res.status(404).json({ success: false, message: "HR not found", type: "checkHR" })
+            return res.status(404).json({ success: false, message: "Không tìm thấy thông tin HR", type: "checkHR" })
         }
-        return res.status(200).json({ success: true, message: "HR Already Logged In", type: "checkHR" })
+        return res.status(200).json({ success: true, message: "HR đã đăng nhập", type: "checkHR" })
     } catch (error) {
-        return res.status(500).json({ success: false, error: error, message: "internal error", type: "checkHR" })
+        return res.status(500).json({ success: false, error: error, message: "Lỗi hệ thống", type: "checkHR" })
     }
 }
 
@@ -162,11 +162,11 @@ export const HandleHRForgotPassword = async (req, res) => {
         const HR = await HumanResources.findOne({ email: email, organizationID: req.ORGID, _id: req.HRid })
 
         if (!HR) {
-            return res.status(404).json({ success: false, message: "HR Email Does Not Exist Please Enter Correct One", type: "HRforgotpassword" })
+            return res.status(404).json({ success: false, message: "Email HR không tồn tại, vui lòng kiểm tra lại", type: "HRforgotpassword" })
         }
 
         const resetToken = crypto.randomBytes(25).toString('hex')
-        const resetTokenExpires = Date.now() + 1000 * 60 * 60 // 1 hour 
+        const resetTokenExpires = Date.now() + 1000 * 60 * 60 // 1 giờ 
 
         HR.resetpasswordtoken = resetToken;
         HR.resetpasswordexpires = resetTokenExpires;
@@ -174,10 +174,10 @@ export const HandleHRForgotPassword = async (req, res) => {
 
         const URL = `${process.env.CLIENT_URL}/auth/HR/resetpassword/${resetToken}`
         const SendResetPasswordEmailStatus = await SendForgotPasswordEmail(email, URL)
-        return res.status(200).json({ success: true, message: "Reset Password Email Sent Successfully", SendResetPasswordEmailStatus: SendResetPasswordEmailStatus, type: "HRforgotpassword" })
+        return res.status(200).json({ success: true, message: "Email đặt lại mật khẩu đã được gửi thành công", SendResetPasswordEmailStatus: SendResetPasswordEmailStatus, type: "HRforgotpassword" })
     }
     catch (error) {
-        return res.status(500).json({ success: false, message: "Internal Server Error", error: error, type: "HRforgotpassword" })
+        return res.status(500).json({ success: false, message: "Lỗi máy chủ nội bộ", error: error, type: "HRforgotpassword" })
     }
 }
 
@@ -193,7 +193,7 @@ export const HandleHRResetPassword = async (req, res) => {
         const HR = await HumanResources.findOne({ resetpasswordtoken: token, resetpasswordexpires: { $gt: Date.now() } })
 
         if (!HR) {
-            return res.status(401).json({ success: false, message: "Invalid or Expired Reset Password Token", resetpassword: false })
+            return res.status(401).json({ success: false, message: "Mã đặt lại mật khẩu không hợp lệ hoặc đã hết hạn", resetpassword: false })
         }
 
         const hashedPassword = await bcrypt.hash(password, 10)
@@ -203,10 +203,10 @@ export const HandleHRResetPassword = async (req, res) => {
         await HR.save()
 
         const SendPasswordResetEmailStatus = await SendResetPasswordConfimation(HR.email)
-        return res.status(200).json({ success: true, message: "Password Reset Successfully", SendPasswordResetEmailStatus: SendPasswordResetEmailStatus, resetpassword: true })
+        return res.status(200).json({ success: true, message: "Đặt lại mật khẩu thành công", SendPasswordResetEmailStatus: SendPasswordResetEmailStatus, resetpassword: true })
 
     } catch (error) {
-        return res.status(500).json({ success: false, message: "Internal Server Error", error: error, resetpassword: false })
+        return res.status(500).json({ success: false, message: "Lỗi máy chủ nội bộ", error: error, resetpassword: false })
     }
 }
 
@@ -216,11 +216,11 @@ export const HandleHRResetverifyEmail = async (req, res) => {
         const HR = await HumanResources.findOne({ email: email, _id: req.HRid, organizationID: req.ORGID })
 
         if (!HR) {
-            return res.status(404).json({ success: false, message: "HR Email Does Not Exist, Please Enter Correct Email", type: "HRResendVerifyEmail" })
+            return res.status(404).json({ success: false, message: "Email HR không tồn tại, vui lòng nhập đúng email", type: "HRResendVerifyEmail" })
         }
 
         if (HR.isverified) {
-            return res.status(400).json({ success: false, message: "HR Email is already Verified", type: "HRResendVerifyEmail" })
+            return res.status(400).json({ success: false, message: "Email HR đã được xác thực trước đó", type: "HRResendVerifyEmail" })
         }
 
         const verificationcode = GenerateVerificationToken(6)
@@ -230,11 +230,11 @@ export const HandleHRResetverifyEmail = async (req, res) => {
         await HR.save()
 
         const SendVerificationEmailStatus = await SendVerificationEmail(email, verificationcode)
-        return res.status(200).json({ success: true, message: "Verification Email Sent Successfully", SendVerificationEmailStatus: SendVerificationEmailStatus, type: "HRResendVerifyEmail" })
+        return res.status(200).json({ success: true, message: "Mã xác thực mới đã được gửi thành công", SendVerificationEmailStatus: SendVerificationEmailStatus, type: "HRResendVerifyEmail" })
 
     }
     catch (error) {
-        return res.status(500).json({ success: false, message: "Internal Server Error", error: error })
+        return res.status(500).json({ success: false, message: "Lỗi máy chủ nội bộ", error: error })
     }
 }
 
@@ -243,16 +243,16 @@ export const HandleHRcheckVerifyEmail = async (req, res) => {
         const HR = await HumanResources.findOne({ _id: req.HRid, organizationID: req.ORGID })
 
         if (HR.isverified) {
-            return res.status(200).json({ sucess: true, message: "HR Already Verified", type: "HRcodeavailable", alreadyverified: true })
+            return res.status(200).json({ sucess: true, message: "Email HR đã được xác thực", type: "HRcodeavailable", alreadyverified: true })
         }
 
         if ((HR.verificationtoken) && (HR.verificationtokenexpires > Date.now())) {
-            return res.status(200).json({ success: true, message: "Verification Code is Still Valid", type: "HRcodeavailable" })
+            return res.status(200).json({ success: true, message: "Mã xác thực hiện tại vẫn còn hiệu lực", type: "HRcodeavailable" })
         }
 
-        return res.status(404).json({ success: false, message: "Invalid or Expired Verification Code", type: "HRcodeavailable" })
+        return res.status(404).json({ success: false, message: "Mã xác thực không hợp lệ hoặc đã hết hạn", type: "HRcodeavailable" })
     }
     catch (error) {
-        return res.status(500).json({ success: false, message: "Internal Server Error", error: error, type: "HRcodeavailable" })
+        return res.status(500).json({ success: false, message: "Lỗi máy chủ nội bộ", error: error, type: "HRcodeavailable" })
     }
-} 
+}

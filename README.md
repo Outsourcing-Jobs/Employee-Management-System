@@ -183,7 +183,9 @@ Create a .env file in the server directory and configure the following :
 
 MONGODB_URI = your mongoDB connection URI
 PORT = your port
-MAILTRAP_TOKEN = your mailtrap token
+BREVO_SENDER_EMAIL= your email
+BREVO_SENDER_NAME= your name app email
+BREVO_API_KEY= your api key
 JWT_SECRET = your jwt secret
 CLIENT_URL = your client URL
 

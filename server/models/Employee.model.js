@@ -34,6 +34,10 @@ const EmployeeSchema = new Schema({
         enum: ["HR-Admin", "Employee"],
         required: true,
     },
+    gender: {
+        type: Boolean,
+        default: false
+    },
     lastlogin: {
         type: Date,
         default: Date.now

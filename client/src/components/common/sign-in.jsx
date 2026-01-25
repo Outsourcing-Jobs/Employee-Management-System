@@ -8,11 +8,13 @@ export const SignIn = ({ image, handlesigninform, handlesigninsubmit, targetedst
             <div className="flex min-h-full flex-1 min-[200px]:flex-col md:flex-row md:items-center justify-center px-6 py-12 lg:px-8 md:gap-5">
 
                 <div className="sm:mx-auto sm:w-full sm:max-w-sm lg:mx-10">
+                <Link to="/">
                     <img
                         alt="Your Company"
                         src={image}
                         className="w-auto h-auto mx-auto"
                     />
+                    </Link>
                 </div>
                 <div className="my-5 sm:mx-auto sm:w-full sm:max-w-sm lg:mx-10">
                     <h2 className="mb-5 font-bold tracking-tight text-center text-gray-900 text-2xl/9">

@@ -213,6 +213,7 @@ export const HRDepartmentPageAsyncReducer = (builder, thunk) => {
         else if (action.payload.type === "CreateDepartment" || 
             action.payload.type === "DepartmentDelete" || 
             action.payload.type === "DepartmentEMUpdate" || 
+            action.payload.type === "DepartmentDEUpdate" ||
             action.payload.type === "RemoveEmployeeDE") 
             {
             state.isLoading = false;

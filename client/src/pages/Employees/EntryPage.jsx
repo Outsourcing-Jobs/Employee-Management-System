@@ -10,8 +10,8 @@ export const EntryPage = () => {
                     <h1 className="text-xl text-blue-600 font-bold min-[300px]:text-lg min-[300px]:text-center">Chào mừng bạn đến với Hệ thống Quản lý Nhân viên, vui lòng chọn vai trò để tiếp tục</h1>
                 </div>
                 <div className="flex justify-center gap-5 buttons placeholder:items-center">
-                    <Link to={"/auth/employee/login"}><Button className="text-lg font-bold text-white bg-purple-600">Nhân viên</Button></Link>
-                    <Link to={"/auth/HR/signup"}><Button className="text-lg font-bold text-white bg-purple-600">HR-Admin</Button> </Link>
+                    <Link to={"/auth/employee/login"}><Button className="text-lg font-bold text-white bg-blue-600">Nhân viên</Button></Link>
+                    <Link to={"/auth/HR/signup"}><Button className="text-lg font-bold text-white bg-blue-600">HR-Admin</Button> </Link>
                 </div>
             </div>
         </div >

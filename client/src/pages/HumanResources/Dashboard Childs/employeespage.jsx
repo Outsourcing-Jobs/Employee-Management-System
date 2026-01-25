@@ -1,49 +1,114 @@
-import { ListWrapper } from "../../../components/common/Dashboard/ListDesigns"
-import { HeadingBar } from "../../../components/common/Dashboard/ListDesigns"
-import { useEffect } from "react"
-import { useDispatch, useSelector } from "react-redux"
-import { HandleGetHREmployees } from "../../../redux/Thunks/HREmployeesThunk.js"
-import { Loading } from "../../../components/common/loading.jsx"
-import { ListItems } from "../../../components/common/Dashboard/ListDesigns"
-import { ListContainer } from "../../../components/common/Dashboard/ListDesigns"
-import { AddEmployeesDialogBox } from "../../../components/common/Dashboard/dialogboxes.jsx"
+import { ListWrapper } from "../../../components/common/Dashboard/ListDesigns";
+import { HeadingBar } from "../../../components/common/Dashboard/ListDesigns";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { HandleGetHREmployees } from "../../../redux/Thunks/HREmployeesThunk.js";
+import { Loading } from "../../../components/common/loading.jsx";
+import { ListItems } from "../../../components/common/Dashboard/ListDesigns";
+import { ListContainer } from "../../../components/common/Dashboard/ListDesigns";
+import { AddEmployeesDialogBox } from "../../../components/common/Dashboard/dialogboxes.jsx";
 export const HREmployeesPage = () => {
-    const dispatch = useDispatch()
-    const HREmployeesState = useSelector((state) => state.HREmployeesPageReducer)
-    const table_headings = ["Full Name", "Email", "Department", "Contact Number", "Modify Employee"]
+  const dispatch = useDispatch();
+  const HREmployeesState = useSelector((state) => state.HREmployeesPageReducer);
+  const table_headings = [
+    "Họ và tên ",
+    "Email",
+    "Phòng ban",
+    "Số điện thoại",
+    "Hành động ",
+  ];
 
-    useEffect(() => {
-        if (HREmployeesState.fetchData) {
-            dispatch(HandleGetHREmployees({ apiroute: "GETALL" }))
-        }
-    }, [HREmployeesState.fetchData])
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 9;
 
-    useEffect(() => {
-        dispatch(HandleGetHREmployees({ apiroute: "GETALL" }))
-    }, [])
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
 
-    if (HREmployeesState.isLoading) {
-        return (
-            <Loading />
-        )
+  const currentEmployees =
+    HREmployeesState.data?.slice(indexOfFirstItem, indexOfLastItem) || [];
+  const totalPages = Math.ceil(
+    (HREmployeesState.data?.length || 0) / itemsPerPage
+  );
+
+  const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
+  useEffect(() => {
+    if (HREmployeesState.fetchData) {
+      dispatch(HandleGetHREmployees({ apiroute: "GETALL" }));
+      setCurrentPage(1);
     }
+  }, [HREmployeesState.fetchData]);
 
-    return (
-        <div className="employee-page-content w-full mx-auto my-10 flex flex-col gap-5 h-[94%]">
-            <div className="flex items-center justify-between employees-heading md:pe-5">
-                <h1 className="min-[250px]:text-xl md:text-4xl font-bold">Nhân viên </h1>
-                <div className="employee-crate-button">
-                    <AddEmployeesDialogBox />
-                </div>
-            </div>
-            <div className="flex flex-col gap-4 overflow-auto employees-data md:pe-5">
-                <ListWrapper>
-                    <HeadingBar table_layout={"grid-cols-5"} table_headings={table_headings} />
-                </ListWrapper>
-                <ListContainer>
-                    <ListItems TargetedState={HREmployeesState} />
-                </ListContainer>
-            </div>
+  useEffect(() => {
+    dispatch(HandleGetHREmployees({ apiroute: "GETALL" }));
+  }, []);
+
+  if (HREmployeesState.isLoading) {
+    return <Loading />;
+  }
+
+  return (
+    <div className="employee-page-content w-full mx-auto my-5 flex flex-col gap-5 h-[94%]">
+      <div className="flex items-center justify-between employees-heading md:pe-5 ">
+        <h1 className="min-[250px]:text-xl md:text-3xl font-bold">
+          Nhân viên{" "}
+        </h1>
+        <div className="employee-crate-button ">
+          <AddEmployeesDialogBox />
         </div>
-    )
-}
+      </div>
+      <div className="flex flex-col gap-4 employees-data md:pe-5">
+        <ListWrapper>
+          <HeadingBar
+            table_layout={"grid-cols-5"}
+            table_headings={table_headings}
+          />
+        </ListWrapper>
+        <ListContainer>
+          <ListItems TargetedState={{ data: currentEmployees }} />
+        </ListContainer>
+        {totalPages > 1 && (
+          <div className="flex items-center justify-center gap-3 border-t border-gray-100">
+            <button
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage === 1}
+              className="px-4 py-2 text-sm font-medium text-gray-500 transition-colors border-2 border-gray-500 rounded-lg hover:bg-gray-500 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-gray-500"
+            >
+              Trước
+            </button>
+
+            <div className="flex gap-2">
+              {[...Array(totalPages)].map((_, index) => {
+                const pageNumber = index + 1;
+                const isActive = currentPage === pageNumber;
+
+                return (
+                  <button
+                    key={pageNumber}
+                    onClick={() => handlePageChange(pageNumber)}
+                    className={`w-10 h-10 flex items-center justify-center rounded-lg font-bold transition-all duration-200 border-2 
+                            ${
+                              isActive
+                                ? "bg-gray-500 border-gray-500 text-white shadow-md scale-110"
+                                : "border-gray-500 text-gray-500 hover:bg-gray-100"
+                            }`}
+                  >
+                    {pageNumber}
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Nút Sau */}
+            <button
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage === totalPages}
+              className="px-4 py-2 text-sm font-medium text-gray-500 transition-colors border-2 border-gray-500 rounded-lg hover:bg-gray-500 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-gray-500"
+            >
+              Sau
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};

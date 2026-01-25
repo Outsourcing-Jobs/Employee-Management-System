@@ -1,7 +1,7 @@
 export const EmployeeDashboard = () =>{
     return(
-        <div className="bg-red-500 text-4xl font-bold flex justify-center items-center">
-            <p>This is The Dashbaord</p>
+        <div className="flex items-center justify-center text-4xl font-bold bg-red-500">
+            <p>Dashboard</p>
         </div>
     )
 }

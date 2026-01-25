@@ -5,24 +5,24 @@ export const Reset_Password = ({ handlepasswordsubmit, handlepasswordform, passw
     return (
         <>
             {targetstate.error.status ? <ErrorPopup error={targetstate.error.message} /> : null}
-            {passworderror ? <ErrorPopup error={"Password Does Not Match, Please Try Again"} /> : null}
+            {passworderror ? <ErrorPopup error={"Mật khẩu không khớp, vui lòng thử lại"} /> : null}
             <div className="flex min-h-full flex-1 min-[200px]:flex-col md:flex-row md:items-center justify-center px-6 py-12 lg:px-8 md:gap-5">
 
                 <div className="sm:mx-auto sm:w-full sm:max-w-sm lg:mx-10">
                     <img
                         alt="Your Company" src="../../src/assets/resetpassword.png"
-                        className="mx-auto h-auto w-auto"
+                        className="w-auto h-auto mx-auto"
                     />
                     <img src="../../src/assets/welcome.png" alt="" />
                 </div>
                 <div className="my-5 sm:mx-auto sm:w-full sm:max-w-sm lg:mx-10">
-                    <h2 className="mb-5 text-center text-2xl/9 font-bold tracking-tight text-gray-900">
-                        Enter Your New Password
+                    <h2 className="mb-5 font-bold tracking-tight text-center text-gray-900 text-2xl/9">
+                    Nhập mật khẩu mới của bạn
                     </h2>
                     <form className="space-y-6">
                         <div>
-                            <label htmlFor="email" className="block text-sm/6 font-medium text-gray-900">
-                                Password
+                            <label htmlFor="email" className="block font-medium text-gray-900 text-sm/6">
+                            Mật khẩu mới
                             </label>
                             <div className="mt-2">
                                 <input
@@ -39,8 +39,8 @@ export const Reset_Password = ({ handlepasswordsubmit, handlepasswordform, passw
 
                         <div>
                             <div className="flex items-center justify-between">
-                                <label htmlFor="password" className="block text-sm/6 font-medium text-gray-900">
-                                    Repeat Password
+                                <label htmlFor="password" className="block font-medium text-gray-900 text-sm/6">
+                                Xác nhận mật khẩu mới
                                 </label>
                                 {/* <div className="text-sm">
                                         <Link to={"/forgot-password"}>
@@ -68,7 +68,7 @@ export const Reset_Password = ({ handlepasswordsubmit, handlepasswordform, passw
                                 type="submit"
                                 className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                                 onClick={handlepasswordsubmit}>
-                                Confirm
+                                Xác nhận thay đổi
                             </button>
                         </div>
                     </form>

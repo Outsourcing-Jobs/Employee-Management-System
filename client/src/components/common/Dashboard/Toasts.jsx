@@ -24,8 +24,8 @@ export const FormSubmitToast = ({ formdata }) => {
     //         })
     //     } else if (HREmployeesState.fetchData) {
     //         return toast({
-    //             title: <p className="text-xl m-1">Success!</p>,
-    //             description: <div className="flex justify-center items-center gap-2">
+    //             title: <p className="m-1 text-xl">Success!</p>,
+    //             description: <div className="flex items-center justify-center gap-2">
     //                 <img src="../../src/assets/HR-Dashboard/correct.png" alt="" className="w-8" />
     //                 <p className="font-bold">Employee added successfully.</p>
     //             </div>,
@@ -47,16 +47,16 @@ export const FormSubmitToast = ({ formdata }) => {
                     //     // action: <ToastAction altText="Try again">Try again</ToastAction>,
                     // }) : null
                     // HREmployeesState.fetchData ? toast({
-                    //     title: <p className="text-xl m-1">Success!</p>,
-                    //     description: <div className="flex justify-center items-center gap-2">
+                    //     title: <p className="m-1 text-xl">Success!</p>,
+                    //     description: <div className="flex items-center justify-center gap-2">
                     //         <img src="../../src/assets/HR-Dashboard/correct.png" alt="" className="w-8" />
                     //         <p className="font-bold">Employee added successfully.</p>
                     //     </div>,
                     // }) : null
                 }}
-                className="bg-blue-800 border-2 border-blue-800 px-4 py-2 text-white font-bold rounded-lg hover:bg-white hover:text-blue-800"
+                className="px-4 py-2 font-bold text-white bg-blue-500 border-2 border-blue-500 rounded-lg hover:bg-white hover:text-blue-500"
             >
-                Add Employee
+                Thêm nhân viên
             </Button>
         </>
     )

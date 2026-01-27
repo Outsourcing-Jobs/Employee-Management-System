@@ -81,12 +81,11 @@ export const HandleAllGenerateRequest = async (req, res) => {
       startDate,
       endDate,
       sortBy,
-      order,
-      ORGID,
+      order
     } = req.query;
 
     // 2. Khởi tạo filter mặc định theo tổ chức
-    let queryFilter = { organizationID: ORGID };
+    let queryFilter = { organizationID: req.ORGID };
 
     // --- BỘ LỌC (FILTERS) ---
 

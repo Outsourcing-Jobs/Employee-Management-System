@@ -31,30 +31,7 @@ const fullSeed = async () => {
         const allModels = [Organization, HumanResources, Department, Employee, Applicant, Salary, Notice, Attendance, Leave, Interviewinsight, GenerateRequest, Recruitment, CorporateCalendar, Balance];
         for (const m of allModels) await m.deleteMany({});
 
-        // 1. Tạo Gốc (FPT Software)
-        const newOrg = await Organization.create({
-            name: "FPT Software",
-            description: "Tập đoàn công nghệ hàng đầu Việt Nam",
-            OrganizationURL: "https://fpt-software.com",
-            OrganizationMail: "hr@fpt.com"
-        });
-
-        const hashedPassword = await bcrypt.hash("AdminPassword123", 10);
-        const newHR = await HumanResources.create({
-            firstname: "Admin", lastname: "Hệ Thống",
-            email: "admin@fpt.com", password: hashedPassword,
-            contactnumber: "0987654321", role: "HR-Admin",
-            organizationID: newOrg._id, isverified: true 
-        });
-
-        // 2. Phòng ban tiếng Việt
-        const deptNames = ["Phòng Phát triển Phần mềm", "Phòng Đảm bảo Chất lượng", "Phòng Thiết kế Product", "Phòng An ninh mạng"];
-        const depts = await Department.insertMany(deptNames.map(name => ({
-            name, description: `Bộ phận chuyên môn thuộc ${name}`, organizationID: newOrg._id
-        })));
-
-        // 3. Nhân viên
-        const ho = [
+                const ho = [
             "Nguyễn", "Trần", "Lê", "Phạm", "Hoàng", "Huỳnh",
             "Phan", "Vũ", "Võ", "Đặng", "Bùi", "Đỗ",
             "Hồ", "Ngô", "Dương", "Lý", "Đinh", "Trịnh",
@@ -107,14 +84,77 @@ const fullSeed = async () => {
             const prefix = prefixes[Math.floor(Math.random() * prefixes.length)];
             return prefix + Math.floor(10000000 + Math.random() * 90000000);
         }
+        
+        // 1. Tạo Gốc (FPT Software)
+        const newOrg = await Organization.create({
+            name: "FPT Software",
+            description: "Tập đoàn công nghệ hàng đầu Việt Nam",
+            OrganizationURL: "https://fpt-software.com",
+            OrganizationMail: "hr@fpt.com"
+        });
 
+        const hashedPassword = await bcrypt.hash("AdminPassword123", 10);
+        const newHR = await HumanResources.create({
+            firstname: "Admin", lastname: "Hệ Thống",
+            email: "admin@fpt.com", password: hashedPassword,
+            contactnumber: "0987654321", role: "HR-Admin",
+            organizationID: newOrg._id, isverified: true 
+        });
+
+        // 2. Phòng ban tiếng Việt
+        const deptNames = ["Phòng Phát triển Phần mềm", "Phòng Đảm bảo Chất lượng", "Phòng Thiết kế Product", "Phòng An ninh mạng"];
+        const depts = await Department.insertMany(deptNames.map(name => ({
+            name, description: `Bộ phận chuyên môn thuộc ${name}`, organizationID: newOrg._id
+        })));
+
+        // 3. Nhân viên
         const hashedPasswordEmployee = await bcrypt.hash("Employee@123", 10);
         const emps = [];
+        const isMale = Math.random() < 0.5;
+
+        await Employee.insertMany(
+        [
+            {
+                firstname: "Đoàn",
+                lastname: "Đức Hải",
+                gender: true,
+                email: "hdoan82300@gmail.com",
+                password: hashedPasswordEmployee,
+                contactnumber: "0912345678",
+                role: "Employee",
+                department: depts[0]._id,
+                organizationID: newOrg._id,
+                isverified: true
+            },
+            {
+                firstname: "Đặng",
+                lastname: "Hồng",
+                gender: false,
+                email: "danghong@gmail.com",
+                password: hashedPasswordEmployee,
+                contactnumber: "0987654321",
+                role: "Employee",
+                department: depts[1]._id,
+                organizationID: newOrg._id,
+                isverified: true
+            },
+            {
+                firstname: "Trần",
+                lastname: "Thị Dạ Thương",
+                gender: false,
+                email: "dathuong@gmail.com",
+                password: hashedPasswordEmployee,
+                contactnumber: "0987654321",
+                role: "Employee",
+                department: depts[1]._id,
+                organizationID: newOrg._id,
+                isverified: true
+            }
+        ]);
+
 
         for (const d of depts) {
             for (let i = 0; i < 5; i++) {
-
-                const isMale = Math.random() < 0.5;
 
                 const firstName = ho[Math.floor(Math.random() * ho.length)];
                 const middleName = isMale
@@ -151,12 +191,30 @@ const fullSeed = async () => {
             department: depts[0]._id, organizationID: newOrg._id
         })));
 
-        const apps = await Applicant.insertMany(Array.from({ length: 20 }).map(() => ({
-            firstname: faker.person.firstName(), lastname: faker.person.lastName(),
-            email: faker.internet.email().toLowerCase(), contactnumber: faker.phone.number(),
-            appliedrole: faker.helpers.arrayElement(["Software Engineer", "Frontend Dev"]), 
-            organizationID: newOrg._id
-        })));
+        const firstName = ho[Math.floor(Math.random() * ho.length)];
+        const middleName = isMale
+            ? tenDemNam[Math.floor(Math.random() * tenDemNam.length)]
+            : tenDemNu[Math.floor(Math.random() * tenDemNu.length)];
+
+        const lastName = isMale
+            ? tenNam[Math.floor(Math.random() * tenNam.length)]
+            : tenNu[Math.floor(Math.random() * tenNu.length)];
+
+        const fullName = `${firstName} ${middleName} ${lastName}`;
+        const emailName = removeVietnameseTones(fullName).toLowerCase();
+        const apps = await Applicant.insertMany(
+            Array.from({ length: 20 }).map((_, i) => ({
+                firstname: firstName,
+                lastname: lastName,
+                email: `${emailName}${i + 1}@gmail.com`, 
+                contactnumber: randomPhoneVN(),
+                appliedrole: faker.helpers.arrayElement([
+                    "Software Engineer",
+                    "Frontend Dev"
+                ]),
+                organizationID: newOrg._id
+            }))
+        );
 
         // 5. Sinh dữ liệu từ Factory
         const rich = generateRichData(newOrg._id, newHR._id, depts, savedEmps, apps);

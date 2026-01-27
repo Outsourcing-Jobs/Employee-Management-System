@@ -14,22 +14,26 @@ export const HRDashboardPage = () => {
         {
             image: "/../../src/assets/HR-Dashboard/employee-2.png",
             dataname: "employees",
-            path: "/HR/dashboard/employees"
+            path: "/HR/dashboard/employees",
+            description:"Nhân viên"
         },
         {
             image: "/../../src/assets/HR-Dashboard/department.png",
             dataname: "departments",
             path: "/HR/dashboard/departments",
+            description:"Phòng ban"
         },
         {
             image: "/../../src/assets/HR-Dashboard/leave.png",
             dataname: "leaves",
-            path: "/HR/dashboard/leaves"
+            path: "/HR/dashboard/leaves",
+            description:"Nghỉ phép"
         },
         {
             image: "/../../src/assets/HR-Dashboard/request.png",
             dataname: "requestes",
-            path: "/HR/dashboard/requestes"
+            path: "/HR/dashboard/requestes",
+            description:"Yêu cầu"
         }
     ]
 

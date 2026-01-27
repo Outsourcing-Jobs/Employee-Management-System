@@ -152,27 +152,26 @@ export const DataTable = ({ noticedata }) => {
                     noticeID: index + 1,
                     noticeTitle: noticedata.notices[index].title,
                     noticeAudience: noticedata.notices[index].audience,
-                    noticeCreatedBy: `${noticedata.notices[index].createdby["firstname"]} ${noticedata.notices[index].createdby["lastname"]}`,
+                  noticeCreatedBy: `${noticedata?.notices?.[index]?.createdby?.firstname || "Người dùng"} ${noticedata?.notices?.[index]?.createdby?.lastname || "hệ thống"}`,
                 }
             )
         }
     }
 
-    console.log("Notice array", Notices)
 
     return (
 
-        <div className="overflow-auto h-full">
-            <div className="notices-heading mx-3 my-2">
-                <p className="min-[250px]:text-xl xl:text-3xl font-bold min-[250px]:text-center sm:text-start">Recent Notices</p>
+        <div className="h-full overflow-auto">
+            <div className="mx-3 my-2 notices-heading">
+                <p className="min-[250px]:text-xl xl:text-2xl font-bold min-[250px]:text-center sm:text-start">Thông báo gần đây</p>
             </div>
             <Table>
                 <TableHeader>
                     <TableRow>
-                        <TableHead className="w-[100px]">Notice ID</TableHead>
-                        <TableHead>Title</TableHead>
-                        <TableHead>Audience</TableHead>
-                        <TableHead className="text-right">Created By</TableHead>
+                        <TableHead className="w-[10px]">Mã</TableHead>
+                        <TableHead>Tiêu đề</TableHead>
+                        <TableHead>Đối tượng</TableHead>
+                        <TableHead className="text-right w-[140px]">Người tạo</TableHead>
                     </TableRow>
                 </TableHeader>
 

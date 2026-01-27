@@ -45,7 +45,11 @@ export const HandleDeleteHRDepartments = createAsyncThunk("HandleDeleteHRDepartm
             data: data,
             withCredentials: true
         });
-        return response.data;
+        return {
+            ...response.data,          
+            type: "DepartmentDelete",   
+            deletedID: data.departmentID 
+        };
     } catch (error) {
         return rejectWithValue(error.response.data);
     }

@@ -168,7 +168,7 @@ const Sidebar = React.forwardRef((
             }
           }
           side={side}>
-          <div className="flex h-full w-full flex-col">{children}</div>
+          <div className="flex flex-col w-full h-full">{children}</div>
         </SheetContent>
       </Sheet>)
     );
@@ -177,7 +177,7 @@ const Sidebar = React.forwardRef((
   return (
     (<div
       ref={ref}
-      className="group peer hidden md:block text-sidebar-foreground"
+      className="hidden group peer md:block text-sidebar-foreground"
       data-state={state}
       data-collapsible={state === "collapsed" ? collapsible : ""}
       data-variant={variant}
@@ -232,7 +232,7 @@ const SidebarTrigger = React.forwardRef(({ className, onClick, ...props }, ref) 
       }}
       {...props}>
       <PanelLeft />
-      <span className="sr-only">Toggle Sidebar</span>
+      <span className="sr-only">Ẩn/Hiện</span>
     </Button>)
   );
 })
@@ -536,7 +536,7 @@ const SidebarMenuSkeleton = React.forwardRef(({ className, showIcon = false, ...
       className={cn("rounded-md h-8 flex gap-2 px-2 items-center", className)}
       {...props}>
       {showIcon && (
-        <Skeleton className="size-4 rounded-md" data-sidebar="menu-skeleton-icon" />
+        <Skeleton className="rounded-md size-4" data-sidebar="menu-skeleton-icon" />
       )}
       <Skeleton
         className="h-4 flex-1 max-w-[--skeleton-width]"

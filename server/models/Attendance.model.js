@@ -11,7 +11,7 @@ const AttendanceSchema = new Schema({
     status: {
         type: String,
         required: true,
-        enum: ['Present', 'Absent', 'Not Specified']
+        enum: ['Present', 'Absent', 'Not Specified', 'Leave']
     },
     attendancelog: [
         {
@@ -22,7 +22,7 @@ const AttendanceSchema = new Schema({
             logstatus: {
                 type: String,
                 required: true,
-                enum: ['Present', 'Absent', 'Not Specified']
+                enum: ['Present', 'Absent', 'Not Specified', 'Leave']
             }
         }
     ],

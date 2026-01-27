@@ -15,15 +15,31 @@ export const generateRichData = (orgId, hrAdminId, departments, employees, appli
     // 1. Lương (Salary) - Giữ nguyên logic nhưng chú thích bằng tiền VND
     employees.forEach(emp => {
         for (let i = 0; i < 3; i++) {
+
+            const now = new Date();
+            const salaryMonth = now.getMonth() + 1; // 1–12
+            const salaryYear = now.getFullYear();
+
+            const workingDays = faker.number.int({ min: 20, max: 26 });
+
             const basic = faker.number.int({ min: 12_000_000, max: 45_000_000 });
+            const bonuses = faker.number.int({ min: 500_000, max: 2_000_000 });
+            const deductions = faker.number.int({ min: 100_000, max: 500_000 });
+
             data.salaries.push({
                 employee: emp._id,
                 basicpay: basic,
-                bonuses: faker.number.int({ min: 500_000, max: 2_000_000 }),
-                deductions: faker.number.int({ min: 100_000, max: 500_000 }),
-                netpay: basic + 500_000,
+
+                salaryMonth,
+                salaryYear,
+                workingDays,
+
+                bonuses,
+                deductions,
+                netpay: basic + bonuses - deductions,
+
                 currency: "VND",
-                duedate: faker.date.future(), 
+                duedate: faker.date.future(),
                 status: i === 0 ? "Pending" : "Paid",
                 organizationID: orgId
             });
@@ -38,7 +54,7 @@ export const generateRichData = (orgId, hrAdminId, departments, employees, appli
             const isWeekend = date.getDay() === 0 || date.getDay() === 6;
             return {
                 logdate: date,
-                logstatus: isWeekend ? 'Not Specified' : faker.helpers.arrayElement(['Present', 'Present', 'Absent'])
+                logstatus: isWeekend ? 'Not Specified' : faker.helpers.arrayElement(['Present', 'Present', 'Absent', 'Leave'])
             };
         });
         data.attendance.push({

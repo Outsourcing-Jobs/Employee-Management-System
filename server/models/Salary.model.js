@@ -11,6 +11,18 @@ const SalarySchema = new Schema({
         type: Number,
         required: true
     },
+    salaryMonth: {
+        type: Number, 
+        required: true
+    },
+    salaryYear: {
+        type: Number,
+        required: true
+    },
+    workingDays: {
+        type: Number,
+        required: true
+    },
     bonuses: {
         type: Number,
         required: true

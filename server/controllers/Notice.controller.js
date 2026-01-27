@@ -122,11 +122,11 @@ export const HandleAllNotice = async (req, res) => {
       endDate,
       sortBy,
       order,
-      ORGID,
+      // ORGID,
     } = req.query;
 
     // 1. Khởi tạo filter mặc định theo tổ chức
-    let queryFilter = { organizationID: ORGID };
+    let queryFilter = { organizationID: req.ORGID };
 
     // --- BỘ LỌC (FILTERS) ---
 

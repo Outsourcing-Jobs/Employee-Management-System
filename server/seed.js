@@ -110,11 +110,10 @@ const fullSeed = async () => {
         // 3. Nhân viên
         const hashedPasswordEmployee = await bcrypt.hash("Employee@123", 10);
         const emps = [];
+        const isMale = Math.random() < 0.5;
 
         for (const d of depts) {
             for (let i = 0; i < 5; i++) {
-
-                const isMale = Math.random() < 0.5;
 
                 const firstName = ho[Math.floor(Math.random() * ho.length)];
                 const middleName = isMale
@@ -162,12 +161,19 @@ const fullSeed = async () => {
 
         const fullName = `${firstName} ${middleName} ${lastName}`;
         const emailName = removeVietnameseTones(fullName).toLowerCase();
-        const apps = await Applicant.insertMany(Array.from({ length: 20 }).map(() => ({
-            firstname: firstName, lastname: lastName,
-            email: `${emailName}@gmail.com`,
-            appliedrole: faker.helpers.arrayElement(["Software Engineer", "Frontend Dev"]), 
-            organizationID: newOrg._id
-        })));
+        const apps = await Applicant.insertMany(
+            Array.from({ length: 20 }).map((_, i) => ({
+                firstname: firstName,
+                lastname: lastName,
+                email: `${emailName}${i + 1}@gmail.com`, 
+                contactnumber: randomPhoneVN(),
+                appliedrole: faker.helpers.arrayElement([
+                    "Software Engineer",
+                    "Frontend Dev"
+                ]),
+                organizationID: newOrg._id
+            }))
+        );
 
         // 5. Sinh dữ liệu từ Factory
         const rich = generateRichData(newOrg._id, newHR._id, depts, savedEmps, apps);

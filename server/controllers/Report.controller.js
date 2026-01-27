@@ -667,7 +667,7 @@ export const HandleExportAllHR = async (req, res) => {
 
 export const ExportFullSystemPDF = async (req, res) => {
   try {
-    const { orgId } = req.query;
+    const orgId = req.ORGID;
     if (!orgId)
       return res.status(400).json({ message: "Thiếu organizationID" });
 

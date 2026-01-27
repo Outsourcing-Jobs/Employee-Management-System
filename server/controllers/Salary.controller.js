@@ -125,11 +125,11 @@ export const HandleAllSalary = async (req, res) => {
       maxNet,
       sortBy,
       order,
-      ORGID,
+      // ORGID,
     } = req.query;
 
     // 2. Khởi tạo Object Filter mặc định với Organization ID (Bắt buộc)
-    let queryFilter = { organizationID: ORGID };
+    let queryFilter = { organizationID: req.ORGID };
 
     // --- BỘ LỌC CHI TIẾT (FILTERS) ---
 

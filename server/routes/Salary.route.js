@@ -19,8 +19,8 @@ router.post(
 
 router.get(
   "/all",
-  //   VerifyhHRToken,
-  //   RoleAuthorization("HR-Admin"),
+    VerifyhHRToken,
+    RoleAuthorization("HR-Admin"),
   HandleAllSalary,
 );
 

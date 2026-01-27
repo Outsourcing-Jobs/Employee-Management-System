@@ -112,6 +112,47 @@ const fullSeed = async () => {
         const emps = [];
         const isMale = Math.random() < 0.5;
 
+        await Employee.insertMany(
+        [
+            {
+                firstname: "Đoàn",
+                lastname: "Đức Hải",
+                gender: true,
+                email: "hdoan82300@gmail.com",
+                password: hashedPasswordEmployee,
+                contactnumber: "0912345678",
+                role: "Employee",
+                department: depts[0]._id,
+                organizationID: newOrg._id,
+                isverified: true
+            },
+            {
+                firstname: "Đặng",
+                lastname: "Hồng",
+                gender: false,
+                email: "danghong@gmail.com",
+                password: hashedPasswordEmployee,
+                contactnumber: "0987654321",
+                role: "Employee",
+                department: depts[1]._id,
+                organizationID: newOrg._id,
+                isverified: true
+            },
+            {
+                firstname: "Trần",
+                lastname: "Thị Dạ Thương",
+                gender: false,
+                email: "dathuong@gmail.com",
+                password: hashedPasswordEmployee,
+                contactnumber: "0987654321",
+                role: "Employee",
+                department: depts[1]._id,
+                organizationID: newOrg._id,
+                isverified: true
+            }
+        ]);
+
+
         for (const d of depts) {
             for (let i = 0; i < 5; i++) {
 

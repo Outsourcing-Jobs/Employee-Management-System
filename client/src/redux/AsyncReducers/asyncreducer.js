@@ -262,3 +262,163 @@ export const EmployeesIDsAsyncReducer = (builder, thunk) => {
         state.error.content = action.payload
     })
 }
+
+export const HRRecruitmentPageAsyncReducer = (builder, thunk) => {
+    builder.addCase(thunk.pending, (state) => {
+        state.isLoading = true;
+        state.error.content = null;
+    });
+
+    builder.addCase(thunk.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.error.status = false;
+        state.error.message = null;
+        state.error.content = null;
+
+        // ✅ GET ALL
+        if (Array.isArray(action.payload.data)) {
+            state.data = action.payload.data;
+            state.fetchData = false;
+        }
+
+        // ✅ CREATE / DELETE / UPDATE
+        if (action.payload.type === "RecruitmentCreate" ||
+            action.payload.type === "RecruitmentDelete") {
+            state.success = action.payload.success;
+            state.fetchData = true;
+        }
+    });
+
+    builder.addCase(thunk.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error.status = true;
+        state.error.message = action.payload?.message;
+        state.error.content = action.payload;
+    });
+};
+
+export const HRInterviewInsightsAsyncReducer = (builder, thunk) => {
+    builder.addCase(thunk.pending, (state) => {
+        state.isLoading = true;
+        state.error.content = null;
+    });
+
+    builder.addCase(thunk.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.error.status = false;
+        state.error.message = null;
+        state.error.content = null;
+
+        // ✅ GET ALL
+        if (Array.isArray(action.payload.data)) {
+            state.data = action.payload.data;
+            state.fetchData = false;
+        }
+
+        // ✅ GET ONE
+        if (action.payload.type === "GetInterviewInsight") {
+            state.selectedInterview = action.payload.data;
+        }
+
+        // ✅ CREATE / UPDATE / DELETE
+        if (
+            action.payload.type === "InterviewInsightCreate" ||
+            action.payload.type === "InterviewInsightUpdate" ||
+            action.payload.type === "InterviewInsightDelete"
+        ) {
+            state.success = action.payload.success;
+            state.fetchData = true;
+        }
+    });
+
+    builder.addCase(thunk.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error.status = true;
+        state.error.message = action.payload?.message;
+        state.error.content = action.payload;
+    });
+};
+
+export const GenerateRequestAsyncReducer = (builder, thunk) => {
+  builder.addCase(thunk.pending, (state) => {
+    state.isLoading = true;
+    state.error.content = null;
+  });
+
+  builder.addCase(thunk.fulfilled, (state, action) => {
+    state.isLoading = false;
+    state.error.status = false;
+    state.error.message = null;
+    state.error.content = null;
+
+    // ✅ GET ALL
+    if (Array.isArray(action.payload?.data)) {
+      state.data = action.payload.data;
+      state.fetchData = false;
+    }
+
+    // ✅ GET ONE
+    if (action.payload?.type === "GetRequest") {
+      state.selectedRequest = action.payload.data;
+    }
+
+    // ✅ CREATE / UPDATE / DELETE / APPROVE
+    if (
+      action.payload?.type === "RequestCreate" ||
+      action.payload?.type === "RequestUpdate" ||
+      action.payload?.type === "RequestDelete" ||
+      action.payload?.type === "RequestUpdateStatus"
+    ) {
+      state.success = action.payload.success;
+      state.fetchData = true;
+    }
+  });
+
+  builder.addCase(thunk.rejected, (state, action) => {
+    state.isLoading = false;
+    state.error.status = true;
+    state.error.message = action.payload?.message;
+    state.error.content = action.payload;
+  });
+};
+
+export const HRProfileAsyncReducer = (builder, thunk) => {
+    builder.addCase(thunk.pending, (state) => {
+        state.isLoading = true;
+        state.error.content = null;
+    });
+
+    builder.addCase(thunk.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.error.status = false;
+        state.error.message = null;
+        state.error.content = null;
+
+        // ✅ GET ALL (Xử lý khi payload trả về mảng dữ liệu HR)
+        if (Array.isArray(action.payload.data)) {
+            state.data = action.payload.data;
+            state.fetchData = false;
+        }
+
+        // ✅ GET ONE (Xem chi tiết 1 HR)
+        if (action.payload.type === "GetHRDetail") {
+            state.selectedHR = action.payload.data;
+        }
+
+        // ✅ UPDATE / DELETE
+        if (
+            action.payload.type === "HRUpdate" || 
+            action.payload.type === "HRDelete"
+        ) {
+            state.success = action.payload.success;
+            state.fetchData = true; // Kích hoạt useEffect load lại danh sách
+        }
+    });
+
+    builder.addCase(thunk.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error.status = true;
+        state.error.message = action.payload?.message;
+        state.error.content = action.payload;
+    });
+};

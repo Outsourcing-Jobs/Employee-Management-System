@@ -9,10 +9,16 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-
+import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
 import { NavLink } from "react-router-dom";
 
 export function HRdashboardSidebar() {
+  const handleLogout = (e) => {
+    e.preventDefault(); 
+    Cookies.remove("HRtoken", { path: "/" }); 
+    window.location.href = "/"; 
+  };
   return (
     <Sidebar>
       <SidebarContent>
@@ -114,49 +120,95 @@ export function HRdashboardSidebar() {
                 </SidebarMenuButton>
               </SidebarMenuItem>
 
-              <SidebarMenuItem className="my-1">
-                <SidebarMenuButton className="gap-4">
-                  <img
-                    src="/../../src/assets/HR-Dashboard/recruitment.png"
-                    alt=""
-                    className="w-7"
-                  />
-                  <button className="text-[16px]">Tuyển dụng</button>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
+              <NavLink
+                to={"/HR/dashboard/recruitments"}
+                className={({ isActive }) => {
+                  return isActive ? "bg-blue-200 rounded-lg" : "";
+                }}
+              > 
+                <SidebarMenuItem className="my-1">
+                  <SidebarMenuButton className="gap-4">
+                    <img
+                      src="/../../src/assets/HR-Dashboard/recruitment.png"
+                      alt=""
+                      className="w-7"
+                    />
+                    <button className="text-[16px]">Tuyển dụng</button>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              </NavLink>
 
-              <SidebarMenuItem className="my-1">
-                <SidebarMenuButton className="gap-4">
-                  <img
-                    src="/../../src/assets/HR-Dashboard/interview-insights.png"
-                    alt=""
-                    className="w-7"
-                  />
-                  <button className="text-[16px]">Thông tin phỏng vấn</button>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
+              <NavLink
+                to={"/HR/dashboard/interview-insights"}
+                className={({ isActive }) => {
+                  return isActive ? "bg-blue-200 rounded-lg" : "";
+                }}
+              >
+                <SidebarMenuItem className="my-1">
+                  <SidebarMenuButton className="gap-4">
+                    <img
+                      src="/../../src/assets/HR-Dashboard/interview-insights.png"
+                      alt=""
+                      className="w-7"
+                    />
+                    <button className="text-[16px]">Thông tin phỏng vấn</button>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              </NavLink>
+              <NavLink
+                to={"/HR/dashboard/internal-requests"}
+                className={({ isActive }) => {
+                  return isActive ? "bg-blue-200 rounded-lg" : "";
+                }}
+              >
+                <SidebarMenuItem className="my-1">
+                  <SidebarMenuButton className="gap-4">
+                    <img
+                      src="/../../src/assets/HR-Dashboard/request.png"
+                      alt=""
+                      className="w-7"
+                    />
+                    <button className="text-[16px]">Yêu cầu</button>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              </NavLink>
 
-              <SidebarMenuItem className="my-1">
-                <SidebarMenuButton className="gap-4">
-                  <img
-                    src="/../../src/assets/HR-Dashboard/request.png"
-                    alt=""
-                    className="w-7"
-                  />
-                  <button className="text-[16px]">Yêu cầu</button>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
+              <NavLink
+                to={"/HR/dashboard/hr-management"}
+                className={({ isActive }) => {
+                  return isActive ? "bg-blue-200 rounded-lg" : "";
+                }}
+              > 
+                <SidebarMenuItem className="my-1">
+                  <SidebarMenuButton className="gap-4">
+                    <img
+                      src="/../../src/assets/HR-Dashboard/HR-profiles.png"
+                      alt=""
+                      className="w-7"
+                    />
+                    <button className="text-[16px]">Hồ sơ quản trị</button>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              </NavLink>
 
-              <SidebarMenuItem className="my-1">
-                <SidebarMenuButton className="gap-4">
-                  <img
-                    src="/../../src/assets/HR-Dashboard/HR-profiles.png"
-                    alt=""
-                    className="w-7"
-                  />
-                  <button className="text-[16px]">Hồ sơ nhân sự</button>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
+              <NavLink
+                to={"/"}
+                className={({ isActive }) => {
+                  return isActive ? "bg-blue-200 rounded-lg" : "";
+                }}
+              >              
+                <SidebarMenuItem onClick={handleLogout} className="my-1">
+                    <SidebarMenuButton className="gap-4">
+                      <img
+                        src="/../../src/assets/HR-Dashboard/logout.png"
+                        alt=""
+                        className="w-7"
+                      />
+                      <button className="text-[16px]">Đăng xuất</button>
+                    </SidebarMenuButton>
+                </SidebarMenuItem>  
+              </NavLink>
+
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

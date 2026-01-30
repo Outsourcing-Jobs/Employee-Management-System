@@ -12,51 +12,38 @@ import { HRDashboardPage } from "../pages/HumanResources/Dashboard Childs/dashbo
 import { HRProtectedRoutes } from "./HRprotectedroutes.jsx"
 import { HREmployeesPage } from "../pages/HumanResources/Dashboard Childs/employeespage.jsx"
 import { HRDepartmentPage } from "../pages/HumanResources/Dashboard Childs/departmentpage.jsx"
+import { RecruitmentPage } from "../pages/HumanResources/Recruitment/RecruitmentPage.jsx"
+import { InterviewInsightsPage } from "../pages/HumanResources/InterviewInsights/InterviewInsightsPage.jsx"
+import HRInternalRequestsPage from "../pages/HumanResources/InternalRequests/HRInternalRequestsPage.jsx"
+import { HRManagementPage } from "../pages/HumanResources/HR/HRManagementPage.jsx"
+
 export const HRRoutes = [
+    // Nhóm Auth: gom hết vào một cụm
     {
-        path: "/auth/HR/signup",
-        element: <HRSignupPage />
-    },
-    {
-        path: "/auth/HR/login",
-        element: <HRLogin />
-    },
-    {
-        path: "/HR/dashboard",
-        element: <HRDashbaord />,
+        path: "/auth/HR",
         children: [
-            {
-                path: "/HR/dashboard/dashboard-data",
-                element: <HRDashboardPage />
-            },
-            {
-                path: "/HR/dashboard/employees",
-                element: <HREmployeesPage />
-            },
-            {
-                path: "/HR/dashboard/departments",
-                element: <HRDepartmentPage />
-            }
+            { path: "signup", element: <HRSignupPage /> },
+            { path: "login", element: <HRLogin /> },
+            { path: "verify-email", element: <VerifyEmailPage /> },
+            { path: "forgot-password", element: <HRForgotPasswordPage /> },
+            { path: "reset-email-validation", element: <ResetHRVerifyEmailPage /> },
+            { path: "reset-email-confirmation", element: <ResetMailConfirmPage /> },
+            { path: "resetpassword/:token", element: <ResetHRPasswordPage /> },
         ]
     },
+    // Nhóm Dashboard: quản lý tập trung
     {
-        path: "/auth/HR/verify-email",
-        element: <VerifyEmailPage />
-    },
-    {
-        path: "/auth/HR/reset-email-validation",
-        element: <ResetHRVerifyEmailPage />
-    },
-    {
-        path: "/auth/HR/forgot-password",
-        element: <HRForgotPasswordPage />
-    },
-    {
-        path: "/auth/HR/reset-email-confirmation",
-        element: <ResetMailConfirmPage />
-    },
-    {
-        path: "/auth/HR/resetpassword/:token",
-        element: <ResetHRPasswordPage />
+        path: "/HR/dashboard",
+        element: <HRDashbaord />, // Lưu ý: Bạn đang viết sai chính tả 'Dashbaord' nhé!
+        children: [
+            { index: true, element: <HRDashboardPage /> }, // Dùng index cho trang mặc định
+            { path: "dashboard-data", element: <HRDashboardPage /> }, // Dùng index cho trang mặc định
+            { path: "employees", element: <HREmployeesPage /> },
+            { path: "departments", element: <HRDepartmentPage /> },
+            { path: "recruitments", element: <RecruitmentPage /> },
+            { path: "interview-insights", element: <InterviewInsightsPage /> },
+            { path: "internal-requests", element: <HRInternalRequestsPage /> },
+            { path: "hr-management", element: <HRManagementPage /> },
+        ]
     },
 ]

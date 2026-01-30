@@ -1,37 +1,39 @@
 import { HandleGetHumanResources } from "../redux/Thunks/HRThunk.js"
 import { useDispatch, useSelector } from "react-redux"
-import { useEffect, useState } from "react"
-import { Navigate } from "react-router-dom"
-import { useNavigate } from "react-router-dom"
+import { useEffect } from "react"
+import { Navigate, useNavigate, useLocation } from "react-router-dom"
 import { Loading } from "../components/common/loading.jsx"
 
 export const HRProtectedRoutes = ({ children }) => {
-    const navigate = useNavigate()
     const dispatch = useDispatch()
-    const HRState = useSelector((state) => state.HRReducer)
+    const location = useLocation()
+    const { isAuthenticated, isAuthourized, isVerified, isLoading, error } = useSelector((state) => state.HRReducer)
 
     useEffect(() => {
-        if (!HRState.isAuthenticated && !HRState.isAuthourized && !HRState.isVerified && !HRState.error.content) {
+        // Chỉ gọi API check quyền nếu chưa có thông tin và không đang loading
+        if (!isAuthenticated && !isLoading) {
             dispatch(HandleGetHumanResources({ apiroute: "CHECKLOGIN" }))
             dispatch(HandleGetHumanResources({ apiroute: "CHECK_VERIFY_EMAIL" }))
         }
+    }, [dispatch, isAuthenticated])
 
-        if (HRState.isAuthenticated && HRState.isAuthourized && !HRState.isVerified && HRState.error.content) {
-            navigate("/auth/HR/reset-email-validation")
-        }
+    if (isLoading) return <Loading />
 
-        if (!HRState.isAuthenticated && !HRState.isAuthourized && !HRState.isVerified && HRState.error.content) {
-            navigate("/auth/HR/signup")
-        }
-    }, [HRState.isAuthenticated, HRState.isAuthourized, HRState.isVerified, HRState.error.content])
-
-    if (HRState.isLoading) {
-        return (
-            <Loading />
-        )
+    // 1. Nếu chưa login -> đá về trang login (lưu lại cái trang định vào để login xong quay lại)
+    if (!isAuthenticated) {
+        return <Navigate to="/auth/HR/login" state={{ from: location }} replace />
     }
 
-    return (
-        (HRState.isAuthenticated && HRState.isAuthourized && HRState.isVerified) ? children : null
-    )
+    // 2. Đã login nhưng chưa verify email
+    if (isAuthenticated && !isVerified) {
+        return <Navigate to="/auth/HR/reset-email-validation" replace />
+    }
+
+    // 3. Đã login nhưng không có quyền (ví dụ role không phải HR)
+    if (isAuthenticated && !isAuthourized) {
+        return <Navigate to="/auth/HR/login" replace /> 
+    }
+
+    // Cuối cùng: Thỏa mãn hết thì mới cho vào trang con
+    return children
 }

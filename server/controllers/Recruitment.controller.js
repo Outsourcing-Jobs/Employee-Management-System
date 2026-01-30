@@ -30,7 +30,7 @@ export const HandleCreateRecruitment = async (req, res) => {
 
 export const HandleAllRecruitments = async (req, res) => {
     try {
-        const recruitments = await Recruitment.find({ organizationID: req.ORGID }).populate("application")
+        const recruitments = await Recruitment.find({ organizationID: req.ORGID }).populate("application").populate("department")
         return res.status(200).json({ success: true, message: "Lấy danh sách tin tuyển dụng thành công", data: recruitments })
     } catch (error) {
         return res.status(500).json({ success: false, message: "Lỗi máy chủ nội bộ", error: error.message })

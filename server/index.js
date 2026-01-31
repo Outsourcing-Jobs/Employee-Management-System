@@ -27,11 +27,23 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cookieParser());
 
+const allowedOrigins = [
+  process.env.CLIENT_URL,
+  process.env.CLIENT_URL_PROD_1,
+  process.env.CLIENT_URL_PROD_2,
+];
+
 app.use(
   cors({
-    origin: process.env.CLIENT_URL, // Adjust this to match your front-end origin exactly
-    credentials: true, // This is optional and depends on whether you’re using cookies
-  }),
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+      return callback(new Error("CORS blocked"));
+    },
+    credentials: true,
+  })
 );
 // app.options('*', cors())
 

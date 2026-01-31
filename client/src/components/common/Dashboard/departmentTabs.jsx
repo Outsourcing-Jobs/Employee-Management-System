@@ -37,7 +37,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useSelector, useDispatch } from "react-redux";
-import { HandleGetHRDepartments } from "../../../redux/Thunks/HRDepartmentPageThunk";
+import { HandleGetHRDepartments } from "../../../redux/Thunks/HRDepartmentPageThunk.js";
 import { Loading } from "../loading.jsx";
 import { HeadingBar } from "./ListDesigns.jsx";
 import { DepartmentListItems } from "./ListDesigns.jsx";

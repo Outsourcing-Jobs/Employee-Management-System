@@ -18,7 +18,7 @@ import GenerateRequestRouter from "./routes/GenerateRequest.route.js";
 import CorporateCalendarRouter from "./routes/CorporateCalendar.route.js";
 import BalanceRouter from "./routes/Balance.route.js";
 import ReportRouter from "./routes/Report.route.js";
-import BaseSalaryRouter from "./routes/baseSalary.routes.js";
+import BaseSalaryRouter from "./routes/BaseSalary.routes.js";
 import { ConnectDB } from "./config/connectDB.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";

@@ -5,6 +5,7 @@ import {
   HandleSalary,
   HandleUpdateSalary,
   HandleDeleteSalary,
+  UpdateSalaryStatus,
 } from "../controllers/Salary.controller.js";
 import { VerifyhHRToken } from "../middlewares/Auth.middleware.js";
 import { RoleAuthorization } from "../middlewares/RoleAuth.middleware.js";
@@ -37,6 +38,14 @@ router.patch(
   RoleAuthorization("HR-Admin"),
   HandleUpdateSalary,
 );
+
+router.patch(
+  "/update-status-salary",
+  VerifyhHRToken,
+  RoleAuthorization("HR-Admin"),
+  UpdateSalaryStatus,
+);
+
 
 router.delete(
   "/delete-salary/:salaryID",

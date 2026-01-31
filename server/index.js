@@ -18,9 +18,11 @@ import GenerateRequestRouter from "./routes/GenerateRequest.route.js";
 import CorporateCalendarRouter from "./routes/CorporateCalendar.route.js";
 import BalanceRouter from "./routes/Balance.route.js";
 import ReportRouter from "./routes/Report.route.js";
+import BaseSalaryRouter from "./routes/baseSalary.routes.js";
 import { ConnectDB } from "./config/connectDB.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import "./cron-schedule/salary.cron.js"
 
 dotenv.config();
 const app = express();
@@ -80,6 +82,8 @@ app.use("/api/v1/corporate-calendar", CorporateCalendarRouter);
 app.use("/api/v1/balance", BalanceRouter);
 
 app.use("/api/v1/report", ReportRouter);
+
+app.use("/api/v1/base-salary", BaseSalaryRouter);
 
 app.get("/ping", (req, res) => {
   res.status(200).json({

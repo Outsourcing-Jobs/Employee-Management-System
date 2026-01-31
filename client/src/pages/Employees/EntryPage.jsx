@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button"
 import { Link } from "react-router-dom"
-import welcomeImg from "../../assets/Welcome.png";
+import welcomeImg from "../../assets/welcome.png";
 export const EntryPage = () => {
     return (
         <div className="extry-page-container h-[100vh] flex justify-center items-center">

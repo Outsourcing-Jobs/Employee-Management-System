@@ -100,30 +100,36 @@ export const HandleUpdateLeaveByEmployee = async (req, res) => {
 
 export const HandleUpdateLeavebyHR = async (req, res) => {
     try {
-        const { leaveID, status, HRID } = req.body
+        const { leaveID, status } = req.body;
+        const HRID = req.HRid; 
 
+       
         if (!leaveID || !status || !HRID) {
-            return res.status(400).json({ success: false, message: "Tất cả các trường thông tin là bắt buộc" })
+            return res.status(400).json({ 
+                success: false, 
+                message: "Thiếu thông tin: leaveID, status hoặc phiên đăng nhập hết hạn" 
+            });
         }
 
-        const leave = await Leave.findOne({ _id: leaveID, organizationID: req.ORGID })
-        const HR = await HumanResources.findById(HRID)
-
+        const leave = await Leave.findOne({ _id: leaveID, organizationID: req.ORGID });
+        
         if (!leave) {
-            return res.status(404).json({ success: false, message: "Không tìm thấy bản ghi nghỉ phép" })
+            return res.status(404).json({ success: false, message: "Không tìm thấy bản ghi nghỉ phép" });
         }
 
-        if (!HR) {
-            return res.status(404).json({ success: false, message: "Không tìm thấy thông tin HR" })
-        }
+        leave.status = status;
+        leave.approvedby = HRID; 
 
-        leave.status = status
-        leave.approvedby = HRID
-
-        await leave.save()
-        return res.status(200).json({ success: true, message: "Phê duyệt nghỉ phép thành công", data: leave })
+        await leave.save();
+        
+        return res.status(200).json({ 
+            success: true, 
+            message: "Phê duyệt nghỉ phép thành công", 
+            data: leave 
+        });
     } catch (error) {
-        return res.status(500).json({ success: false, message: "Lỗi máy chủ nội bộ" })
+        console.error("Lỗi duyệt đơn:", error);
+        return res.status(500).json({ success: false, message: "Lỗi máy chủ nội bộ" });
     }
 }
 

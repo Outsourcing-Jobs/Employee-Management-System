@@ -193,3 +193,97 @@ export const HandleDeleteAttendance = async (req, res) => {
         return res.status(500).json({ success: false, message: "Lỗi máy chủ nội bộ", error: error })
     }
 }
+
+export const HandleHRChangeAttendance = async (req, res) => {
+  try {
+    const {
+      employeeID,
+      logdate,
+      logstatus,
+      checkInTime,
+      checkOutTime
+    } = req.body
+
+    if (!employeeID || !logdate) {
+      return res.status(400).json({
+        success: false,
+        message: "employeeID và logdate là bắt buộc"
+      })
+    }
+
+    // 🔍 Tìm nhân viên
+    const employee = await Employee.findOne({
+      _id: employeeID,
+      organizationID: req.ORGID
+    })
+
+    if (!employee) {
+      return res.status(404).json({
+        success: false,
+        message: "Không tìm thấy nhân viên"
+      })
+    }
+
+    // 📁 Tìm hoặc tạo Attendance
+    let attendance = await Attendance.findOne({
+      employee: employeeID,
+      organizationID: req.ORGID
+    })
+
+    if (!attendance) {
+      attendance = await Attendance.create({
+        employee: employeeID,
+        organizationID: req.ORGID,
+        status: "Not Specified",
+        attendancelog: []
+      })
+
+      employee.attendance = attendance._id
+      await employee.save()
+    }
+
+    const targetDate = new Date(logdate)
+    targetDate.setHours(0, 0, 0, 0)
+
+    // 🔎 Tìm log theo ngày
+    let log = attendance.attendancelog.find(item => {
+      const d = new Date(item.logdate)
+      d.setHours(0, 0, 0, 0)
+      return d.getTime() === targetDate.getTime()
+    })
+
+    // ➕ Nếu chưa có log → tạo mới
+    if (!log) {
+      log = {
+        logdate: targetDate,
+        logstatus: logstatus || "Present",
+        checkInTime: checkInTime ? new Date(checkInTime) : null,
+        checkOutTime: checkOutTime ? new Date(checkOutTime) : null
+      }
+      attendance.attendancelog.push(log)
+    }
+    // ✏️ Nếu có → update
+    else {
+      if (logstatus !== undefined) log.logstatus = logstatus
+      if (checkInTime !== undefined)
+        log.checkInTime = checkInTime ? new Date(checkInTime) : null
+      if (checkOutTime !== undefined)
+        log.checkOutTime = checkOutTime ? new Date(checkOutTime) : null
+    }
+
+    await attendance.save()
+
+    return res.status(200).json({
+      success: true,
+      message: "HR cập nhật điểm danh thành công",
+      data: attendance
+    })
+
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Lỗi máy chủ nội bộ",
+      error
+    })
+  }
+}

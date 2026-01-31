@@ -69,3 +69,30 @@ export const HRProfileEndPoints = {
     GETONE: (HRID) => `/api/v1/hr/${HRID}`,
     DELETE: (HRID) => `/api/v1/hr/delete-HR/${HRID}`,
 };
+export const LeavePageEndPoints = {
+    GETALL: "/api/v1/leave/all",
+    CREATE: "/api/v1/leave/create-leave",
+    GETONE: (leaveID) => `/api/v1/leave/${leaveID}`,
+    HR_UPDATE: "/api/v1/leave/HR-update-leave",
+    DELETE: (leaveID) => `/api/v1/leave/delete-leave/${leaveID}`,
+};
+export const SalaryPageEndPoints = {
+    GETALL: "/api/v1/salary/all",
+    CREATE: "/api/v1/salary/create-salary",
+    UPDATE: "/api/v1/salary/update-salary",
+    GETONE: (salaryID) => `/api/v1/salary/${salaryID}`,
+    DELETE: (salaryID) => `/api/v1/salary/delete-salary/${salaryID}`,
+};
+export const AttendanceEndPoints = {
+    GET_ALL: "/api/v1/attendance/all", 
+    GET_DETAILS: (id) => `/api/v1/attendance/${id}`, 
+    DELETE: (id) => `/api/v1/attendance/delete-attendance/${id}`,
+};
+
+export const NoticeEndPoints = {
+    CREATE: "/api/v1/notice/create-notice",
+    GETALL: "/api/v1/notice/all",
+    GETONE: (noticeID) => `/api/v1/notice/${noticeID}`,
+    UPDATE: "/api/v1/notice/update-notice",
+    DELETE: (noticeID) => `/api/v1/notice/delete-notice/${noticeID}`,
+};

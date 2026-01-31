@@ -75,7 +75,12 @@ export function HRdashboardSidebar() {
                   <button className="text-[16px]">Phòng ban</button>
                 </SidebarMenuItem>
               </NavLink>
-
+              <NavLink
+                to={"/HR/dashboard/salary"}
+                className={({ isActive }) => {
+                  return isActive ? "bg-blue-200 rounded-lg" : "";
+                }}
+              >
               <SidebarMenuItem className="my-1">
                 <SidebarMenuButton className="gap-4">
                   <img
@@ -86,7 +91,13 @@ export function HRdashboardSidebar() {
                   <button className="text-[16px]">Lương bổng</button>
                 </SidebarMenuButton>
               </SidebarMenuItem>
-
+              </NavLink>
+              <NavLink
+                to={"/HR/dashboard/notice"}
+                className={({ isActive }) => {
+                  return isActive ? "bg-blue-200 rounded-lg" : "";
+                }}
+              >
               <SidebarMenuItem className="my-1">
                 <SidebarMenuButton className="gap-4">
                   <img
@@ -97,7 +108,13 @@ export function HRdashboardSidebar() {
                   <button className="text-[16px]">Thông báo</button>
                 </SidebarMenuButton>
               </SidebarMenuItem>
-
+              </NavLink>
+              <NavLink
+                to={"/HR/dashboard/leave"}
+                className={({ isActive }) => {
+                  return isActive ? "bg-blue-200 rounded-lg" : "";
+                }}
+              >
               <SidebarMenuItem className="my-1">
                 <SidebarMenuButton className="gap-4">
                   <img
@@ -108,7 +125,13 @@ export function HRdashboardSidebar() {
                   <button className="text-[16px]">Nghỉ phép</button>
                 </SidebarMenuButton>
               </SidebarMenuItem>
-
+              </NavLink>
+              <NavLink
+                to={"/HR/dashboard/attendance"}
+                className={({ isActive }) => {
+                  return isActive ? "bg-blue-200 rounded-lg" : "";
+                }}
+              >
               <SidebarMenuItem className="my-1">
                 <SidebarMenuButton className="gap-4">
                   <img
@@ -119,7 +142,7 @@ export function HRdashboardSidebar() {
                   <button className="text-[16px]">Chấm công</button>
                 </SidebarMenuButton>
               </SidebarMenuItem>
-
+             </NavLink>
               <NavLink
                 to={"/HR/dashboard/recruitments"}
                 className={({ isActive }) => {

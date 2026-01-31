@@ -3,7 +3,7 @@ import {
   HeadingBar,
   ListContainer,
   InterviewInsightsList
-} from "../../../components/common/Dashboard/ListDesigns";
+} from "../../../components/common/Dashboard/ListDesigns.jsx";
 
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -13,7 +13,7 @@ import dayjs from "dayjs";
 import {
   HandleGetInterviewInsights,
   HandleDeleteInterviewInsight
-} from "../../../redux/Thunks/InterviewInsightsThunk";
+} from "../../../redux/Thunks/InterviewInsightsThunk.js";
 
 
 export const InterviewInsightsPage = () => {

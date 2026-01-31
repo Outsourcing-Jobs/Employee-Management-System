@@ -1,7 +1,7 @@
 import { Navigate } from "react-router-dom"
 import { useSelector, useDispatch } from "react-redux"
 import { useEffect } from "react"
-import { HandleGetEmployees } from "../redux/Thunks/EmployeeThunk"
+import { HandleGetEmployees } from "../redux/Thunks/EmployeeThunk.js"
 export const ProtectedRoutes = ({ children }) => {
     const { isAuthenticated } = useSelector((state) => state.employeereducer)
     const dispatch = useDispatch()

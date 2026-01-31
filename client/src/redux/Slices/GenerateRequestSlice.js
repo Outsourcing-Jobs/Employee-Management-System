@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { GenerateRequestAsyncReducer } from "../AsyncReducers/asyncreducer";
+import { GenerateRequestAsyncReducer } from "../AsyncReducers/asyncreducer.js";
 
 import {
   HandleGetRequests,

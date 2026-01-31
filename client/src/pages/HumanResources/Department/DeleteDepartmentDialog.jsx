@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useDispatch } from "react-redux";
-import { HandleDeleteHRDepartments } from "../../../redux/Thunks/HRDepartmentPageThunk";
+import { HandleDeleteHRDepartments } from "../../../redux/Thunks/HRDepartmentPageThunk.js";
 
 export const DeleteDepartmentDialog = ({ department, onDeleted }) => {
     const dispatch = useDispatch();

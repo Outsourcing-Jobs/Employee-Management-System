@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useDispatch } from "react-redux";
-import { HandlePatchHRDepartments } from "../../../redux/Thunks/HRDepartmentPageThunk";
+import { HandlePatchHRDepartments } from "../../../redux/Thunks/HRDepartmentPageThunk.js";
 
 export const UpdateDepartmentDialog = ({ department }) => {
     const dispatch = useDispatch();

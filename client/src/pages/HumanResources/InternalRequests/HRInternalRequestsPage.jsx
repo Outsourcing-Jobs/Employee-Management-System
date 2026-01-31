@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { HandleGetRequests, HandleUpdateRequestStatus } from "../../../redux/Thunks/GenerateRequestThunk";
+import { HandleGetRequests, HandleUpdateRequestStatus } from "../../../redux/Thunks/GenerateRequestThunk.js";
 
 const HRInternalRequestsPage = () => {
   const dispatch = useDispatch();

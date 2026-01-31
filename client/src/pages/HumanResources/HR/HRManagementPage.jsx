@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Loading } from "../../../components/common/loading.jsx";
-import { ListWrapper, HeadingBar, ListContainer } from "../../../components/common/Dashboard/ListDesigns";
+import { ListWrapper, HeadingBar, ListContainer } from "../../../components/common/Dashboard/ListDesigns.jsx";
 
 import { HandleGetHRs, HandleDeleteHR } from "../../../redux/Thunks/HRProfileThunk.js";
 import { ViewHRDialogBox } from "../../../components/common/Dashboard/HR/ViewHRDialogBox.jsx";

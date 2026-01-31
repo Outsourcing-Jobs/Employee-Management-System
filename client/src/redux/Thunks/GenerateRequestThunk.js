@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { apiService } from "../apis/apiService";
-import { GenerateRequestEndPoints } from "../apis/APIsEndpoints";
+import { apiService } from "../apis/apiService.js";
+import { GenerateRequestEndPoints } from "../apis/APIsEndpoints.js";
 
 /* GET ALL (HR-Admin) */
 export const HandleGetRequests = createAsyncThunk(

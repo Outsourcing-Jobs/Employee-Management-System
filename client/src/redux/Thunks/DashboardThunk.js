@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { apiService } from "../apis/apiService";
-import { DashboardEndPoints } from "../apis/APIsEndpoints";
+import { apiService } from "../apis/apiService.js";
+import { DashboardEndPoints } from "../apis/APIsEndpoints.js";
 
 export const HandleGetDashboard = createAsyncThunk("HandleGetDashboard", async (DashboardData, { rejectWithValue }) => {
     try {

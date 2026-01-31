@@ -33,6 +33,19 @@ export default [
         'warn',
         { allowConstantExport: true },
       ],
+      "import/extensions": [
+        "error",
+        "always",
+        {
+          js: "always",
+          jsx: "always",
+          png: "always",
+          jpg: "always",
+          jpeg: "always",
+          svg: "always",
+          webp: "always",
+        },
+      ]
     },
   },
 ]

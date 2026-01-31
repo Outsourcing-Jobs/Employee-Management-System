@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Check, ChevronsUpDown } from "lucide-react";
+import correct from "../../../assets/HR-Dashboard/correct.png";
 
 import { cn } from "@/lib/utils";
 import {
@@ -36,7 +37,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useSelector, useDispatch } from "react-redux";
-import { HandleGetHRDepartments } from "../../../redux/Thunks/HRDepartmentPageThunk";
+import { HandleGetHRDepartments } from "../../../redux/Thunks/HRDepartmentPageThunk.js";
 import { Loading } from "../loading.jsx";
 import { HeadingBar } from "./ListDesigns.jsx";
 import { DepartmentListItems } from "./ListDesigns.jsx";
@@ -45,6 +46,7 @@ import { EmployeesIDSDialogBox } from "./dialogboxes.jsx";
 import { UpdateDepartmentDialog } from "../../../pages/HumanResources/Department/UpdateDepartmentDialog.jsx";
 import { DeleteDepartmentDialog } from "../../../pages/HumanResources/Department/DeleteDepartmentDialog.jsx";
 import { NotificationListItems } from "../../../pages/HumanResources/Department/NoticDepartment.jsx";
+import settings from "../../../assets/HR-Dashboard/settings.png";
 
 export const HRDepartmentTabs = () => {
   const { toast } = useToast();
@@ -87,7 +89,7 @@ export const HRDepartmentTabs = () => {
         description: (
           <div className="flex items-center justify-center gap-2">
             <img
-              src="../../src/assets/HR-Dashboard/correct.png"
+              src={correct}
               alt=""
               className="w-6"
             />
@@ -126,7 +128,7 @@ export const HRDepartmentTabs = () => {
               <DropdownMenuTrigger asChild>
                 <Button className="bg-blue-500 hover:bg-blue-900">
                   <img
-                    src="../../src/assets/HR-Dashboard/settings.png"
+                    src={settings}
                     alt=""
                     className="w-5"
                   />

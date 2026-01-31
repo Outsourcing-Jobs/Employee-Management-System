@@ -1,4 +1,4 @@
-import { KeyDetailsBox } from "./keydetailboxes"
+import { KeyDetailsBox } from "./keydetailboxes.jsx"
 import { Link } from "react-router-dom"
 
 export const ContentWraperMain = ({ children }) => {

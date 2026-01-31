@@ -4,6 +4,8 @@ import { ToastAction } from "@/components/ui/toast"
 import { useSelector, useDispatch } from "react-redux"
 import { useEffect, useRef } from "react"
 import { HandlePostHREmployees } from "../../../redux/Thunks/HREmployeesThunk.js"
+import correct from "../../../assets/HR-Dashboard/correct.png";
+
 export const FormSubmitToast = ({ formdata }) => {
     const { toast } = useToast()
     const dispatch = useDispatch()
@@ -26,7 +28,7 @@ export const FormSubmitToast = ({ formdata }) => {
     //         return toast({
     //             title: <p className="m-1 text-xl">Success!</p>,
     //             description: <div className="flex items-center justify-center gap-2">
-    //                 <img src="../../src/assets/HR-Dashboard/correct.png" alt="" className="w-8" />
+    //                 <img src={correct} alt="" className="w-8" />
     //                 <p className="font-bold">Employee added successfully.</p>
     //             </div>,
     //         })
@@ -49,7 +51,7 @@ export const FormSubmitToast = ({ formdata }) => {
                     // HREmployeesState.fetchData ? toast({
                     //     title: <p className="m-1 text-xl">Success!</p>,
                     //     description: <div className="flex items-center justify-center gap-2">
-                    //         <img src="../../src/assets/HR-Dashboard/correct.png" alt="" className="w-8" />
+                    //         <img src={correct} alt="" className="w-8" />
                     //         <p className="font-bold">Employee added successfully.</p>
                     //     </div>,
                     // }) : null

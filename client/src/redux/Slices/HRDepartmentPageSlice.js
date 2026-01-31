@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { HandleGetHRDepartments, HandlePostHRDepartments, HandlePatchHRDepartments, HandleDeleteHRDepartments } from "../Thunks/HRDepartmentPageThunk";
-import { HRDepartmentPageAsyncReducer } from "../AsyncReducers/asyncreducer";
+import { HandleGetHRDepartments, HandlePostHRDepartments, HandlePatchHRDepartments, HandleDeleteHRDepartments } from "../Thunks/HRDepartmentPageThunk.js";
+import { HRDepartmentPageAsyncReducer } from "../AsyncReducers/asyncreducer.js";
 
 const HRDepartmentPageSlice = createSlice({
     name: "HRDepartmentPage",

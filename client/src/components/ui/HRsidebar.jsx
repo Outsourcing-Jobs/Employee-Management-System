@@ -12,6 +12,18 @@ import {
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 import { NavLink } from "react-router-dom";
+import attendance from "../../assets/HR-Dashboard/attendance.png";
+import dashboard from "../../assets/HR-Dashboard/dashboard.png";
+import department from "../../assets/HR-Dashboard/department.png";
+import employee2 from "../../assets/HR-Dashboard/employee-2.png";
+import HRprofiles from "../../assets/HR-Dashboard/HR-profiles.png";
+import interviewInsights from "../../assets/HR-Dashboard/interview-insights.png";
+import leave from "../../assets/HR-Dashboard/leave.png";
+import logout from "../../assets/HR-Dashboard/logout.png";
+import recruitment from "../../assets/HR-Dashboard/recruitment.png";
+import request from "../../assets/HR-Dashboard/request.png";
+import salary from "../../assets/HR-Dashboard/Salary.png";
+import notice from "../../assets/HR-Dashboard/notice.png";
 
 export function HRdashboardSidebar() {
   const handleLogout = (e) => {
@@ -36,7 +48,7 @@ export function HRdashboardSidebar() {
               >
                 <SidebarMenuItem className="flex gap-4 rounded-lg hover:bg-blue-200">
                   <img
-                    src="/../../src/assets/HR-Dashboard/dashboard.png"
+                    src={dashboard}
                     alt=""
                     className="my-1 w-7 ms-2"
                   />
@@ -52,7 +64,7 @@ export function HRdashboardSidebar() {
               >
                 <SidebarMenuItem className="flex gap-4 rounded-lg hover:bg-blue-200">
                   <img
-                    src="/../../src/assets/HR-Dashboard/employee-2.png"
+                    src={employee2}
                     alt=""
                     className="my-1 w-7 ms-2"
                   />
@@ -68,7 +80,7 @@ export function HRdashboardSidebar() {
               >
                 <SidebarMenuItem className="flex gap-4 rounded-lg hover:bg-blue-200">
                   <img
-                    src="/../../src/assets/HR-Dashboard/department.png"
+                    src={department}
                     alt=""
                     className="my-1 w-7 ms-2"
                   />
@@ -84,7 +96,7 @@ export function HRdashboardSidebar() {
               <SidebarMenuItem className="my-1">
                 <SidebarMenuButton className="gap-4">
                   <img
-                    src="/../../src/assets/HR-Dashboard/salary.png"
+                    src={salary}
                     alt=""
                     className="w-7"
                   />
@@ -101,7 +113,7 @@ export function HRdashboardSidebar() {
               <SidebarMenuItem className="my-1">
                 <SidebarMenuButton className="gap-4">
                   <img
-                    src="/../../src/assets/HR-Dashboard/notice.png"
+                    src={notice}
                     alt=""
                     className="w-7"
                   />
@@ -118,7 +130,7 @@ export function HRdashboardSidebar() {
               <SidebarMenuItem className="my-1">
                 <SidebarMenuButton className="gap-4">
                   <img
-                    src="/../../src/assets/HR-Dashboard/leave.png"
+                    src={leave}
                     alt=""
                     className="w-7"
                   />
@@ -135,7 +147,7 @@ export function HRdashboardSidebar() {
               <SidebarMenuItem className="my-1">
                 <SidebarMenuButton className="gap-4">
                   <img
-                    src="/../../src/assets/HR-Dashboard/attendance.png"
+                    src={attendance}
                     alt=""
                     className="w-7"
                   />
@@ -152,7 +164,7 @@ export function HRdashboardSidebar() {
                 <SidebarMenuItem className="my-1">
                   <SidebarMenuButton className="gap-4">
                     <img
-                      src="/../../src/assets/HR-Dashboard/recruitment.png"
+                      src={recruitment}
                       alt=""
                       className="w-7"
                     />
@@ -170,7 +182,7 @@ export function HRdashboardSidebar() {
                 <SidebarMenuItem className="my-1">
                   <SidebarMenuButton className="gap-4">
                     <img
-                      src="/../../src/assets/HR-Dashboard/interview-insights.png"
+                      src={interviewInsights}
                       alt=""
                       className="w-7"
                     />
@@ -187,7 +199,7 @@ export function HRdashboardSidebar() {
                 <SidebarMenuItem className="my-1">
                   <SidebarMenuButton className="gap-4">
                     <img
-                      src="/../../src/assets/HR-Dashboard/request.png"
+                      src={request}
                       alt=""
                       className="w-7"
                     />
@@ -205,7 +217,7 @@ export function HRdashboardSidebar() {
                 <SidebarMenuItem className="my-1">
                   <SidebarMenuButton className="gap-4">
                     <img
-                      src="/../../src/assets/HR-Dashboard/HR-profiles.png"
+                      src={HRprofiles}
                       alt=""
                       className="w-7"
                     />
@@ -223,7 +235,7 @@ export function HRdashboardSidebar() {
                 <SidebarMenuItem onClick={handleLogout} className="my-1">
                     <SidebarMenuButton className="gap-4">
                       <img
-                        src="/../../src/assets/HR-Dashboard/logout.png"
+                        src={logout}
                         alt=""
                         className="w-7"
                       />

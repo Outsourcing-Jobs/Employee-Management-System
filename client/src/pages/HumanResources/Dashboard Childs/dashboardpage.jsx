@@ -6,31 +6,36 @@ import { HandleGetDashboard } from "../../../redux/Thunks/DashboardThunk.js"
 import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import { Loading } from "../../../components/common/loading.jsx"
+import department from "../../../assets/HR-Dashboard/department.png";
+import employee2 from "../../../assets/HR-Dashboard/employee-2.png";
+import leave from "../../../assets/HR-Dashboard/leave.png";
+import request from "../../../assets/HR-Dashboard/request.png";
+
 export const HRDashboardPage = () => {
     console.log("Reloaded")
     const DashboardState = useSelector((state) => state.dashboardreducer)
     const dispatch = useDispatch()
     const DataArray = [
         {
-            image: "/../../src/assets/HR-Dashboard/employee-2.png",
+            image: {employee2},
             dataname: "employees",
             path: "/HR/dashboard/employees",
             description:"Nhân viên"
         },
         {
-            image: "/../../src/assets/HR-Dashboard/department.png",
+            image: {department},
             dataname: "departments",
             path: "/HR/dashboard/departments",
             description:"Phòng ban"
         },
         {
-            image: "/../../src/assets/HR-Dashboard/leave.png",
+            image: {leave},
             dataname: "leaves",
             path: "/HR/dashboard/leaves",
             description:"Nghỉ phép"
         },
         {
-            image: "/../../src/assets/HR-Dashboard/request.png",
+            image: {request},
             dataname: "requestes",
             path: "/HR/dashboard/requestes",
             description:"Yêu cầu"

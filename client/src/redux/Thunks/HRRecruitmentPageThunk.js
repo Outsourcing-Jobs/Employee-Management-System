@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { apiService } from "../apis/apiService";
-import { HRRecruitmentPageEndPoints } from "../apis/APIsEndpoints";
+import { apiService } from "../apis/apiService.js";
+import { HRRecruitmentPageEndPoints } from "../apis/APIsEndpoints.js";
 
 /* GET ALL */
 export const HandleGetRecruitments = createAsyncThunk("HandleGetRecruitments", async (data, { rejectWithValue }) => {

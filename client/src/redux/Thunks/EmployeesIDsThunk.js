@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { apiService } from "../apis/apiService.js";
 import { EmployeesIDsEndPoints } from "../apis/APIsEndpoints.js";
+import { apiService } from "../apis/apiService.js";
 
 export const fetchEmployeesIDs = createAsyncThunk("fetchEmployeesIDs", async (fetchdata, { rejectWithValue }) => {
     try {

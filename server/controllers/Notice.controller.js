@@ -5,45 +5,49 @@ import { Notice } from "../models/Notice.model.js";
 
 export const HandleCreateNotice = async (req, res) => {
   try {
-    const { title, content, audience, departmentID, employeeID, HRID } =
-      req.body;
+    const { title, content, audience, departmentID, employeeID } = req.body;
+    
+   
+    const HRID = req.HRid; 
+
+    if (!HRID) {
+      return res.status(401).json({
+        success: false,
+        message: "Phiên làm việc hết hạn, vui lòng đăng nhập lại",
+      });
+    }
 
     if (audience === "Department-Specific") {
-      if (!title || !content || !audience || !departmentID || !HRID) {
-        return res.status(404).json({
+      if (!title || !content || !departmentID) {
+        return res.status(400).json({
           success: false,
-          message: "Vui lòng cung cấp đầy đủ tất cả các trường thông tin",
+          message: "Vui lòng cung cấp đầy đủ: Tiêu đề, Nội dung và Phòng ban",
         });
       }
 
       const department = await Department.findById(departmentID);
-
       if (!department) {
-        return res
-          .status(404)
-          .json({ success: false, message: "Không tìm thấy phòng ban" });
+        return res.status(404).json({ success: false, message: "Không tìm thấy phòng ban" });
       }
 
       const checknotice = await Notice.findOne({
-        title: title,
-        content: content,
-        audience: audience,
+        title,
+        content,
+        audience,
         department: departmentID,
-        createdby: HRID,
+        organizationID: req.ORGID,
       });
 
       if (checknotice) {
-        return res
-          .status(400)
-          .json({ success: false, message: "Thông báo cụ thể này đã tồn tại" });
+        return res.status(400).json({ success: false, message: "Thông báo này đã tồn tại" });
       }
 
       const notice = await Notice.create({
-        title: title,
-        content: content,
-        audience: audience,
+        title,
+        content,
+        audience,
         department: departmentID,
-        createdby: HRID,
+        createdby: HRID, 
         organizationID: req.ORGID,
       });
 
@@ -58,41 +62,36 @@ export const HandleCreateNotice = async (req, res) => {
     }
 
     if (audience === "Employee-Specific") {
-      if (!title || !content || !audience || !employeeID || !HRID) {
-        return res.status(404).json({
+      if (!title || !content || !employeeID) {
+        return res.status(400).json({
           success: false,
-          message: "Vui lòng cung cấp đầy đủ tất cả các trường thông tin",
+          message: "Vui lòng cung cấp đầy đủ: Tiêu đề, Nội dung và Nhân viên",
         });
       }
 
       const employee = await Employee.findById(employeeID);
-
       if (!employee) {
-        return res
-          .status(404)
-          .json({ success: false, message: "Không tìm thấy nhân viên" });
+        return res.status(404).json({ success: false, message: "Không tìm thấy nhân viên" });
       }
 
       const checknotice = await Notice.findOne({
-        title: title,
-        content: content,
-        audience: audience,
+        title,
+        content,
+        audience,
         employee: employeeID,
-        createdby: HRID,
+        organizationID: req.ORGID,
       });
 
       if (checknotice) {
-        return res
-          .status(400)
-          .json({ success: false, message: "Thông báo cụ thể này đã tồn tại" });
+        return res.status(400).json({ success: false, message: "Thông báo này đã tồn tại" });
       }
 
       const notice = await Notice.create({
-        title: title,
-        content: content,
-        audience: audience,
+        title,
+        content,
+        audience,
         employee: employeeID,
-        createdby: HRID,
+        createdby: HRID, 
         organizationID: req.ORGID,
       });
 
@@ -106,9 +105,11 @@ export const HandleCreateNotice = async (req, res) => {
       });
     }
   } catch (error) {
-    return res
-      .status(500)
-      .json({ success: false, message: "Lỗi máy chủ nội bộ", error: error });
+    return res.status(500).json({ 
+      success: false, 
+      message: "Lỗi máy chủ nội bộ", 
+      error: error.message 
+    });
   }
 };
 

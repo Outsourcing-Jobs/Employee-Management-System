@@ -5,6 +5,7 @@ import { HandlePostEmployees, HandleGetEmployees } from "../../redux/Thunks/Empl
 import LoadingBar from 'react-top-loading-bar'
 import { useNavigate } from 'react-router-dom'
 import { CommonStateHandler } from "../../utils/commonhandler.js"
+import EmployeeWelcome from "../../assets/Employee-Welcome.jpg";
 
 export const EmployeeLogin = () => {
 
@@ -51,7 +52,7 @@ export const EmployeeLogin = () => {
         <div className="employee-login-container">
             <LoadingBar ref={loadingbar} />
             <div className="employee-login-content flex justify-center items-center h-[100vh]">
-                <SignIn image={"../../src/assets/Employee-Welcome.jpg"} handlesigninform={handlesigninform} handlesigninsubmit={handlesigninsubmit} targetedstate={EmployeeState} statevalue={signinform} redirectpath={"/auth/employee/forgot-password"} />
+                <SignIn image={EmployeeWelcome} handlesigninform={handlesigninform} handlesigninsubmit={handlesigninsubmit} targetedstate={EmployeeState} statevalue={signinform} redirectpath={"/auth/employee/forgot-password"} />
             </div>
         </div>
     )

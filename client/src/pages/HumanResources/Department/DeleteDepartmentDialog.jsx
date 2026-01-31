@@ -2,7 +2,9 @@ import React, { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useDispatch } from "react-redux";
+import deleteIcon from "../../../assets/HR-Dashboard/delete.png";
 import { HandleDeleteHRDepartments } from "../../../redux/Thunks/HRDepartmentPageThunk.js";
+
 
 export const DeleteDepartmentDialog = ({ department, onDeleted }) => {
     const dispatch = useDispatch();
@@ -23,7 +25,7 @@ export const DeleteDepartmentDialog = ({ department, onDeleted }) => {
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
                 <Button className="flex w-full gap-2 text-sm font-bold text-white bg-red-500 hover:bg-red-900">
-                    <img src="../../src/assets/HR-Dashboard/delete.png" alt="" className="w-5" />
+                    <img src={deleteIcon} alt="" className="w-5" />
                     Xóa
                 </Button>
             </DialogTrigger>

@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom"
 import LoadingBar from 'react-top-loading-bar'
 import { CommonStateHandler } from "../../utils/commonhandler.js"
 import { HandleGetHumanResources, HandlePostHumanResources } from "../../redux/Thunks/HRThunk.js"
+import EmployeeWelcome from "../../assets/Employee-Welcome.jpg";
 
 export const HRLogin = () => {
     const HRState = useSelector((state) => state.HRReducer)
@@ -47,7 +48,7 @@ export const HRLogin = () => {
         <div>
             <div className="employee-login-content flex justify-center items-center h-[100vh]">
                 <LoadingBar ref={loadingbar} />
-                <SignIn image={"../../src/assets/Employee-Welcome.jpg"} handlesigninform={handlesigninform} handlesigninsubmit={handlesigninsubmit} targetedstate={HRState} statevalue={signinform} redirectpath={"/auth/HR/forgot-password"} />
+                <SignIn image={EmployeeWelcome} handlesigninform={handlesigninform} handlesigninsubmit={handlesigninsubmit} targetedstate={HRState} statevalue={signinform} redirectpath={"/auth/HR/forgot-password"} />
             </div>
         </div>
     )

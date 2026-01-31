@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button"
 import { ErrorPopup } from "../../components/common/error-popup"
+import verifyEmailImg from "../../assets/verify-email.png";
 export const ResetVerifyEmailPage = ({ handleverifyemail, handleverifybutton, emailvalue, targetstate}) => {
     return (
         <>
@@ -8,7 +9,7 @@ export const ResetVerifyEmailPage = ({ handleverifyemail, handleverifybutton, em
                 <div className="verify-email-content h-[100vh] min-[250px]:flex-col min-[250px]:items-center md:flex-row flex justify-center">
                     {targetstate.error.status ? <ErrorPopup error={targetstate.error.message} /> : null}
                     <div className="flex items-center justify-center img">
-                        <img src="../../src/assets/verify-email.png" alt="" className="min-[250px]:max-w-xs lg:max-w-sm 2xl:max-w-md" />
+                        <img src={verifyEmailImg} alt="Verify Email" className="min-[250px]:max-w-xs lg:max-w-sm 2xl:max-w-md" />
                     </div>
 
                     <div className="form-content flex flex-col gap-3 min-[250px]:items-center md:items-start justify-center">

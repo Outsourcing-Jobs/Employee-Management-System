@@ -2,6 +2,7 @@ import { ErrorPopup } from "./error-popup";
 import { useSelector } from "react-redux";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import EmployeeWelcome from "../../assets/Employee-Welcome.jpg";
 
 export const SignUP = ({
   handlesignupform,
@@ -22,7 +23,7 @@ export const SignUP = ({
         <div className="mx-auto form-img">
           <Link to="/">
             <img
-              src="../../src/assets/Employee-Welcome.jpg"
+              src={EmployeeWelcome}
               alt="Your Company"
               className="min-[250px]:max-w-[15rem] min-[600px]:max-w-sm min-[900px]:max-w-sm 2xl:max-w-md cursor-pointer"
             />

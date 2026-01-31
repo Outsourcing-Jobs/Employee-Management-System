@@ -25,6 +25,7 @@
     "mailtrap": "^3.4.0",
     "mongodb": "^6.10.0",
     "mongoose": "^8.8.1",
+    "node-cron": "^4.2.1",
     "pdfkit": "^0.17.2",
     "pdfkit-table": "^0.1.99",
     "react-top-loading-bar": "^2.3.1"

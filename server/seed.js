@@ -18,65 +18,32 @@ import { GenerateRequest } from './models/GenerateRequest.model.js';
 import { Recruitment } from './models/Recruitment.model.js';
 import { CorporateCalendar } from './models/CorporateCalendar.model.js';
 import { Balance } from './models/Balance.model.js';
-
+import { BaseSalary } from './models/BaseSalary.model.js';
 import { generateRichData } from './seed-factory.js';
 
 dotenv.config();
+
+const START_2026 = new Date(2026, 0, 1);
+const END_2026 = new Date(2026, 2, 31);
+
+const randomDateQ1_2026 = () => faker.date.between({ from: START_2026, to: END_2026 });
 
 const fullSeed = async () => {
     try {
         await mongoose.connect(process.env.MONGODB_URI);
         console.log("🛠  Đang dọn dẹp Database...");
         
-        const allModels = [Organization, HumanResources, Department, Employee, Applicant, Salary, Notice, Attendance, Leave, Interviewinsight, GenerateRequest, Recruitment, CorporateCalendar, Balance];
+        const allModels = [Organization, HumanResources, BaseSalary, Department, Employee, Applicant, Salary, Notice, Attendance, Leave, Interviewinsight, GenerateRequest, Recruitment, CorporateCalendar, Balance];
         for (const m of allModels) await m.deleteMany({});
 
-                const ho = [
-            "Nguyễn", "Trần", "Lê", "Phạm", "Hoàng", "Huỳnh",
-            "Phan", "Vũ", "Võ", "Đặng", "Bùi", "Đỗ",
-            "Hồ", "Ngô", "Dương", "Lý", "Đinh", "Trịnh",
-            "Mai", "Tạ", "Châu", "Tôn", "Quách"
-        ];
-
-        const tenNam = [
-            "Anh", "Hải", "Dũng", "Tuấn", "Nam", "Long",
-            "Phong", "Khôi", "Hùng", "Khoa", "Thành",
-            "Tài", "Đạt", "Bảo", "Sơn", "Trung", "Thắng",
-            "Hoàng", "Phúc", "Vinh", "Toàn", "Quân",
-            "Lộc", "Nhật", "Kiên", "Cường", "Thiện",
-            "Hiếu", "Tín", "Khánh", "Hào", "Bình"
-        ];
-
-        const tenNu = [
-            "Hà", "Linh", "Trang", "Mai", "Lan", "Hương",
-            "Ngọc", "Thảo", "Vy", "Yến", "Nhung",
-            "Phương", "Trâm", "Chi", "Quỳnh", "My",
-            "Diệu", "Tuyết", "Ánh", "Bích", "Loan",
-            "Oanh", "Hạnh", "Nhi", "Thư", "An",
-            "Kim", "Huyền", "Thu", "Mỹ", "Tâm"
-        ];
-
-        const tenDemNam = [
-            "Văn", "Hữu", "Đức", "Minh", "Quang",
-            "Công", "Xuân", "Hoàng", "Thanh",
-            "Ngọc", "Phúc", "Gia", "Trung",
-            "Anh", "Khánh", "Tuấn"
-        ];
-
-        const tenDemNu = [
-            "Thị", "Ngọc", "Thanh", "Xuân", "Hoài",
-            "Tuệ", "Kim", "Thu", "Bích", "Mỹ",
-            "Diệu", "Hồng", "Ánh", "Phương",
-            "Mai", "Lan"
-        ];
+        const ho = ["Nguyễn", "Trần", "Lê", "Phạm", "Hoàng", "Huỳnh", "Phan", "Vũ", "Võ", "Đặng", "Bùi", "Đỗ", "Hồ", "Ngô", "Dương", "Lý", "Đinh", "Trịnh", "Mai", "Tạ", "Châu", "Tôn", "Quách"];
+        const tenNam = ["Anh", "Hải", "Dũng", "Tuấn", "Nam", "Long", "Phong", "Khôi", "Hùng", "Khoa", "Thành", "Tài", "Đạt", "Bảo", "Sơn", "Trung", "Thắng", "Hoàng", "Phúc", "Vinh", "Toàn", "Quân", "Lộc", "Nhật", "Kiên", "Cường", "Thiện", "Hiếu", "Tín", "Khánh", "Hào", "Bình"];
+        const tenNu = ["Hà", "Linh", "Trang", "Mai", "Lan", "Hương", "Ngọc", "Thảo", "Vy", "Yến", "Nhung", "Phương", "Trâm", "Chi", "Quỳnh", "My", "Diệu", "Tuyết", "Ánh", "Bích", "Loan", "Oanh", "Hạnh", "Nhi", "Thư", "An", "Kim", "Huyền", "Thu", "Mỹ", "Tâm"];
+        const tenDemNam = ["Văn", "Hữu", "Đức", "Minh", "Quang", "Công", "Xuân", "Hoàng", "Thanh", "Ngọc", "Phúc", "Gia", "Trung", "Anh", "Khánh", "Tuấn"];
+        const tenDemNu = ["Thị", "Ngọc", "Thanh", "Xuân", "Hoài", "Tuệ", "Kim", "Thu", "Bích", "Mỹ", "Diệu", "Hồng", "Ánh", "Phương", "Mai", "Lan"];
 
         function removeVietnameseTones(str) {
-            return str
-                .normalize("NFD")
-                .replace(/[\u0300-\u036f]/g, "")
-                .replace(/đ/g, "d")
-                .replace(/Đ/g, "D")
-                .replace(/\s+/g, "");
+            return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/đ/g, "d").replace(/Đ/g, "D").replace(/\s+/g, "");
         }
 
         function randomPhoneVN() {
@@ -85,7 +52,6 @@ const fullSeed = async () => {
             return prefix + Math.floor(10000000 + Math.random() * 90000000);
         }
         
-        // 1. Tạo Gốc (FPT Software)
         const newOrg = await Organization.create({
             name: "FPT Software",
             description: "Tập đoàn công nghệ hàng đầu Việt Nam",
@@ -101,18 +67,15 @@ const fullSeed = async () => {
             organizationID: newOrg._id, isverified: true 
         });
 
-        // 2. Phòng ban tiếng Việt
         const deptNames = ["Phòng Phát triển Phần mềm", "Phòng Đảm bảo Chất lượng", "Phòng Thiết kế Product", "Phòng An ninh mạng"];
         const depts = await Department.insertMany(deptNames.map(name => ({
             name, description: `Bộ phận chuyên môn thuộc ${name}`, organizationID: newOrg._id
         })));
 
-        // 3. Nhân viên
         const hashedPasswordEmployee = await bcrypt.hash("Employee@123", 10);
         const emps = [];
-        const isMale = Math.random() < 0.5;
 
-        await Employee.insertMany(
+                await Employee.insertMany(
         [
             {
                 firstname: "Đoàn",
@@ -151,28 +114,20 @@ const fullSeed = async () => {
                 isverified: true
             }
         ]);
-
-
+        
         for (const d of depts) {
             for (let i = 0; i < 5; i++) {
-
+                const isMale = Math.random() < 0.5;
                 const firstName = ho[Math.floor(Math.random() * ho.length)];
-                const middleName = isMale
-                    ? tenDemNam[Math.floor(Math.random() * tenDemNam.length)]
-                    : tenDemNu[Math.floor(Math.random() * tenDemNu.length)];
-
-                const lastName = isMale
-                    ? tenNam[Math.floor(Math.random() * tenNam.length)]
-                    : tenNu[Math.floor(Math.random() * tenNu.length)];
-
+                const middleName = isMale ? tenDemNam[Math.floor(Math.random() * tenDemNam.length)] : tenDemNu[Math.floor(Math.random() * tenDemNu.length)];
+                const lastName = isMale ? tenNam[Math.floor(Math.random() * tenNam.length)] : tenNu[Math.floor(Math.random() * tenNu.length)];
                 const fullName = `${firstName} ${middleName} ${lastName}`;
-                const emailName = removeVietnameseTones(fullName).toLowerCase();
 
                 emps.push({
                     firstname: firstName,
                     lastname: `${middleName} ${lastName}`,
                     gender: isMale, 
-                    email: `${emailName}${i}@fpt.com`,
+                    email: `${removeVietnameseTones(fullName).toLowerCase()}${i}@fpt.com`,
                     password: hashedPasswordEmployee,
                     contactnumber: randomPhoneVN(),
                     role: "Employee",
@@ -185,38 +140,31 @@ const fullSeed = async () => {
 
         const savedEmps = await Employee.insertMany(emps);
 
-        // 4. Tuyển dụng & Ứng viên
+        console.log("💰 Đang seed BaseSalary (T1–T3 / 2026)...");
+        await BaseSalary.insertMany(savedEmps.map(e => ({
+            employee: e._id,
+            dailyRate: faker.number.int({ min: 500_000, max: 2_500_000 }),
+            currency: "VND",
+            effectiveFrom: new Date(2026, 0, 1),
+            organizationID: newOrg._id
+        })));
+
         const recs = await Recruitment.insertMany(["Lập trình viên Senior Java", "Chuyên viên NodeJS"].map(job => ({
             jobtitle: job, description: `Tuyển gấp vị trí ${job} cho dự án Global.`,
             department: depts[0]._id, organizationID: newOrg._id
         })));
 
-        const firstName = ho[Math.floor(Math.random() * ho.length)];
-        const middleName = isMale
-            ? tenDemNam[Math.floor(Math.random() * tenDemNam.length)]
-            : tenDemNu[Math.floor(Math.random() * tenDemNu.length)];
-
-        const lastName = isMale
-            ? tenNam[Math.floor(Math.random() * tenNam.length)]
-            : tenNu[Math.floor(Math.random() * tenNu.length)];
-
-        const fullName = `${firstName} ${middleName} ${lastName}`;
-        const emailName = removeVietnameseTones(fullName).toLowerCase();
         const apps = await Applicant.insertMany(
             Array.from({ length: 20 }).map((_, i) => ({
-                firstname: firstName,
-                lastname: lastName,
-                email: `${emailName}${i + 1}@gmail.com`, 
+                firstname: ho[Math.floor(Math.random() * ho.length)],
+                lastname: tenNam[Math.floor(Math.random() * tenNam.length)],
+                email: `applicant${i + 1}@gmail.com`, 
                 contactnumber: randomPhoneVN(),
-                appliedrole: faker.helpers.arrayElement([
-                    "Software Engineer",
-                    "Frontend Dev"
-                ]),
+                appliedrole: faker.helpers.arrayElement(["Software Engineer", "Frontend Dev"]),
                 organizationID: newOrg._id
             }))
         );
 
-        // 5. Sinh dữ liệu từ Factory
         const rich = generateRichData(newOrg._id, newHR._id, depts, savedEmps, apps);
 
         const [salaries, attendances, leaves, notices, insights, requests] = await Promise.all([
@@ -230,32 +178,20 @@ const fullSeed = async () => {
             Balance.insertMany(rich.balances)
         ]);
 
-        console.log("🔗 Đang thiết lập các liên kết ID (Mapping References)...");
-
-        // 6. ĐỒNG BỘ QUAN HỆ (Update References)
+        console.log("🔗 Đang thiết lập các liên kết ID...");
         for (const emp of savedEmps) {
-            const eSalaries = salaries.filter(s => s.employee.equals(emp._id)).map(s => s._id);
-            const eLeaves = leaves.filter(l => l.employee.equals(emp._id)).map(l => l._id);
-            const eRequests = requests.filter(r => r.employee.equals(emp._id)).map(r => r._id);
-            const eAttendance = attendances.find(a => a.employee.equals(emp._id));
-
             await Employee.findByIdAndUpdate(emp._id, {
-                salary: eSalaries,
-                leaverequest: eLeaves,
-                generaterequest: eRequests,
-                attendance: eAttendance?._id
+                salary: salaries.filter(s => s.employee.equals(emp._id)).map(s => s._id),
+                leaverequest: leaves.filter(l => l.employee.equals(emp._id)).map(l => l._id),
+                generaterequest: requests.filter(r => r.employee.equals(emp._id)).map(r => r._id),
+                attendance: attendances.find(a => a.employee.equals(emp._id))?._id
             });
         }
 
         for (const d of depts) {
-            const dEmps = savedEmps.filter(e => e.department.equals(d._id)).map(e => e._id);
-            const dNotices = notices.filter(n => n.department?.equals(d._id)).map(n => n._id);
-            await Department.findByIdAndUpdate(d._id, { employees: dEmps, notice: dNotices });
-        }
-
-        for (const r of recs) {
-            await Recruitment.findByIdAndUpdate(r._id, { 
-                application: apps.slice(0, 10).map(a => a._id) 
+            await Department.findByIdAndUpdate(d._id, { 
+                employees: savedEmps.filter(e => e.department.equals(d._id)).map(e => e._id), 
+                notice: notices.filter(n => n.department?.equals(d._id)).map(n => n._id) 
             });
         }
 
@@ -263,15 +199,7 @@ const fullSeed = async () => {
         newOrg.HRs = [newHR._id];
         await newOrg.save();
 
-        console.log(`
-        ✅ SEED DỮ LIỆU THÀNH CÔNG (NỘI DUNG TIẾNG VIỆT)
-        -----------------------------------------------
-        🏢 Công ty: 1 (FPT Software)
-        👥 Nhân viên: ${savedEmps.length}
-        💰 Lương (VND): ${salaries.length} bản ghi
-        📅 Điểm danh: 30 ngày/nhân viên
-        📂 Quan hệ ID: Đã kết nối hoàn tất
-        `);
+        console.log("✅ SEED DỮ LIỆU THÀNH CÔNG (T1-T3/2026)");
         process.exit();
     } catch (err) {
         console.error("❌ Lỗi Seed:", err);

@@ -12,16 +12,13 @@ export const generateRichData = (orgId, hrAdminId, departments, employees, appli
         balances: []
     };
 
-    // 1. Lương (Salary) - Giữ nguyên logic nhưng chú thích bằng tiền VND
+    // 1. Lương (Salary) - Chỉnh về T1, T2, T3 năm 2026
     employees.forEach(emp => {
-        for (let i = 0; i < 3; i++) {
-
-            const now = new Date();
-            const salaryMonth = now.getMonth() + 1; // 1–12
-            const salaryYear = now.getFullYear();
+        [1, 2, 3].forEach((month) => { // Chạy 3 tháng đầu năm
+            const salaryMonth = month;
+            const salaryYear = 2026;
 
             const workingDays = faker.number.int({ min: 20, max: 26 });
-
             const basic = faker.number.int({ min: 12_000_000, max: 45_000_000 });
             const bonuses = faker.number.int({ min: 500_000, max: 2_000_000 });
             const deductions = faker.number.int({ min: 100_000, max: 500_000 });
@@ -29,27 +26,24 @@ export const generateRichData = (orgId, hrAdminId, departments, employees, appli
             data.salaries.push({
                 employee: emp._id,
                 basicpay: basic,
-
                 salaryMonth,
                 salaryYear,
                 workingDays,
-
                 bonuses,
                 deductions,
                 netpay: basic + bonuses - deductions,
-
                 currency: "VND",
-                duedate: faker.date.future(),
-                status: i === 0 ? "Pending" : "Paid",
+                duedate: new Date(2026, month - 1, 28), // Cuối mỗi tháng
+                status: month === 3 ? "Pending" : "Paid",
                 organizationID: orgId
             });
-        }
+        });
     });
 
-    // 2. Điểm danh (Attendance) - Giữ Enum tiếng Anh
+    // 2. Điểm danh (Attendance) - Chỉnh logdate lùi lại từ 31/03/2026
     employees.forEach(emp => {
-        const logs = Array.from({ length: 30 }).map((_, i) => {
-            const date = new Date();
+        const logs = Array.from({ length: 90 }).map((_, i) => { // Tăng lên 90 ngày để phủ hết Q1
+            const date = new Date(2026, 2, 31); // Bắt đầu từ 31/03/2026
             date.setDate(date.getDate() - i);
             const isWeekend = date.getDay() === 0 || date.getDay() === 6;
             return {
@@ -65,7 +59,7 @@ export const generateRichData = (orgId, hrAdminId, departments, employees, appli
         });
     });
 
-    // 3. Đơn nghỉ phép (Leave) - Việt hóa Lý do & Tiêu đề
+    // 3. Đơn nghỉ phép (Leave) - Chỉnh date trong Q1/2026
     const leaveReasons = [
         "Giải quyết việc gia đình cá nhân",
         "Nghỉ ốm (có giấy xác nhận của bác sĩ)",
@@ -76,10 +70,14 @@ export const generateRichData = (orgId, hrAdminId, departments, employees, appli
     ];
 
     employees.slice(0, 15).forEach(emp => {
+        const start = faker.date.between({ from: '2026-01-01', to: '2026-03-25' });
+        const end = new Date(start);
+        end.setDate(start.getDate() + 2);
+
         data.leaves.push({
             employee: emp._id,
-            startdate: faker.date.recent(),
-            enddate: faker.date.soon(),
+            startdate: start,
+            enddate: end,
             title: faker.helpers.arrayElement(["Đơn xin nghỉ phép", "Đơn xin nghỉ ốm", "Xin nghỉ việc riêng"]),
             reason: faker.helpers.arrayElement(leaveReasons),
             status: faker.helpers.arrayElement(["Pending", "Approved", "Rejected"]),
@@ -88,7 +86,7 @@ export const generateRichData = (orgId, hrAdminId, departments, employees, appli
         });
     });
 
-    // 4. Thông báo (Notice) - Việt hóa Tiêu đề & Nội dung
+    // 4. Thông báo (Notice) - Giữ nguyên
     const noticeTemplates = [
         { t: "Thông báo họp nội bộ định kỳ", c: "Yêu cầu tất cả thành viên tham gia đầy đủ để cập nhật tiến độ dự án quý mới." },
         { t: "Cập nhật quy định văn hóa công ty", c: "Vui lòng kiểm tra email để nắm rõ các quy định mới về giờ giấc làm việc tại văn phòng." },
@@ -107,7 +105,7 @@ export const generateRichData = (orgId, hrAdminId, departments, employees, appli
         };
     }));
 
-    // 5. Phỏng vấn (Interview Insight) - Việt hóa Nhận xét
+    // 5. Phỏng vấn (Interview Insight) - Chỉnh date trong Q1/2026
     const feedbacks = [
         "Ứng viên có tư duy logic tốt, nắm vững kiến thức cơ bản.",
         "Kỹ năng giao tiếp xuất sắc, phù hợp với văn hóa đội ngũ.",
@@ -121,15 +119,15 @@ export const generateRichData = (orgId, hrAdminId, departments, employees, appli
             applicant: app._id,
             feedback: faker.helpers.arrayElement(feedbacks),
             interviewer: hrAdminId,
-            interviewdate: faker.date.recent(),
+            interviewdate: faker.date.between({ from: '2026-01-01', to: '2026-03-31' }),
             status: "Completed",
             organizationID: orgId
         });
     });
 
-    // 6. Lịch công ty (Corporate Calendar) - Việt hóa Sự kiện
+    // 6. Lịch công ty (Corporate Calendar) - Chỉnh date trong Q1/2026
     const eventList = [
-        "Tiệc tất niên công ty 2025",
+        "Tiệc tân niên công ty 2026",
         "Ngày hội Team Building bãi biển",
         "Hội thảo chia sẻ kiến thức công nghệ mới",
         "Lễ kỷ niệm ngày thành lập công ty",
@@ -138,24 +136,24 @@ export const generateRichData = (orgId, hrAdminId, departments, employees, appli
 
     data.events = eventList.map(name => ({
         eventtitle: name,
-        eventdate: faker.date.future(),
+        eventdate: faker.date.between({ from: '2026-01-01', to: '2026-03-31' }),
         description: "Sự kiện được tổ chức nhằm mục đích gắn kết thành viên và nâng cao tinh thần làm việc.",
         audience: "Toàn thể nhân viên",
         organizationID: orgId
     }));
 
-    // 7. Ngân sách (Balance) - Việt hóa tiêu đề
+    // 7. Ngân sách (Balance) - Giữ nguyên mô tả 2026
     data.balances = departments.map(d => ({
         title: `Ngân sách hoạt động ${d.name}`,
         description: `Dự chi các khoản chi phí vận hành và vật tư cho ${d.name} quý 1/2026`,
         availableamount: faker.number.int({ min: 100_000_000, max: 800_000_000 }),
         totalexpenses: faker.number.int({ min: 10_000_000, max: 80_000_000 }),
-        expensemonth: "Tháng 01/2026",
+        expensemonth: "Tháng 03/2026",
         organizationID: orgId,
         createdBy: hrAdminId
     }));
 
-    // 8. Yêu cầu phê duyệt (Generate Request) - Việt hóa yêu cầu
+    // 8. Yêu cầu phê duyệt (Generate Request) - Giữ nguyên
     const requestItems = [
         "Đăng ký cấp thêm màn hình rời 27 inch",
         "Yêu cầu cấp mới bộ chuột và bàn phím không dây",
@@ -175,3 +173,6 @@ export const generateRichData = (orgId, hrAdminId, departments, employees, appli
 
     return data;
 };
+
+
+

@@ -1,7 +1,7 @@
 import { Navigate } from "react-router-dom"
 import { useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux"
-import { HandleGetEmployees } from "../redux/Thunks/EmployeeThunk"
+import { HandleGetEmployees } from "../redux/Thunks/EmployeeThunk.js"
 export const CheckLogin = ({ children }) => {
     const dispatch = useDispatch()
     const { isAuthenticated } = useSelector((state) => state.employeereducer)

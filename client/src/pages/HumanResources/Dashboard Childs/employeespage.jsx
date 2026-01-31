@@ -1,11 +1,9 @@
-import { ListWrapper } from "../../../components/common/Dashboard/ListDesigns";
-import { HeadingBar } from "../../../components/common/Dashboard/ListDesigns";
+import { ListContainer, ListItems, ListWrapper } from "../../../components/common/Dashboard/ListDesigns.jsx";
+import { HeadingBar } from "../../../components/common/Dashboard/ListDesigns.jsx";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { HandleGetHREmployees } from "../../../redux/Thunks/HREmployeesThunk.js";
 import { Loading } from "../../../components/common/loading.jsx";
-import { ListItems } from "../../../components/common/Dashboard/ListDesigns";
-import { ListContainer } from "../../../components/common/Dashboard/ListDesigns";
 import { AddEmployeesDialogBox } from "../../../components/common/Dashboard/dialogboxes.jsx";
 export const HREmployeesPage = () => {
   const dispatch = useDispatch();

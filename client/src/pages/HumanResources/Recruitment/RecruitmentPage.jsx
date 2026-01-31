@@ -1,4 +1,4 @@
-import { ListWrapper, HeadingBar,  ListContainer, RecruitmentList } from "../../../components/common/Dashboard/ListDesigns";
+import { ListWrapper, HeadingBar,  ListContainer, RecruitmentList } from "../../../components/common/Dashboard/ListDesigns.jsx";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Loading } from "../../../components/common/loading.jsx";

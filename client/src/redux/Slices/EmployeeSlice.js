@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
-import { AsyncReducer } from "../AsyncReducers/asyncreducer"
-import { HandlePostEmployees, HandleGetEmployees } from "../Thunks/EmployeeThunk"
+import { AsyncReducer } from "../AsyncReducers/asyncreducer.js"
+import { HandlePostEmployees, HandleGetEmployees } from "../Thunks/EmployeeThunk.js"
 
 const EmployeeSlice = createSlice({
     name: 'employees',

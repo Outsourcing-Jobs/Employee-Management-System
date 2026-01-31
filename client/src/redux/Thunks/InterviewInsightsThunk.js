@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { HRInterviewInsightsEndPoints } from "../apis/APIsEndpoints.js";
 import { apiService } from "../apis/apiService.js";
+import { HRInterviewInsightsEndPoints } from "../apis/APIsEndpoints.js";
 
 /* GET ALL */
 export const HandleGetInterviewInsights = createAsyncThunk(

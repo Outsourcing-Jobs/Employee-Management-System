@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { HRDashboardAsyncReducer } from "../AsyncReducers/asyncreducer";
-import { HandleGetDashboard } from "../Thunks/DashboardThunk";
+import { HRDashboardAsyncReducer } from "../AsyncReducers/asyncreducer.js";
+import { HandleGetDashboard } from "../Thunks/DashboardThunk.js";
 
 const HRDashboardSlice = createSlice({
     name: "HRDashboard",

@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { apiService } from "../apis/apiService";
-import { HREmployeesPageEndPoints } from "../apis/APIsEndpoints";
+import { apiService } from "../apis/apiService.js";
+import { HREmployeesPageEndPoints } from "../apis/APIsEndpoints.js";
 
 export const HandleGetHREmployees = createAsyncThunk('HandleGetHREmployees', async (HREmployeeData, { rejectWithValue }) => {
     try {

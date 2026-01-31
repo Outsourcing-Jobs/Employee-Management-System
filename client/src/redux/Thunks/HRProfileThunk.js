@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { apiService } from "../apis/apiService";
-import { HRProfileEndPoints } from "../apis/APIsEndpoints";
+import { apiService } from "../apis/apiService.js";
+import { HRProfileEndPoints } from "../apis/APIsEndpoints.js";
 
 /* GET ALL */
 export const HandleGetHRs = createAsyncThunk(

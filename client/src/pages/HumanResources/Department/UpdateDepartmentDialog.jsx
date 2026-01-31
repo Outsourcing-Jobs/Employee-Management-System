@@ -3,6 +3,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Button } from "@/components/ui/button";
 import { useDispatch } from "react-redux";
 import { HandlePatchHRDepartments } from "../../../redux/Thunks/HRDepartmentPageThunk.js";
+import updateIcon from "../../../assets/HR-Dashboard/update.png";
 
 export const UpdateDepartmentDialog = ({ department }) => {
     const dispatch = useDispatch();
@@ -47,7 +48,7 @@ export const UpdateDepartmentDialog = ({ department }) => {
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
                 <Button className="flex w-full gap-2 text-sm font-bold text-white bg-blue-500 hover:bg-blue-900">
-                    <img src="../../src/assets/HR-Dashboard/update.png" alt="" className="w-5" />
+                    <img src={updateIcon} alt="" className="w-5" />
                     Cập nhật
                 </Button>
             </DialogTrigger>

@@ -35,6 +35,8 @@ jobs:
               { "key": "BREVO_API_KEY", "value": "${{ secrets.BREVO_API_KEY }}" },
               { "key": "JWT_SECRET", "value": "${{ secrets.JWT_SECRET }}" },
               { "key": "MONGODB_URI", "value": "${{ secrets.MONGODB_URI }}" },
+              { "key": "CLIENT_URL_PROD_1", "value": "${{ secrets.CLIENT_URL_PROD_1 }}" },
+              { "key": "CLIENT_URL_PROD_2", "value": "${{ secrets.CLIENT_URL_PROD_2 }}" },
               { "key": "PORT", "value": "10000" },
               { "key": "NODE_ENV", "value": "production" }
             ]'

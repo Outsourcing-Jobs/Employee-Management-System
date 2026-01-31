@@ -1,7 +1,6 @@
 import mongoose from 'mongoose'
 import { Schema } from "mongoose";
 
-
 const AttendanceSchema = new Schema({
     employee: {
         type: mongoose.Schema.Types.ObjectId,
@@ -23,6 +22,12 @@ const AttendanceSchema = new Schema({
                 type: String,
                 required: true,
                 enum: ['Present', 'Absent', 'Not Specified', 'Leave']
+            },
+            checkInTime: {
+                type: Date
+            },
+            checkOutTime: {
+                type: Date
             }
         }
     ],
@@ -32,4 +37,4 @@ const AttendanceSchema = new Schema({
     }
 }, { timestamps: true });
 
-export const Attendance = mongoose.model("Attendance", AttendanceSchema)
+export const Attendance = mongoose.model("Attendance", AttendanceSchema);

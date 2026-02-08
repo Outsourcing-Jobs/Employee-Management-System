@@ -2,6 +2,7 @@ import { Department } from "../models/Department.model.js";
 import { Employee } from "../models/Employee.model.js";
 import { HumanResources } from "../models/HR.model.js";
 import { Notice } from "../models/Notice.model.js";
+import { publishNotification } from "../queue/publisher.js";
 
 export const HandleCreateNotice = async (req, res) => {
   try {
@@ -295,5 +296,32 @@ export const HandleDeleteNotice = async (req, res) => {
     return res
       .status(500)
       .json({ success: false, message: "Lỗi máy chủ nội bộ", error: error });
+  }
+};
+
+export const createNotice = async (req, res) => {
+  try {
+    const notice = await Notice.create({
+      ...req.body,
+      createdby: req.HRid,
+      status: 'PENDING',
+      organizationID: req.ORGID,
+      error: undefined
+    });
+
+    publishNotification(notice._id)
+      .catch(err => {
+        console.error('Queue error:', err);
+      });
+
+    return res.status(201).json({
+      message: 'Notice created & queued',
+      noticeId: notice._id
+    });
+  } catch (err) {
+    return res.status(500).json({
+      message: 'Failed to create notice',
+      error: err.message
+    });
   }
 };

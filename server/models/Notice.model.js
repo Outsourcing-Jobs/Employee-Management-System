@@ -13,16 +13,33 @@ const NoticeSchema = new Schema({
     audience: {
         type: String,
         required: true,
-        enum: ["Department-Specific", "Employee-Specific"]
+        enum: ["Department-Specific", "Employee-Specific", "ALL_EMPLOYEES"]
     },
-    department: {
+    status: {
+        type: String,
+        enum: ['PENDING', 'PROCESSING', 'DONE', 'FAILED'],
+        default: 'PENDING'
+    },
+    channels: {
+        type: [String],
+        enum: ['mail', 'system'],
+        default: ['system']
+    },
+    error: {
+        type: String
+    },
+    departments: [
+    {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Department"
-    },
-    employee: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Employee"
-    },
+    }
+    ],
+    employee: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Employee"
+        }
+    ],
     createdby: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,

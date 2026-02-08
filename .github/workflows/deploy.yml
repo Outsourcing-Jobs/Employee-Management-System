@@ -14,14 +14,16 @@ on:
       - 'server/**'
 
 jobs:
-  deploy-process:
+  deploy:
     if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.merged == true)
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Sync Environment Variables to Render
+      # 1️⃣ Sync env vars cho API service
+      - name: Sync Env Vars (API)
         run: |
           curl --request PATCH \
             --url https://api.render.com/v1/services/${{ secrets.RENDER_SERVICE_ID }}/env-vars \
@@ -37,14 +39,45 @@ jobs:
               { "key": "MONGODB_URI", "value": "${{ secrets.MONGODB_URI }}" },
               { "key": "CLIENT_URL_PROD_1", "value": "${{ secrets.CLIENT_URL_PROD_1 }}" },
               { "key": "CLIENT_URL_PROD_2", "value": "${{ secrets.CLIENT_URL_PROD_2 }}" },
+              { "key": "RABBITMQ_URL", "value": "${{ secrets.RABBITMQ_URL }}" },
               { "key": "PORT", "value": "10000" },
               { "key": "NODE_ENV", "value": "production" }
             ]'
 
-      - name: Trigger Render Deploy
+      # 2️⃣ Sync env vars cho Worker service
+      - name: Sync Env Vars (Worker)
+        run: |
+          curl --request PATCH \
+            --url https://api.render.com/v1/services/${{ secrets.RENDER_WORKER_SERVICE_ID }}/env-vars \
+            --header 'accept: application/json' \
+            --header 'authorization: Bearer ${{ secrets.RENDER_API_KEY }}' \
+            --header 'content-type: application/json' \
+            --data '[
+              { "key": "CLIENT_URL", "value": "${{ secrets.CLIENT_URL }}" },
+              { "key": "BREVO_SENDER_EMAIL", "value": "${{ secrets.BREVO_SENDER_EMAIL }}" },
+              { "key": "BREVO_SENDER_NAME", "value": "${{ secrets.BREVO_SENDER_NAME }}" },
+              { "key": "BREVO_API_KEY", "value": "${{ secrets.BREVO_API_KEY }}" },
+              { "key": "JWT_SECRET", "value": "${{ secrets.JWT_SECRET }}" },
+              { "key": "MONGODB_URI", "value": "${{ secrets.MONGODB_URI }}" },
+              { "key": "CLIENT_URL_PROD_1", "value": "${{ secrets.CLIENT_URL_PROD_1 }}" },
+              { "key": "CLIENT_URL_PROD_2", "value": "${{ secrets.CLIENT_URL_PROD_2 }}" },
+              { "key": "RABBITMQ_URL", "value": "${{ secrets.RABBITMQ_URL }}" },
+              { "key": "PORT", "value": "10000" },
+              { "key": "NODE_ENV", "value": "production" }
+            ]'
+
+      # 3️⃣ Trigger API deploy
+      - name: Trigger API Deploy
         run: |
           curl --request POST \
             --url https://api.render.com/v1/services/${{ secrets.RENDER_SERVICE_ID }}/deploys \
             --header 'accept: application/json' \
-            --header 'authorization: Bearer ${{ secrets.RENDER_API_KEY }}' \
-            --header 'content-type: application/json'
+            --header 'authorization: Bearer ${{ secrets.RENDER_API_KEY }}'
+
+      # 4️⃣ Trigger Worker deploy
+      - name: Trigger Worker Deploy
+        run: |
+          curl --request POST \
+            --url https://api.render.com/v1/services/${{ secrets.RENDER_WORKER_SERVICE_ID }}/deploys \
+            --header 'accept: application/json' \
+            --header 'authorization: Bearer ${{ secrets.RENDER_API_KEY }}'

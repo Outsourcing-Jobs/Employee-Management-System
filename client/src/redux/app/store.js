@@ -9,7 +9,10 @@ import HRRecruitmentPageReducer from '../Slices/HRRecruitmentPageSlice.js'
 import InterviewInsightsReducer from '../Slices/InterviewInsightsSlice.js'
 import GenerateRequestReducer from '../Slices/GenerateRequestSlice.js'
 import HRManagementReducer from '../Slices/HRProfileSlice.js'
-
+import HRLeavePageReducer from '../Slices/HRLeavePageReducer.js'
+import AttendanceReducer from '../Slices/AttendanceSlice.js'
+import SalaryReducer from '../Slices/SalarySlice.js'
+import NoticeReducer from '../Slices/NoticeSlice.js'
 export const store = configureStore({
     reducer: {
         employeereducer: EmployeeReducer,
@@ -21,6 +24,10 @@ export const store = configureStore({
         HRRecruitmentPageReducer : HRRecruitmentPageReducer,
         InterviewInsightsReducer : InterviewInsightsReducer,
         GenerateRequestReducer : GenerateRequestReducer,
-        HRManagementReducer : HRManagementReducer
+        HRManagementReducer : HRManagementReducer,
+        HRLeavePageReducer: HRLeavePageReducer,
+        AttendanceReducer: AttendanceReducer,
+        SalaryReducer:  SalaryReducer,
+        NoticeReducer:  NoticeReducer,
     }
 })

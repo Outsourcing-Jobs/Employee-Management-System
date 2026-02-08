@@ -16,6 +16,10 @@ import { RecruitmentPage } from "../pages/HumanResources/Recruitment/Recruitment
 import { InterviewInsightsPage } from "../pages/HumanResources/InterviewInsights/InterviewInsightsPage.jsx"
 import HRInternalRequestsPage from "../pages/HumanResources/InternalRequests/HRInternalRequestsPage.jsx"
 import { HRManagementPage } from "../pages/HumanResources/HR/HRManagementPage.jsx"
+import LeavePage from "../pages/HumanResources/Leave/LeavePage.jsx"
+import AttendancePage from "../pages/HumanResources/Attendance/AttendancePage.jsx"
+import SalaryPage from "../pages/HumanResources/Salary/SalaryPage.jsx"
+import NoticePage from "../pages/HumanResources/Notice/NoticePage.jsx"
 
 export const HRRoutes = [
     // Nhóm Auth: gom hết vào một cụm
@@ -44,6 +48,10 @@ export const HRRoutes = [
             { path: "interview-insights", element: <InterviewInsightsPage /> },
             { path: "internal-requests", element: <HRInternalRequestsPage /> },
             { path: "hr-management", element: <HRManagementPage /> },
+            { path: "leave", element: <LeavePage /> },
+            { path: "attendance", element: <AttendancePage /> },
+            { path: "salary", element: <SalaryPage /> },
+            { path: "notice", element: <NoticePage/> },
         ]
     },
 ]

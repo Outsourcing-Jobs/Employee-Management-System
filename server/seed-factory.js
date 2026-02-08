@@ -12,6 +12,37 @@ export const generateRichData = (orgId, hrAdminId, departments, employees, appli
         balances: []
     };
 
+    function randomCheckIn(baseDate) {
+        const checkIn = new Date(baseDate);
+
+        // 8:00 sáng
+        checkIn.setHours(8, 0, 0, 0);
+
+        // lệch từ -30 đến +45 phút
+        const offsetMinutes = faker.number.int({ min: -30, max: 45 });
+        checkIn.setMinutes(checkIn.getMinutes() + offsetMinutes);
+
+        return checkIn;
+    }
+
+    function randomCheckOut(checkIn) {
+        const checkOut = new Date(checkIn);
+
+        // 17:30
+        checkOut.setHours(17, 30, 0, 0);
+
+        // lệch từ -45 đến +90 phút
+        const offsetMinutes = faker.number.int({ min: -45, max: 90 });
+        checkOut.setMinutes(checkOut.getMinutes() + offsetMinutes);
+
+        // Đảm bảo checkout luôn sau checkin ít nhất 4 tiếng
+        if (checkOut <= checkIn) {
+            checkOut.setHours(checkIn.getHours() + 9);
+        }
+
+        return checkOut;
+    }
+
     // 1. Lương (Salary) - Chỉnh về T1, T2, T3 năm 2026
     employees.forEach(emp => {
         [1, 2, 3].forEach((month) => { // Chạy 3 tháng đầu năm
@@ -41,16 +72,33 @@ export const generateRichData = (orgId, hrAdminId, departments, employees, appli
     });
 
     // 2. Điểm danh (Attendance) - Chỉnh logdate lùi lại từ 31/03/2026
-    employees.forEach(emp => {
-        const logs = Array.from({ length: 90 }).map((_, i) => { // Tăng lên 90 ngày để phủ hết Q1
-            const date = new Date(2026, 2, 31); // Bắt đầu từ 31/03/2026
+        employees.forEach(emp => {
+        const logs = Array.from({ length: 90 }).map((_, i) => {
+            const date = new Date(2026, 2, 31);
             date.setDate(date.getDate() - i);
+
             const isWeekend = date.getDay() === 0 || date.getDay() === 6;
+
+            const logstatus = isWeekend
+                ? 'Not Specified'
+                : faker.helpers.arrayElement(['Present', 'Present', 'Absent', 'Leave']);
+
+            let checkInTime = null;
+            let checkOutTime = null;
+
+            if (logstatus === 'Present') {
+                checkInTime = randomCheckIn(date);
+                checkOutTime = randomCheckOut(checkInTime);
+            }
+
             return {
                 logdate: date,
-                logstatus: isWeekend ? 'Not Specified' : faker.helpers.arrayElement(['Present', 'Present', 'Absent', 'Leave'])
+                logstatus,
+                checkInTime,
+                checkOutTime
             };
         });
+
         data.attendance.push({
             employee: emp._id,
             status: 'Present',

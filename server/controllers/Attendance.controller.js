@@ -128,7 +128,7 @@ export const HandleUpdateAttendance = async (req, res) => {
         const today = new Date(currentdate)
         today.setHours(0, 0, 0, 0)
 
-        const now = new Date()
+        const now = new Date(currentdate)
 
         // 4️⃣ Tìm log hôm nay
         const log = attendance.attendancelog.find(item => {

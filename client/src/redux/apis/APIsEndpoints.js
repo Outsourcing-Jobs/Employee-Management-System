@@ -99,3 +99,13 @@ export const NoticeEndPoints = {
     UPDATE: "/api/v1/notice/update-notice",
     DELETE: (noticeID) => `/api/v1/notice/delete-notice/${noticeID}`,
 };
+
+export const ReportEndPoints = {
+  EXPORT_SALARY_BY_MONTH: "/api/v1/report/export/month",
+  EXPORT_SALARY_BY_EMPLOYEE: "/api/v1/report/export/employee",
+  EXPORT_SALARY_BY_YEAR: "/api/v1/report/export/year",
+  EXPORT_ALL_EMPLOYEES: "/api/v1/report/export/all-employees",
+  EXPORT_ALL_HR: "/api/v1/report/export/all-hr",
+  EXPORT_FULL_SYSTEM_REPORT_PDF:
+    "/api/v1/report/export/full-system-report-pdf",
+};

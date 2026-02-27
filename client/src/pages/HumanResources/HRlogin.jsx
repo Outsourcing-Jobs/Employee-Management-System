@@ -16,7 +16,7 @@ export const HRLogin = () => {
         email: "",
         password: ""
     })
-
+    console.log('HRState', HRState)
     const handlesigninform = (event) => {
         CommonStateHandler(signinform, setsigninform, event)
     }
@@ -39,7 +39,7 @@ export const HRLogin = () => {
 
         if (HRState.isAuthenticated) {
             loadingbar.current.complete()
-            navigate("/auth/HR/dashboard")
+            navigate("/HR/dashboard/dashboard-data")
         }
     }, [HRState.isAuthenticated])
 

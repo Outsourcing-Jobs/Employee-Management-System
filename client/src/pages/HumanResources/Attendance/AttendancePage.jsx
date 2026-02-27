@@ -49,8 +49,12 @@ const AttendancePage = () => {
           id: checkIn._id,
           employeeName: `${emp.employee?.firstname} ${emp.employee?.lastname}`,
           date: date,
-          checkInTime: dayjs(checkIn.logdate).format("HH:mm:ss"),
-          checkOutTime: checkOut ? dayjs(checkOut.logdate).format("HH:mm:ss") : "-",
+          checkInTime: checkIn.checkInTime 
+            ? dayjs(checkIn.checkInTime).format("HH:mm:ss") 
+            : "-",
+          checkOutTime: checkIn.checkOutTime 
+            ? dayjs(checkIn.checkOutTime).format("HH:mm:ss") 
+            : "-",
           status: checkIn.logstatus,
           searchName: `${emp.employee?.firstname} ${emp.employee?.lastname}`.toLowerCase(),
         });

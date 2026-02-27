@@ -17,7 +17,10 @@ export const HREndPoints = {
 }
 
 export const DashboardEndPoints = {
-    GETDATA: "/api/v1/dashboard/HR-dashboard"
+    GETDATA: "/api/v1/dashboard/HR-dashboard",
+    GET_LEAVE_REPORT: "/api/v1/dashboard/HR-dashboard-report-leave",
+    GET_ATTENDANCE_REPORT: "/api/v1/dashboard/HR-dashboard-report-attendance" ,
+    GET_RECRUITMENT_REPORT: "/api/v1/dashboard/HR-dashboard-report-recruitment"
 }
 
 export const HREmployeesPageEndPoints = {

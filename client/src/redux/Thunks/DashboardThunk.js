@@ -13,3 +13,49 @@ export const HandleGetDashboard = createAsyncThunk("HandleGetDashboard", async (
         return rejectWithValue(error.response.data); 
     }
 })
+
+export const HandleGetLeaveReport = createAsyncThunk(
+    "HandleGetLeaveReport",
+    async (_, { rejectWithValue }) => {
+        try {
+            const response = await apiService.get(
+                DashboardEndPoints.GET_LEAVE_REPORT,
+                { withCredentials: true }
+            );
+            return response.data;
+        } catch (error) {
+            return rejectWithValue(error.response.data);
+        }
+    }
+);
+
+export const HandleGetAttendanceReport = createAsyncThunk(
+    "HandleGetAttendanceReport",
+    async (_, { rejectWithValue }) => {
+        try {
+            const response = await apiService.get(
+                DashboardEndPoints.GET_ATTENDANCE_REPORT,
+                { withCredentials: true }
+            );
+            return response.data;
+        } catch (error) {
+            return rejectWithValue(error.response.data);
+        }
+    }
+);
+
+export const HandleGetRecruitmentReport = createAsyncThunk(
+    "HandleGetRecruitmentReport",
+    async (year, { rejectWithValue }) => {
+        try {
+            const response = await apiService.get(
+                `${DashboardEndPoints.GET_RECRUITMENT_REPORT}/${year}`,
+                { withCredentials: true }
+            );
+
+            return response.data;
+        } catch (error) {
+            return rejectWithValue(error.response?.data);
+        }
+    }
+);

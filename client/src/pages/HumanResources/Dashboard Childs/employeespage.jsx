@@ -5,6 +5,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { HandleGetHREmployees } from "../../../redux/Thunks/HREmployeesThunk.js";
 import { Loading } from "../../../components/common/loading.jsx";
 import { AddEmployeesDialogBox } from "../../../components/common/Dashboard/dialogboxes.jsx";
+import { Download } from "lucide-react";
+import { HandleGetReport } from "../../../redux/Thunks/ReportThunk.js";
+
 export const HREmployeesPage = () => {
   const dispatch = useDispatch();
   const HREmployeesState = useSelector((state) => state.HREmployeesPageReducer);
@@ -44,6 +47,16 @@ export const HREmployeesPage = () => {
     return <Loading />;
   }
 
+  const handleExportListEmployee = () => {
+        dispatch(
+        HandleGetReport({
+            apiroute: "EXPORT_ALL_EMPLOYEES",
+            // params: { month, year },
+            responseType: "blob", // vì thường export là file
+        })
+        );
+  };
+
   return (
     <div className="employee-page-content w-full mx-auto my-5 flex flex-col gap-5 h-[94%]">
       <div className="flex items-center justify-between employees-heading md:pe-5 ">
@@ -53,6 +66,11 @@ export const HREmployeesPage = () => {
         <div className="employee-crate-button ">
           <AddEmployeesDialogBox />
         </div>
+        <button 
+          onClick={handleExportListEmployee}
+          className="flex items-center gap-2 px-4 py-2 font-bold text-white transition-all bg-green-600 rounded-xl hover:bg-green-700">
+          <Download size={18} /> Xuất báo cáo
+        </button>
       </div>
       <div className="flex flex-col gap-4 employees-data md:pe-5">
         <ListWrapper>

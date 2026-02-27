@@ -14,6 +14,8 @@ import { LeaveStatusChart } from "../../../components/common/Dashboard/LeaveStat
 import { AttendanceStatusChart } from "../../../components/common/Dashboard/AttendanceStatusChart.jsx"
 import { RecruitmentByMonthChart } from "../../../components/common/Dashboard/RecruitmentByMonthChart.jsx"
 import { ApplicantStatusBarChart } from "../../../components/common/Dashboard/ApplicantStatusBarChart.jsx"
+import { Download } from "lucide-react"
+import { HandleGetReport } from "../../../redux/Thunks/ReportThunk.js"
 
 const containerVariants = {
     hidden: { opacity: 0 },
@@ -84,9 +86,25 @@ export const HRDashboardPage = () => {
         )
     }
     // console.log("DashboardState.report: ", DashboardState.report)
-
+    const handleExportSystem = () => {
+            dispatch(
+            HandleGetReport({
+                apiroute: "EXPORT_FULL_SYSTEM_REPORT_PDF",
+                // params: { month, year },
+                responseType: "blob", // vì thường export là file
+            })
+            );
+    };
     return (
         <>
+            <div className="flex items-center gap-4 mt-4">
+                <button
+                    onClick={handleExportSystem}
+                    className="flex items-center gap-2 px-4 py-2 font-bold text-white transition-all bg-green-600 rounded-xl hover:bg-green-700"
+                >
+                    <Download size={18} /> Báo cáo toàn hệ thống
+                </button>
+            </div>
             <KeyDetailBoxContentWrapper imagedataarray={DataArray} data={DashboardState.data} />
             <motion.div
                 variants={containerVariants}

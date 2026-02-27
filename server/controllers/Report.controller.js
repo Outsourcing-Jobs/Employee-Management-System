@@ -149,6 +149,7 @@ export const HandleExportSalaryByMonth = async (req, res) => {
       "Content-Type",
       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     );
+    res.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
     res.setHeader(
       "Content-Disposition",
       `attachment; filename=bao_cao_luong_chi_tiet_thang_${month}_${year}.xlsx`,
@@ -534,6 +535,7 @@ export const HandleExportAllEmployees = async (req, res) => {
       "Content-Type",
       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     );
+    res.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
     res.setHeader(
       "Content-Disposition",
       "attachment; filename=danh_sach_nhan_vien.xlsx",
@@ -681,6 +683,7 @@ export const ExportFullSystemPDF = async (req, res) => {
 
     // Thiết lập Header trả về file PDF
     res.setHeader("Content-Type", "application/pdf");
+    res.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
     res.setHeader(
       "Content-Disposition",
       `attachment; filename=Bao_Cao_Tong_The_He_Thong.pdf`,

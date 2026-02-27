@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { FileText, Download, ChevronLeft, ChevronRight } from "lucide-react";
 import dayjs from "dayjs";
 import { HandleGetAllSalaries } from "@/redux/Thunks/SalaryThunk";
+import { HandleGetReport } from "../../../redux/Thunks/ReportThunk";
 
 const SalaryPage = () => {
   const dispatch = useDispatch();
@@ -42,13 +43,29 @@ const SalaryPage = () => {
     return salaries?.slice(firstPageIndex, lastPageIndex) || [];
   }, [currentPage, salaries]);
 
+  const handleExportCurrentMonth = () => {
+    const now = new Date();
+    const month = now.getMonth() + 1; // getMonth() trả 0-11
+    const year = now.getFullYear();
+
+    dispatch(
+      HandleGetReport({
+        apiroute: "EXPORT_SALARY_BY_MONTH",
+        params: { month, year },
+        responseType: "blob", // vì thường export là file
+      })
+    );
+  };
+
   return (
     <div className="py-6 pr-6 space-y-6">
       <div className="flex items-center justify-between">
         <h3 className="text-3xl font-bold text-slate-800">
           Bảng lương hệ thống
         </h3>
-        <button className="flex items-center gap-2 px-4 py-2 font-bold text-white transition-all bg-green-600 rounded-xl hover:bg-green-700">
+        <button 
+          onClick={handleExportCurrentMonth}
+          className="flex items-center gap-2 px-4 py-2 font-bold text-white transition-all bg-green-600 rounded-xl hover:bg-green-700">
           <Download size={18} /> Xuất báo cáo
         </button>
       </div>

@@ -8,7 +8,8 @@ export const HandleAllEmployees = async (req, res) => {
       .populate("department", "name")
       .select(
         "firstname lastname email contactnumber department attendance notice salary leaverequest generaterequest isverified",
-      );
+      )
+      .sort({ createdAt: -1 });
     return res
       .status(200)
       .json({ success: true, data: employees, type: "AllEmployees" });

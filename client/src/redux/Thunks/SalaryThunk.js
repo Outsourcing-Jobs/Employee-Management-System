@@ -29,3 +29,16 @@ export const HandleCreateSalary = createAsyncThunk(
         }
     }
 );
+export const HandleGetSalaryDetail = createAsyncThunk(
+  "salary/getOne",
+  async (salaryID, { rejectWithValue }) => {
+    try {
+      const response = await apiService.get(SalaryPageEndPoints.GETONE(salaryID), {
+        withCredentials: true,
+      });
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || "Lỗi lấy chi tiết lương");
+    }
+  }
+);

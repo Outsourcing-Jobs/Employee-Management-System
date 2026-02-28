@@ -2,6 +2,7 @@ import { HRDepartmentTabs } from "../../../components/common/Dashboard/departmen
 import { useDispatch, useSelector } from "react-redux"
 import { useEffect, useState } from "react"
 import { CreateDepartmentDialogBox } from "../../../components/common/Dashboard/dialogboxes.jsx"
+import CreateDepartment from "./CreateDepartment.jsx"
 export const HRDepartmentPage = () => {
     return (
         <div className="department-container mt-5 min-[250px]:mx-1 sm:mx-2 w-auto flex flex-col gap-3 h-[97%]">
@@ -9,7 +10,7 @@ export const HRDepartmentPage = () => {
                 <h1 className="min-[250px]:text-2xl md:text-3xl font-bold">
                     Phòng ban
                 </h1>
-                <CreateDepartmentDialogBox />
+                <CreateDepartment />
             </div>
             <HRDepartmentTabs />
         </div>

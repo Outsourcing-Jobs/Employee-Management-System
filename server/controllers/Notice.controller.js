@@ -127,6 +127,7 @@ export const HandleAllNotice = async (req, res) => {
       // ORGID,
     } = req.query;
 
+    console.log("Received query parameters:", req.ORGID); // Debug log
     // 1. Khởi tạo filter mặc định theo tổ chức
     let queryFilter = { organizationID: req.ORGID };
 
@@ -139,7 +140,7 @@ export const HandleAllNotice = async (req, res) => {
 
     // Lọc theo phòng ban cụ thể
     if (departmentId) {
-      queryFilter.department = departmentId;
+      queryFilter.departments = departmentId;
     }
 
     // Lọc theo nhân viên cụ thể
@@ -167,7 +168,7 @@ export const HandleAllNotice = async (req, res) => {
     // 2. Thực hiện truy vấn và populate thông tin liên quan
     const notices = await Notice.find(queryFilter)
       .populate(
-        "employee department createdby",
+        "employee departments createdby",
         "firstname lastname name description email",
       )
       .sort(sortOptions);

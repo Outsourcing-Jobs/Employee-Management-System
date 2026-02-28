@@ -9,7 +9,8 @@
     "server": "nodemon index.js",
     "worker": "nodemon worker.js",
     "dev": "concurrently \"npm run server\" \"npm run worker\"",
-    "generate": "node seed.js"
+    "generate": "node seed.js",
+    "generate-v2": "node seed-ver2.js"
   },
   "author": "Darsh Jogi",
   "license": "ISC",

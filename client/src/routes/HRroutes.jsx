@@ -9,9 +9,9 @@ import { ResetMailConfirmPage } from "../pages/HumanResources/resetmailconfirm.j
 import { ResetHRPasswordPage } from "../pages/HumanResources/resetpassword.jsx"
 import { ResetHRVerifyEmailPage } from "../pages/HumanResources/resetemail.jsx"
 import { HRDashboardPage } from "../pages/HumanResources/Dashboard Childs/dashboardpage.jsx"
-import { HRProtectedRoutes } from "./HRprotectedroutes.jsx"
-import { HREmployeesPage } from "../pages/HumanResources/Dashboard Childs/employeespage.jsx"
-import { HRDepartmentPage } from "../pages/HumanResources/Dashboard Childs/departmentpage.jsx"
+// import { HRProtectedRoutes } from "./HRprotectedroutes.jsx"
+// import { HREmployeesPage } from "../pages/HumanResources/Dashboard Childs/employeespage.jsx"
+// import { HRDepartmentPage } from "../pages/HumanResources/Department/departmentpage.jsx"
 import { RecruitmentPage } from "../pages/HumanResources/Recruitment/RecruitmentPage.jsx"
 import { InterviewInsightsPage } from "../pages/HumanResources/InterviewInsights/InterviewInsightsPage.jsx"
 import HRInternalRequestsPage from "../pages/HumanResources/InternalRequests/HRInternalRequestsPage.jsx"
@@ -20,6 +20,9 @@ import LeavePage from "../pages/HumanResources/Leave/LeavePage.jsx"
 import AttendancePage from "../pages/HumanResources/Attendance/AttendancePage.jsx"
 import SalaryPage from "../pages/HumanResources/Salary/SalaryPage.jsx"
 import NoticePage from "../pages/HumanResources/Notice/NoticePage.jsx"
+import EmployeesPage from "../pages/HumanResources/Employees/EmployeesPage.jsx"
+import { HRDepartmentPage } from "../pages/HumanResources/Department/departmentpage.jsx"
+
 
 export const HRRoutes = [
     // Nhóm Auth: gom hết vào một cụm
@@ -42,7 +45,7 @@ export const HRRoutes = [
         children: [
             { index: true, element: <HRDashboardPage /> }, // Dùng index cho trang mặc định
             { path: "dashboard-data", element: <HRDashboardPage /> }, // Dùng index cho trang mặc định
-            { path: "employees", element: <HREmployeesPage /> },
+            { path: "employees", element: <EmployeesPage /> },
             { path: "departments", element: <HRDepartmentPage /> },
             { path: "recruitments", element: <RecruitmentPage /> },
             { path: "interview-insights", element: <InterviewInsightsPage /> },

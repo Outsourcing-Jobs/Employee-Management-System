@@ -4,15 +4,19 @@ import { FileText, Download, ChevronLeft, ChevronRight } from "lucide-react";
 import dayjs from "dayjs";
 import { HandleGetAllSalaries } from "@/redux/Thunks/SalaryThunk";
 import { HandleGetReport } from "../../../redux/Thunks/ReportThunk";
+import { SalaryDetailModal } from "./SalaryDetailModal";
 
 const SalaryPage = () => {
   const dispatch = useDispatch();
   const { salaries, isLoading } = useSelector((state) => state.SalaryReducer);
-
+  const today = new Date();
+  const thirtyDaysAgo = new Date();
+  thirtyDaysAgo.setDate(today.getDate() - 30);
+  const formatDate = (date) => date.toISOString().split('T')[0];
   const [filters, setFilters] = useState({
     status: "Paid",
-    startDate: "2026-01-01",
-    endDate: "2026-01-31",
+    startDate:formatDate(thirtyDaysAgo),
+    endDate: formatDate(today),
     minNet: 20000000,
     sortBy: "netpay",
     order: "desc",
@@ -61,7 +65,7 @@ const SalaryPage = () => {
     <div className="py-6 pr-6 space-y-6">
       <div className="flex items-center justify-between">
         <h3 className="text-3xl font-bold text-slate-800">
-          Bảng lương hệ thống
+          Bảng lương 
         </h3>
         <button 
           onClick={handleExportCurrentMonth}
@@ -109,8 +113,7 @@ const SalaryPage = () => {
           <thead className="text-xs font-bold uppercase border-b bg-slate-50 text-slate-500">
             <tr>
               <th className="px-6 py-4">Nhân viên</th>
-              <th className="px-6 py-4 text-center">Ngày tạo</th>
-              <th className="px-6 py-4 text-center">Ngày trả</th>
+              <th className="px-6 py-4 text-center">Lương tháng</th>
               <th className="px-6 py-4 text-center">Lương cơ bản</th>
               <th className="px-6 py-4 text-center">Thực nhận (Net)</th>
               <th className="px-6 py-4 text-center">Trạng thái</th>
@@ -126,8 +129,7 @@ const SalaryPage = () => {
                   <td className="px-6 py-4">
                     <p className="font-bold text-slate-700">{s.employee?.firstname} {s.employee?.lastname}</p>
                   </td>
-                  <td className="px-6 py-4 font-medium text-center text-slate-600">{dayjs(s.createdAt).format("DD/MM/YYYY")}</td>
-                  <td className="px-6 py-4 font-medium text-center text-slate-600">{dayjs(s.updateAt).format("DD/MM/YYYY")}</td>
+                  <td className="px-6 py-4 font-medium text-center text-slate-600">{s.salaryMonth}/{s.salaryYear}</td>
                   <td className="px-6 py-4 font-medium text-center">{s.basicpay?.toLocaleString()} {s.currency}</td>
                   <td className="px-6 py-4 font-black text-center text-blue-600">{s.netpay?.toLocaleString()} {s.currency}</td>
                   <td className="px-6 py-4 text-center">
@@ -136,9 +138,7 @@ const SalaryPage = () => {
                     </span>
                   </td>
                   <td className="px-6 py-4 text-center">
-                    <button className="p-2 text-blue-600 transition-all rounded-lg hover:bg-blue-50">
-                      <FileText size={18} />
-                    </button>
+                  <SalaryDetailModal salaryID={s._id} />
                   </td>
                 </tr>
               ))

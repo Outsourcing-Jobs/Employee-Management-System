@@ -161,72 +161,61 @@ export const HandleCreateSalary = async (req, res) => {
 export const HandleAllSalary = async (req, res) => {
   try {
     // 1. Trích xuất các tham số từ Query Params
-    const {
-      status,
-      employeeId,
-      startDate,
-      endDate,
-      minNet,
-      maxNet,
-      sortBy,
-      order,
-      // ORGID,
-    } = req.query;
+    const { status, employeeId, startDate, endDate, minNet, maxNet, sortBy, order } = req.query;
 
-    // 2. Khởi tạo Object Filter mặc định với Organization ID (Bắt buộc)
+    // 1. Luôn đảm bảo organizationID tồn tại và đúng kiểu
+    if (!req.ORGID) {
+       return res.status(400).json({ success: false, message: "Thiếu ID tổ chức" });
+    }
     let queryFilter = { organizationID: req.ORGID };
 
-    // --- BỘ LỌC CHI TIẾT (FILTERS) ---
+    if (status) queryFilter.status = status;
+    if (employeeId) queryFilter.employee = employeeId;
 
-    // Lọc theo trạng thái lương: Pending, Delayed, Paid
-    if (status) {
-      queryFilter.status = status;
-    }
+    // 2. Xử lý logic thời gian
+    if (startDate && endDate) {
+      const start = new Date(startDate);
+      const end = new Date(endDate);
+      const monthYearConditions = [];
+      let curr = new Date(start);
 
-    // Lọc theo một nhân viên cụ thể
-    if (employeeId) {
-      queryFilter.employee = employeeId;
-    }
-
-    // Lọc theo khoảng thời gian tạo phiếu (createdAt)
-    if (startDate || endDate) {
-      queryFilter.createdAt = {};
-      if (startDate) {
-        queryFilter.createdAt.$gte = new Date(startDate); // Lớn hơn hoặc bằng
+      while (curr <= end) {
+        monthYearConditions.push({
+          salaryMonth: curr.getMonth() + 1,
+          salaryYear: curr.getFullYear(),
+        });
+        curr.setMonth(curr.getMonth() + 1);
       }
-      if (endDate) {
-        const end = new Date(endDate);
-        end.setHours(23, 59, 59, 999); // Lấy đến cuối ngày
-        queryFilter.createdAt.$lte = end; // Nhỏ hơn hoặc bằng
+
+      // Thay vì gán thẳng $or, ta dùng $and để gom cụm nếu cần, 
+      // nhưng gán thẳng vào queryFilter vẫn chạy nếu viết đúng:
+      if (monthYearConditions.length > 0) {
+        queryFilter.$or = monthYearConditions;
       }
     }
 
-    // Lọc theo khoảng lương thực lãnh (netpay)
+    // 3. Quan trọng: Ép kiểu Number cho Netpay
     if (minNet || maxNet) {
       queryFilter.netpay = {};
       if (minNet) queryFilter.netpay.$gte = Number(minNet);
       if (maxNet) queryFilter.netpay.$lte = Number(maxNet);
     }
 
-    // --- SẮP XẾP (SORTING) ---
+    // --- Debug: Log queryFilter ra console để xem nó trông thế nào ---
+    console.log("Query Filter gửi xuống DB:", JSON.stringify(queryFilter, null, 2));
 
-    let sortOptions = {};
-    // Các trường hỗ trợ: createdAt, netpay, duedate, basicpay
     const sortField = sortBy || "createdAt";
-    // Thứ tự: asc (1) hoặc desc (-1)
     const sortOrder = order === "asc" ? 1 : -1;
-    sortOptions[sortField] = sortOrder;
 
-    // 3. Thực hiện truy vấn cơ sở dữ liệu
     const salaryList = await Salary.find(queryFilter)
-      .populate("employee", "firstname lastname department") // Lấy thông tin nhân viên liên quan
-      .sort(sortOptions);
+      .populate("employee", "firstname lastname department")
+      .sort({ [sortField]: sortOrder });
 
-    // 4. Trả về kết quả JSON
+      console.log(`Tìm thấy ${salaryList.length} bản ghi lương phù hợp với điều kiện.`, salaryList);
     return res.status(200).json({
       success: true,
-      message: "Lấy danh sách lương thành công",
       results: salaryList.length,
+      message: "Lấy danh sách lương thành công",
       data: salaryList,
     });
   } catch (error) {

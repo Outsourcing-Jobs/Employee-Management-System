@@ -137,7 +137,13 @@ export const HandleHRLogin = async (req, res) => {
 
 export const HandleHRLogout = async (req, res) => {
     try {
-        res.clearCookie("HRtoken")
+        res.clearCookie("HRtoken", {
+            httpOnly: true,
+            secure: true,
+            sameSite: "none",
+            path: "/",
+            // expires: new Date(0),
+        });
         return res.status(200).json({ success: true, message: "Đăng xuất tài khoản HR thành công" })
     } catch (error) {
         return res.status(500).json({ success: false, message: "Lỗi máy chủ nội bộ", error: error })

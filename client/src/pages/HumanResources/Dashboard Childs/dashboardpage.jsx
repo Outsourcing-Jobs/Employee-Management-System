@@ -97,7 +97,7 @@ export const HRDashboardPage = () => {
     };
     return (
         <>
-            <div className="flex items-center gap-4 mt-4">
+            <div className="flex justify-end gap-4 mt-4">
                 <button
                     onClick={handleExportSystem}
                     className="flex items-center gap-2 px-4 py-2 font-bold text-white transition-all bg-green-600 rounded-xl hover:bg-green-700"

@@ -1,3 +1,4 @@
+import mongoose from "mongoose"
 import { Attendance } from "../models/Attendance.model.js"
 import { BaseSalary } from "../models/BaseSalary.model.js"
 import { Employee } from "../models/Employee.model.js"
@@ -350,6 +351,63 @@ export const HandleDeleteSalary = async (req, res) => {
       success: false,
       error: error,
       message: "Lỗi trong quá trình xóa bản ghi",
+    });
+  }
+};
+
+export const HandleGetSalaryByEmployee = async (req, res) => {
+  try {
+    const employeeId = req.EMid;
+    const { month, year } = req.query;
+
+    let matchFilter = {
+      employee: new mongoose.Types.ObjectId(employeeId),
+      organizationID: new mongoose.Types.ObjectId(req.ORGID)
+    };
+
+    if (month) matchFilter.salaryMonth = Number(month);
+    if (year) matchFilter.salaryYear = Number(year);
+
+    const result = await Salary.aggregate([
+      {
+        $match: matchFilter
+      },
+      {
+        $group: {
+          _id: null,
+          totalBasicPay: { $sum: "$basicpay" },
+          totalBonuses: { $sum: "$bonuses" },
+          totalDeductions: { $sum: "$deductions" },
+          totalNetPay: { $sum: "$netpay" },
+          totalMonths: { $sum: 1 }
+        }
+      }
+    ]);
+
+    const salaries = await Salary.find(matchFilter)
+      .populate("employee", "firstname lastname email")
+      .sort({ salaryYear: -1, salaryMonth: -1 });
+
+    return res.status(200).json({
+      success: true,
+      message: "Lấy salary theo employee thành công",
+      totals: result[0] || {
+        totalBasicPay: 0,
+        totalBonuses: 0,
+        totalDeductions: 0,
+        totalNetPay: 0,
+        totalMonths: 0
+      },
+      results: salaries.length,
+      data: salaries
+    });
+
+  } catch (error) {
+    console.error("Get salary employee error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Server error",
+      error: error.message
     });
   }
 };

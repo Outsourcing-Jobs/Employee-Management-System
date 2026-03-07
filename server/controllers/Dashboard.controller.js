@@ -414,3 +414,120 @@ export const HandleStatisticsByYear = async (req, res) => {
         })
     }
 }
+
+export const HandleEmployeeDashboard = async (req, res) => {
+  try {
+
+    const employeeId = new mongoose.Types.ObjectId(req.EMid)
+    const orgId = new mongoose.Types.ObjectId(req.ORGID)
+    const year = Number(req.query.year) || new Date().getFullYear()
+
+    // ===== COUNT =====
+    const [
+      totalAttendance,
+      totalLeaves,
+      totalRequests,
+      totalSalary
+    ] = await Promise.all([
+      Attendance.countDocuments({ employee: employeeId, organizationID: orgId }),
+      Leave.countDocuments({ employee: employeeId, organizationID: orgId }),
+      GenerateRequest.countDocuments({ employee: employeeId, organizationID: orgId }),
+      Salary.countDocuments({ employee: employeeId, organizationID: orgId })
+    ])
+
+    // ===== LEAVE STATUS =====
+    const leaveStats = await Leave.aggregate([
+      {
+        $match: {
+          employee: employeeId,
+          organizationID: orgId
+        }
+      },
+      {
+        $group: {
+          _id: "$status",
+          count: { $sum: 1 }
+        }
+      }
+    ])
+
+    // ===== REQUEST STATUS =====
+    const requestStats = await GenerateRequest.aggregate([
+      {
+        $match: {
+          employee: employeeId,
+          organizationID: orgId
+        }
+      },
+      {
+        $group: {
+          _id: "$status",
+          count: { $sum: 1 }
+        }
+      }
+    ])
+
+    // ===== SALARY CHART (12 months) =====
+    const salaryChart = await Salary.aggregate([
+      {
+        $match: {
+          employee: employeeId,
+          organizationID: orgId,
+          salaryYear: year
+        }
+      },
+      {
+        $group: {
+          _id: "$salaryMonth",
+          totalSalary: { $sum: "$netpay" }
+        }
+      },
+      { $sort: { _id: 1 } }
+    ])
+
+    // ===== ATTENDANCE STATUS =====
+    const attendanceStats = await Attendance.aggregate([
+      {
+        $match: {
+          employee: employeeId,
+          organizationID: orgId
+        }
+      },
+      {
+        $group: {
+          _id: "$status",
+          count: { $sum: 1 }
+        }
+      }
+    ])
+
+    return res.status(200).json({
+      success: true,
+
+      counts: {
+        totalAttendance,
+        totalLeaves,
+        totalRequests,
+        totalSalary
+      },
+
+      charts: {
+        leaveStats,
+        requestStats,
+        salaryChart,
+        attendanceStats
+      }
+
+    })
+
+  } catch (error) {
+
+    console.error("Employee dashboard error:", error)
+
+    return res.status(500).json({
+      success: false,
+      message: "Server error"
+    })
+
+  }
+}

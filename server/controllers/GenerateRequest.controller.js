@@ -148,6 +148,69 @@ export const HandleAllGenerateRequest = async (req, res) => {
   }
 };
 
+export const HandleGenerateRequestByEmployee = async (req, res) => {
+  try {
+    const employeeId = req.EMid;
+    console.log('employeeId', employeeId)
+    const { status, startDate, endDate, sortBy, order } = req.query;
+
+    // Filter theo organization + employee
+    let queryFilter = {
+      organizationID: req.ORGID,
+      employee: employeeId
+    };
+
+    // Lọc theo status
+    if (status) {
+      queryFilter.status = status;
+    }
+
+    // Lọc theo khoảng thời gian
+    if (startDate || endDate) {
+      queryFilter.createdAt = {};
+
+      if (startDate) {
+        queryFilter.createdAt.$gte = new Date(startDate);
+      }
+
+      if (endDate) {
+        const end = new Date(endDate);
+        end.setHours(23, 59, 59, 999);
+        queryFilter.createdAt.$lte = end;
+      }
+    }
+
+    // Sorting
+    let sortOptions = {};
+    const sortField = sortBy || "createdAt";
+    const sortOrder = order === "asc" ? 1 : -1;
+    sortOptions[sortField] = sortOrder;
+
+    // Query
+    const requests = await GenerateRequest.find(queryFilter)
+      .populate(
+        "employee department approvedby",
+        "firstname lastname name email"
+      )
+      .sort(sortOptions);
+
+    return res.status(200).json({
+      success: true,
+      message: "Lấy danh sách yêu cầu của nhân viên thành công",
+      results: requests.length,
+      data: requests
+    });
+
+  } catch (error) {
+    console.error("Lỗi HandleGenerateRequestByEmployee:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Lỗi máy chủ nội bộ",
+      error: error.message
+    });
+  }
+};
+
 export const HandleGenerateRequest = async (req, res) => {
   try {
     const { requestID } = req.params;

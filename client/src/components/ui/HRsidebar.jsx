@@ -30,11 +30,20 @@ import { HandlePostHumanResources } from "../../redux/Thunks/HRThunk";
 export function HRdashboardSidebar() {
   const dispatch = useDispatch()
   
-  const handleLogout = (e) => {
-    dispatch(HandlePostHumanResources({ apiroute: "LOGOUT", data: null }))
-    e.preventDefault(); 
-    Cookies.remove("HRtoken", { path: "/" }); 
-    window.location.href = "/"; 
+  const handleLogout = async (e) => {
+    e.preventDefault();
+
+    try {
+      await dispatch(
+        HandlePostHumanResources({ apiroute: "LOGOUT", data: {} })
+      ).unwrap();
+
+      Cookies.remove("HRtoken", { path: "/" });
+
+      window.location.href = "/";
+    } catch (error) {
+      console.log("Logout failed", error);
+    }
   };
   return (
     <Sidebar>

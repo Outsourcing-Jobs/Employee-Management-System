@@ -21,6 +21,7 @@ export const GenerateJwtTokenAndSetCookiesHR = (res, HRid, HRrole, ORGID) => {
         httpOnly: true,
         secure: true,
         sameSite: "none",
+        path: "/",
     })
 
     return token

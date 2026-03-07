@@ -2,7 +2,8 @@ export const APIsEndPoints = {
     LOGIN: "/api/auth/employee/login",
     CHECKELOGIN: "/api/auth/employee/check-login",
     FORGOT_PASSWORD: "/api/auth/employee/forgot-password",
-    RESET_PASSWORD: (token) => `/api/auth/employee/reset-password/${token}`
+    RESET_PASSWORD: (token) => `/api/auth/employee/reset-password/${token}`,
+    LOGOUT: "/api/auth/employee/logout"
 }
 
 export const HREndPoints = {
@@ -13,7 +14,8 @@ export const HREndPoints = {
     CHECK_VERIFY_EMAIL: "/api/auth/HR/check-verify-email",
     RESEND_VERIFY_EMAIL: "/api/auth/HR/resend-verify-email",
     FORGOT_PASSWORD: "/api/auth/HR/forgot-password",
-    RESET_PASSWORD: (token) => `/api/auth/HR/reset-password/${token}` 
+    RESET_PASSWORD: (token) => `/api/auth/HR/reset-password/${token}` ,
+
 }
 
 export const DashboardEndPoints = {
@@ -90,6 +92,7 @@ export const AttendanceEndPoints = {
     GET_ALL: "/api/v1/attendance/all", 
     GET_DETAILS: (id) => `/api/v1/attendance/${id}`, 
     DELETE: (id) => `/api/v1/attendance/delete-attendance/${id}`,
+    UPDATE: "/api/v1/attendance/update-attendance",
 };
 
 export const NoticeEndPoints = {
@@ -109,3 +112,7 @@ export const ReportEndPoints = {
   EXPORT_FULL_SYSTEM_REPORT_PDF:
     "/api/v1/report/export/full-system-report-pdf",
 };
+export const EmployeeSelfEndPoints = {
+    GET_MY_PROFILE: "/api/v1/employee/by-employee",
+    UPDATE_MY_PROFILE: "/api/v1/employee/update-employee"
+}

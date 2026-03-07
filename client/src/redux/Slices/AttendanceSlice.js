@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { HandleHRDeleteAttendance, HandleHRGetAllAttendance } from "../Thunks/AttendanceThunk";
-
+import { HandleHRDeleteAttendance, HandleHRGetAllAttendance, HandleUpdateAttendance } from "../Thunks/AttendanceThunk";
 
 const AttendanceSlice = createSlice({
     name: "HRAttendanceSlice",
@@ -14,9 +13,7 @@ const AttendanceSlice = createSlice({
         },
         fetchData: true 
     },
-    reducers: {
-        
-    },
+    reducers: {},
     extraReducers: (builder) => {
         builder
             .addCase(HandleHRGetAllAttendance.pending, (state) => {
@@ -35,6 +32,20 @@ const AttendanceSlice = createSlice({
 
             .addCase(HandleHRDeleteAttendance.fulfilled, (state) => {
                 state.fetchData = true; 
+            })
+
+            // Update attendance (check-in/check-out)
+            .addCase(HandleUpdateAttendance.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(HandleUpdateAttendance.fulfilled, (state) => {
+                state.isLoading = false;
+                state.fetchData = true;
+            })
+            .addCase(HandleUpdateAttendance.rejected, (state, action) => {
+                state.isLoading = false;
+                state.error.status = true;
+                state.error.message = action.payload;
             });
     }
 });

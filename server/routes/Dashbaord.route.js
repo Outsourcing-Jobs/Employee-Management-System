@@ -1,11 +1,12 @@
 import express from "express"
-import { HandleAttendanceReport, HandleDashboardReport, HandleHRDashboard, HandleStatisticsByYear } from "../controllers/Dashboard.controller.js"
-import { VerifyhHRToken } from "../middlewares/Auth.middleware.js"
+import { HandleAttendanceReport, HandleDashboardReport, HandleEmployeeDashboard, HandleHRDashboard, HandleStatisticsByYear } from "../controllers/Dashboard.controller.js"
+import { VerifyEmployeeToken, VerifyhHRToken } from "../middlewares/Auth.middleware.js"
 import { RoleAuthorization } from "../middlewares/RoleAuth.middleware.js"
 
 const router = express.Router()
 
 router.get("/HR-dashboard", VerifyhHRToken, RoleAuthorization("HR-Admin"), HandleHRDashboard) 
+router.get("/dashboard-by-employee", VerifyEmployeeToken, HandleEmployeeDashboard) 
 router.get("/HR-dashboard-report-leave", VerifyhHRToken, RoleAuthorization("HR-Admin"), HandleDashboardReport) 
 router.get(
   "/HR-dashboard-report-attendance",

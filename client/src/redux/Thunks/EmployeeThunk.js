@@ -40,3 +40,21 @@ export const HandlePutEmployees = createAsyncThunk()
 export const HandlePatchEmployees = createAsyncThunk()
 
 export const HandleDeleteEmployees = createAsyncThunk()
+export const HandleLogout = createAsyncThunk(
+    "HandleLogout",
+    async (_, { rejectWithValue }) => {
+      try {
+        const response = await apiService.post(
+          APIsEndPoints.LOGOUT,
+          {},
+          {
+            withCredentials: true
+          }
+        );
+  
+        return response.data;
+      } catch (error) {
+        return rejectWithValue(error?.response?.data || error.message);
+      }
+    }
+  );

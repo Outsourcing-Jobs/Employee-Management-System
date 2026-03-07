@@ -30,3 +30,18 @@ export const HandleHRDeleteAttendance = createAsyncThunk(
         }
     }
 );
+export const HandleUpdateAttendance = createAsyncThunk(
+    "hrAttendance/update",
+    async (data, { rejectWithValue }) => {
+        try {
+            const response = await apiService.patch(
+                AttendanceEndPoints.UPDATE,
+                data,
+                { withCredentials: true }
+            );
+            return response.data;
+        } catch (error) {
+            return rejectWithValue(error.response?.data || { message: "Chấm công thất bại" });
+        }
+    }
+);

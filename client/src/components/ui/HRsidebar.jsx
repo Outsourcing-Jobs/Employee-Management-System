@@ -24,9 +24,14 @@ import recruitment from "../../assets/HR-Dashboard/recruitment.png";
 import request from "../../assets/HR-Dashboard/request.png";
 import salary from "../../assets/HR-Dashboard/Salary.png";
 import notice from "../../assets/HR-Dashboard/notice.png";
+import { useDispatch } from "react-redux";
+import { HandlePostHumanResources } from "../../redux/Thunks/HRThunk";
 
 export function HRdashboardSidebar() {
+  const dispatch = useDispatch()
+  
   const handleLogout = (e) => {
+    dispatch(HandlePostHumanResources({ apiroute: "LOGOUT", data: null }))
     e.preventDefault(); 
     Cookies.remove("HRtoken", { path: "/" }); 
     window.location.href = "/"; 

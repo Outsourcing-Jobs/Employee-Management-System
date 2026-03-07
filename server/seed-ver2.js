@@ -129,31 +129,51 @@ async function seedDatabase() {
     console.log(`👥 Đã tạo ${employees.length} Employees`);
 
     // ====================== 5. TẠO ATTENDANCE cho mỗi Employee ======================
+    const monthsToGen = [
+      { monthIndex: 1, days: 28, label: "Tháng 02" }, // Tháng 2 (Index 1)
+      { monthIndex: 2, days: 31, label: "Tháng 03" }, // Tháng 3 (Index 2)
+    ];
+
     for (const emp of employees) {
+      const allAttendanceLogs = [];
+      const year = 2026;
+
+      for (const m of monthsToGen) {
+        for (let day = 1; day <= m.days; day++) {
+          const logDate = new Date(year, m.monthIndex, day);
+          
+          // Kiểm tra nếu là Chủ Nhật (getDay() === 0) thì có thể bỏ qua hoặc đánh dấu nghỉ
+          // Ở đây mình mặc định cho đi làm tất cả các ngày để bạn có nhiều data test
+          
+          // Random giờ Check-in: 07:45 - 08:29
+          const checkInMin = Math.floor(Math.random() * 45) + 45; 
+          
+          // Random giờ Check-out: 17:00 - 18:29
+          const checkOutMin = Math.floor(Math.random() * 90);
+
+          allAttendanceLogs.push({
+            logdate: logDate,
+            logstatus: "Present",
+            checkInTime: new Date(year, m.monthIndex, day, 7, checkInMin, 0),
+            checkOutTime: new Date(year, m.monthIndex, day, 17, checkOutMin, 0),
+          });
+        }
+      }
+
+      // Tạo 1 bản ghi Attendance duy nhất chứa log của cả 2 tháng cho mỗi nhân viên
+      // Hoặc bạn có thể tách ra mỗi tháng 1 bản ghi tùy vào thiết kế Schema của bạn
       const att = await Attendance.create({
         employee: emp._id,
         status: "Present",
-        attendancelog: [
-          {
-            logdate: new Date("2026-02-01"),
-            logstatus: "Present",
-            checkInTime: new Date("2026-02-01T08:00:00"),
-            checkOutTime: new Date("2026-02-01T17:30:00"),
-          },
-          {
-            logdate: new Date("2026-02-02"),
-            logstatus: "Present",
-            checkInTime: new Date("2026-02-02T08:15:00"),
-            checkOutTime: new Date("2026-02-02T18:00:00"),
-          },
-        ],
+        attendancelog: allAttendanceLogs,
         organizationID: org._id,
       });
 
       // Liên kết ngược Employee.attendance
       await Employee.findByIdAndUpdate(emp._id, { attendance: att._id });
     }
-    console.log(`📅 Đã tạo Attendance cho tất cả Employees`);
+
+    console.log(`📅 Đã tạo xong dữ liệu Attendance cho Tháng 2 & Tháng 3 năm 2026`);
 
     // ====================== 6. TẠO BASE SALARY ======================
     for (const emp of employees) {

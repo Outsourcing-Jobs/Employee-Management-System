@@ -154,3 +154,64 @@ export const HandleDeleteLeave = async (req, res) => {
         return res.status(500).json({ success: false, message: "Lỗi máy chủ nội bộ" })
     }
 }
+
+export const HandleGetLeaveByEmployee = async (req, res) => {
+  try {
+    const employeeId = req.EMid;
+    const { status, month, year, startDate, endDate, sortBy, order } = req.query;
+
+    let queryFilter = {
+      employee: employeeId,
+      organizationID: req.ORGID
+    };
+
+    // Filter theo status
+    if (status) {
+      queryFilter.status = status;
+    }
+
+    // Filter theo tháng / năm
+    if (month && year) {
+      const start = new Date(year, month - 1, 1);
+      const end = new Date(year, month, 0, 23, 59, 59, 999);
+
+      queryFilter.startdate = { $gte: start, $lte: end };
+    }
+
+    // Filter theo khoảng ngày
+    if (startDate || endDate) {
+      queryFilter.startdate = {};
+      if (startDate) queryFilter.startdate.$gte = new Date(startDate);
+      if (endDate) {
+        const end = new Date(endDate);
+        end.setHours(23, 59, 59, 999);
+        queryFilter.startdate.$lte = end;
+      }
+    }
+
+    // Sorting
+    let sortOptions = {};
+    const sortField = sortBy || "createdAt";
+    const sortOrder = order === "asc" ? 1 : -1;
+    sortOptions[sortField] = sortOrder;
+
+    const leaves = await Leave.find(queryFilter)
+      .populate("employee approvedby organizationID", "firstname lastname email name")
+      .sort(sortOptions);
+
+    return res.status(200).json({
+      success: true,
+      message: "Lấy danh sách đơn nghỉ phép thành công",
+      results: leaves.length,
+      data: leaves
+    });
+
+  } catch (error) {
+    console.error("HandleGetLeaveByEmployee error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Lỗi máy chủ nội bộ",
+      error: error.message
+    });
+  }
+};

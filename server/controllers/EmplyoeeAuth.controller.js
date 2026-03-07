@@ -162,7 +162,13 @@ export const HandleEmployeeCheck = async (req, res) => {
 
 export const HandleEmplyoeeLogout = async (req, res) => {
     try {
-        res.clearCookie("EMtoken")
+        res.clearCookie("EMtoken", {
+            httpOnly: true,
+            secure: true,
+            sameSite: "none",
+            path: "/",
+            // expires: new Date(0),
+        });
         return res.status(200).json({ success: true, message: "Đăng xuất thành công" })
     } catch (error) {
         console.error(error)

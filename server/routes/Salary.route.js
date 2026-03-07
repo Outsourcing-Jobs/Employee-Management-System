@@ -6,8 +6,9 @@ import {
   HandleUpdateSalary,
   HandleDeleteSalary,
   UpdateSalaryStatus,
+  HandleGetSalaryByEmployee,
 } from "../controllers/Salary.controller.js";
-import { VerifyhHRToken } from "../middlewares/Auth.middleware.js";
+import { VerifyEmployeeToken, VerifyhHRToken } from "../middlewares/Auth.middleware.js";
 import { RoleAuthorization } from "../middlewares/RoleAuth.middleware.js";
 const router = express.Router();
 
@@ -17,6 +18,8 @@ router.post(
   RoleAuthorization("HR-Admin"),
   HandleCreateSalary,
 );
+
+router.get("/by-employee", VerifyEmployeeToken, HandleGetSalaryByEmployee);
 
 router.get(
   "/all",

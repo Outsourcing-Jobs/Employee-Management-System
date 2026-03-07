@@ -2,6 +2,7 @@ import { Department } from "../models/Department.model.js";
 import { Employee } from "../models/Employee.model.js";
 import { HumanResources } from "../models/HR.model.js";
 import { Notice } from "../models/Notice.model.js";
+import { UserNotification } from "../models/UserNotification.model.js";
 import { publishNotification } from "../queue/publisher.js";
 
 export const HandleCreateNotice = async (req, res) => {
@@ -323,6 +324,54 @@ export const createNotice = async (req, res) => {
     return res.status(500).json({
       message: 'Failed to create notice',
       error: err.message
+    });
+  }
+};
+
+export const HandleGetNotificationsByEmployee = async (req, res) => {
+  try {
+    const employeeId = req.EMid; 
+    const { read, sortBy, channel, order } = req.query;
+
+    let queryFilter = {
+      employee: employeeId
+    };
+
+    // filter read/unread
+    if (read !== undefined) {
+      queryFilter.read = read === "true";
+    }
+
+    if (channel) {
+      queryFilter.channel = channel;
+    }
+
+    // sorting
+    let sortOptions = {};
+    const sortField = sortBy || "createdAt";
+    const sortOrder = order === "asc" ? 1 : -1;
+    sortOptions[sortField] = sortOrder;
+
+    const notifications = await UserNotification.find(queryFilter)
+      .populate({
+        path: "notice",
+        select: "title content audience createdAt"
+      })
+      .sort(sortOptions);
+
+    return res.status(200).json({
+      success: true,
+      message: "Lấy danh sách thông báo thành công",
+      results: notifications.length,
+      data: notifications
+    });
+
+  } catch (error) {
+    console.error("HandleGetNotificationsByEmployee error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Lỗi máy chủ nội bộ",
+      error: error.message
     });
   }
 };

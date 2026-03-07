@@ -287,3 +287,72 @@ export const HandleHRChangeAttendance = async (req, res) => {
     })
   }
 }
+
+export const HandleGetAttendanceByEmployee = async (req, res) => {
+  try {
+    const employeeId = req.EMid;
+    const { startDate, endDate, day, month, year } = req.query;
+
+    let queryFilter = {
+      employee: employeeId,
+      organizationID: req.ORGID
+    };
+
+    const attendance = await Attendance.find(queryFilter)
+      .populate("employee organizationID", "firstname lastname email name")
+      .lean();
+
+    attendance.forEach(record => {
+      record.attendancelog = record.attendancelog.filter(log => {
+        const logDate = new Date(log.logdate);
+        if (day && month && year) {
+        return (
+            logDate.getUTCDate() == day &&
+            logDate.getUTCMonth() + 1 == month &&
+            logDate.getUTCFullYear() == year
+        );
+        }
+
+        if (month && year) {
+        return (
+            logDate.getUTCMonth() + 1 == month &&
+            logDate.getUTCFullYear() == year
+        );
+        }
+
+        if (year && !month) {
+        return logDate.getUTCFullYear() == year;
+        }
+
+        if (year && !month) {
+          return logDate.getFullYear() == year;
+        }
+
+        if (startDate && logDate < new Date(startDate)) return false;
+
+        if (endDate) {
+          const end = new Date(endDate);
+          end.setHours(23, 59, 59, 999);
+          if (logDate > end) return false;
+        }
+
+        return true;
+      });
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: "Lấy dữ liệu chấm công thành công",
+      results: attendance.length,
+      data: attendance
+    });
+
+  } catch (error) {
+    console.error("HandleGetAttendanceByEmployee error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Lỗi máy chủ nội bộ",
+      error: error.message
+    });
+  }
+};

@@ -4,7 +4,7 @@ import { HRRoutes } from "./HRroutes.jsx";
 
 export const router = createBrowserRouter([
     ...EmployeeRoutes,
-    ...HRRoutes 
+    ...HRRoutes ,
 ],
     {
         future: {

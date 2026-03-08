@@ -7,7 +7,7 @@ export class CustomUsersStrategy extends BaseRecipientStrategy {
     if (!notice.employee || !notice.employee.length) {
       return [];
     }
-
+    console.log(`🔍 [CustomUsersStrategy] Xác định người nhận cho thông báo "${notice.title}"...`)  ;
     return Employee.find({
       _id: { $in: notice.employee }
     });

@@ -1,21 +1,24 @@
 import { useEffect, useState } from "react";
-import { X, Save, Megaphone} from "lucide-react";
+import { X, Save, Megaphone } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
-
 import { toast } from "../../../hooks/use-toast";
-import { HandleCreateNotice, HandleUpdateNotice } from "../../../redux/Thunks/NoticeThunk";
+import {
+  HandleCreateNotice,
+  HandleUpdateNotice,
+} from "../../../redux/Thunks/NoticeThunk";
 import { HandleGetHRDepartments } from "../../../redux/Thunks/HRDepartmentPageThunk";
 import { HandleGetHREmployees } from "../../../redux/Thunks/HREmployeesThunk";
 
-
 const NoticeActionModal = ({ isOpen, onClose, mode = "create", initialData = null }) => {
   const dispatch = useDispatch();
+
   const { fetchData } = useSelector((state) => state.NoticeReducer);
- const HRDepartmentState = useSelector((state) => state.HRDepartmentPageReducer);
-   const departments = HRDepartmentState?.data || [];
-   const HREmployeeState = useSelector((state) => state.HREmployeesPageReducer);
-   const employees = HREmployeeState?.data || [];
-   useEffect(() => {
+  const HRDepartmentState = useSelector((state) => state.HRDepartmentPageReducer);
+  const departments = HRDepartmentState?.data || [];
+  const HREmployeeState = useSelector((state) => state.HREmployeesPageReducer);
+  const employees = HREmployeeState?.data || [];
+
+  useEffect(() => {
     if (isOpen) {
       if (departments.length === 0) {
         dispatch(HandleGetHRDepartments({ apiroute: "GETALL" }));
@@ -24,33 +27,39 @@ const NoticeActionModal = ({ isOpen, onClose, mode = "create", initialData = nul
         dispatch(HandleGetHREmployees({ apiroute: "GETALL" }));
       }
     }
-  }, [dispatch, isOpen, departments.length, employees.length,fetchData]);
+  }, [dispatch, isOpen, departments.length, employees.length, fetchData]);
+
   const [formData, setFormData] = useState({
     title: "",
     content: "",
     audience: "Department-Specific",
-    department: "",
-    employee: "",
+    departments: [],    
+    employee: [],      
+    channels: ["system"],
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Xử lý dữ liệu khi edit
   useEffect(() => {
     if (mode === "edit" && initialData) {
       setFormData({
         title: initialData.title || "",
         content: initialData.content || "",
         audience: initialData.audience || "Department-Specific",
-        department: initialData.department?._id || initialData.department || "",
-        employee: initialData.employee?._id || initialData.employee || "",
+        departments: initialData.departments?.map(d => d._id || d) || [],
+        employee: initialData.employees?.map(e => e._id || e) || [],
+        channels: initialData.channels || ["system"],
       });
-    } else {
+    } else if (isOpen) {
+      // reset khi mở modal create
       setFormData({
         title: "",
         content: "",
         audience: "Department-Specific",
-        department: "",
-        employee: "",
+        departments: [],
+        employee: [],
+        channels: "system",
       });
     }
   }, [mode, initialData, isOpen]);
@@ -60,26 +69,46 @@ const NoticeActionModal = ({ isOpen, onClose, mode = "create", initialData = nul
     setIsSubmitting(true);
 
     try {
-      const payload = {
-        ...formData,
+      // Chuẩn bị payload theo audience
+      let payload = {
+        title: formData.title,
+        content: formData.content,
+        audience: formData.audience,
+        channels: formData.channels,
       };
+
+      if (formData.audience === "Department-Specific") {
+        payload.departments = formData.departments;
+        payload.employee = [];
+      } else if (formData.audience === "Employee-Specific") {
+        payload.employee = formData.employee;
+        payload.departments = [];
+      } else if (formData.audience === "ALL_EMPLOYEES") {
+        payload.departments = [];
+        payload.employee = employees.map(emp => emp._id);
+      }
+
+      console.log("Payload gửi lên:", payload);
 
       if (mode === "create") {
         await dispatch(HandleCreateNotice(payload)).unwrap();
         toast({ title: "Thành công", description: "Đã đăng thông báo mới!" });
       } else {
-        await dispatch(HandleUpdateNotice({ 
-            noticeID: initialData._id, 
-            UpdatedData: formData 
-        })).unwrap();
+        await dispatch(
+          HandleUpdateNotice({
+            noticeID: initialData._id,
+            UpdatedData: payload,
+          })
+        ).unwrap();
         toast({ title: "Thành công", description: "Đã cập nhật thông báo!" });
       }
+
       onClose();
     } catch (error) {
-      toast({ 
-        variant: "destructive", 
-        title: "Lỗi", 
-        description: error?.message || "Thao tác thất bại" 
+      toast({
+        variant: "destructive",
+        title: "Lỗi",
+        description: error?.message || "Thao tác thất bại",
       });
     } finally {
       setIsSubmitting(false);
@@ -100,78 +129,162 @@ const NoticeActionModal = ({ isOpen, onClose, mode = "create", initialData = nul
               {mode === "create" ? "Tạo thông báo mới" : "Chỉnh sửa thông báo"}
             </h3>
           </div>
-          <button onClick={onClose} className="p-2 transition-colors rounded-full hover:bg-slate-200">
+          <button
+            onClick={onClose}
+            className="p-2 transition-colors rounded-full hover:bg-slate-200"
+          >
             <X size={20} />
           </button>
         </div>
 
         <form onSubmit={handleSubmit} className="p-8 space-y-6">
           <div className="space-y-2">
-            <label className="ml-1 text-sm font-bold uppercase text-slate-600">Tiêu đề</label>
+            <label className="ml-1 text-sm font-bold uppercase text-slate-600">
+              Tiêu đề
+            </label>
             <input
               required
               className="w-full px-4 py-3 transition-all border-none outline-none bg-slate-50 rounded-xl focus:ring-2 ring-blue-500"
               placeholder="Nhập tiêu đề thông báo..."
               value={formData.title}
-              onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, title: e.target.value })
+              }
             />
           </div>
 
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
             <div className="space-y-2">
-              <label className="ml-1 text-sm font-bold uppercase text-slate-600">Đối tượng nhận</label>
+              <label className="ml-1 text-sm font-bold uppercase text-slate-600">
+                Hình thức gửi
+              </label>
               <select
                 className="w-full px-4 py-3 border-none outline-none bg-slate-50 rounded-xl focus:ring-2 ring-blue-500"
-                value={formData.audience}
-                onChange={(e) => setFormData({ ...formData, audience: e.target.value })}
+                value={formData.channels}
+                onChange={(e) =>
+                  setFormData({ ...formData, channels: [e.target.value]})
+                }
               >
-                <option value="Department-Specific">Theo phòng ban</option>
-                <option value="Employee-Specific">Cá nhân nhân viên</option>
+                <option value="system">Gửi qua thông báo hệ thống</option>
+                <option value="mail">Gửi qua email</option>
               </select>
             </div>
 
-            {formData.audience === "Department-Specific" ? (
-              <div className="space-y-2">
-                <label className="ml-1 text-sm font-bold uppercase text-slate-600">Chọn phòng ban</label>
-                <select
-                  required
-                  className="w-full px-4 py-3 border-none outline-none bg-slate-50 rounded-xl focus:ring-2 ring-blue-500"
-                  value={formData.department}
-                  onChange={(e) => setFormData({ ...formData, department: e.target.value })}
-                >
-                  <option value="">-- Chọn phòng ban --</option>
-                  {departments?.map(dept => (
-                    <option key={dept._id} value={dept._id}>{dept.name}</option>
-                  ))}
-                </select>
-              </div>
-            ) : (
-              <div className="space-y-2">
-                <label className="ml-1 text-sm font-bold uppercase text-slate-600">Chọn nhân viên</label>
-                <select
-                  required
-                  className="w-full px-4 py-3 border-none outline-none bg-slate-50 rounded-xl focus:ring-2 ring-blue-500"
-                  value={formData.employee}
-                  onChange={(e) => setFormData({ ...formData, employee: e.target.value })}
-                >
-                  <option value="">-- Chọn nhân viên --</option>
-                  {employees?.map(emp => (
-                    <option key={emp._id} value={emp._id}>{emp.firstname} {emp.lastname}</option>
-                  ))}
-                </select>
-              </div>
-            )}
+            <div className="space-y-2">
+              <label className="ml-1 text-sm font-bold uppercase text-slate-600">
+                Đối tượng nhận
+              </label>
+              <select
+                className="w-full px-4 py-3 border-none outline-none bg-slate-50 rounded-xl focus:ring-2 ring-blue-500"
+                value={formData.audience}
+                onChange={(e) => {
+                  const newAudience = e.target.value;
+                  setFormData((prev) => ({
+                    ...prev,
+                    audience: newAudience,
+                    // clear lựa chọn cũ khi đổi loại
+                    departments: newAudience === "Department-Specific" ? prev.departments : [],
+                    employee: newAudience === "Employee-Specific" ? prev.employee : [],
+                  }));
+                }}
+              >
+                <option value="Department-Specific">Theo phòng ban</option>
+                <option value="Employee-Specific">Cá nhân nhân viên</option>
+                <option value="ALL_EMPLOYEES">Tất cả CB-VN</option>
+              </select>
+            </div>
           </div>
 
+          {/* Phần chọn phòng ban / nhân viên */}
+          {formData.audience === "Department-Specific" && (
+            <div className="space-y-2">
+              <label className="ml-1 text-sm font-bold uppercase text-slate-600">
+                Chọn phòng ban (có thể chọn nhiều)
+              </label>
+              <div className="w-full p-4 overflow-y-auto border-none bg-slate-50 rounded-xl h-44 focus-within:ring-2 ring-blue-500">
+                <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
+                  {departments?.map((dept) => (
+                    <label key={dept._id} className="flex items-center gap-3 p-2 transition-colors cursor-pointer hover:bg-white rounded-lg">
+                      <input
+                        type="checkbox"
+                        className="w-5 h-5 border-gray-300 rounded text-blue-600 focus:ring-blue-500"
+                        checked={formData.departments.includes(dept._id)}
+                        onChange={(e) => {
+                          const checked = e.target.checked;
+                          const newDepts = checked
+                            ? [...formData.departments, dept._id]
+                            : formData.departments.filter((id) => id !== dept._id);
+                          setFormData({ ...formData, departments: newDepts });
+                        }}
+                      />
+                      <span className="text-sm font-medium text-slate-700">{dept.name}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+              <p className="text-xs text-slate-500 italic">Đã chọn: {formData.departments.length} phòng ban</p>
+            </div>
+          )}
+
+          {formData.audience === "Employee-Specific" && (
+            <div className="space-y-2">
+              <label className="ml-1 text-sm font-bold uppercase text-slate-600">
+                Chọn nhân viên (có thể chọn nhiều)
+              </label>
+              <div className="w-full p-4 overflow-y-auto border-none bg-slate-50 rounded-xl h-44 focus-within:ring-2 ring-blue-500">
+                <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
+                  {employees?.map((emp) => (
+                    <label key={emp._id} className="flex items-center gap-3 p-2 transition-colors cursor-pointer hover:bg-white rounded-lg">
+                      <input
+                        type="checkbox"
+                        className="w-5 h-5 border-gray-300 rounded text-blue-600 focus:ring-blue-500"
+                        checked={formData.employee.includes(emp._id)}
+                        onChange={(e) => {
+                          const checked = e.target.checked;
+                          const newEmps = checked
+                            ? [...formData.employee, emp._id]
+                            : formData.employee.filter((id) => id !== emp._id);
+                          setFormData({ ...formData, employee: newEmps });
+                        }}
+                      />
+                      <span className="text-sm font-medium text-slate-700">
+                        {emp.firstname} {emp.lastname}
+                      </span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+              <p className="text-xs text-slate-500 italic">Đã chọn: {formData.employee.length} nhân viên</p>
+            </div>
+          )}
+
+          {formData.audience === "ALL_EMPLOYEES" && (
+            <div className="space-y-2">
+              <label className="ml-1 text-sm font-bold uppercase text-slate-600">Đối tượng nhận</label>
+              <div className="flex flex-col items-center justify-center p-8 border-2 border-dashed border-blue-200 bg-blue-50 rounded-2xl">
+                <div className="p-3 mb-3 bg-blue-500 text-white rounded-full animate-pulse">
+                  <Megaphone size={28} />
+                </div>
+                <h4 className="text-lg font-bold text-blue-800">Gửi tới Toàn thể CB-NV</h4>
+                <p className="text-sm text-blue-600 text-center max-w-[300px] mt-1">
+                  Thông báo này sẽ được gửi đến tất cả <strong>{employees.length}</strong> nhân viên trên hệ thống.
+                </p>
+              </div>
+            </div>
+          )}
           <div className="space-y-2">
-            <label className="ml-1 text-sm font-bold uppercase text-slate-600">Nội dung</label>
+            <label className="ml-1 text-sm font-bold uppercase text-slate-600">
+              Nội dung
+            </label>
             <textarea
               required
               rows={5}
               className="w-full px-4 py-3 transition-all border-none outline-none resize-none bg-slate-50 rounded-xl focus:ring-2 ring-blue-500"
               placeholder="Nhập nội dung chi tiết thông báo..."
               value={formData.content}
-              onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, content: e.target.value })
+              }
             />
           </div>
 
@@ -189,7 +302,11 @@ const NoticeActionModal = ({ isOpen, onClose, mode = "create", initialData = nul
               className="flex items-center justify-center flex-1 gap-2 px-6 py-3 font-bold text-white transition-all bg-blue-600 shadow-lg rounded-xl hover:bg-blue-700 shadow-blue-100 disabled:opacity-50"
             >
               <Save size={18} />
-              {isSubmitting ? "Đang xử lý..." : mode === "create" ? "Đăng thông báo" : "Lưu thay đổi"}
+              {isSubmitting
+                ? "Đang xử lý..."
+                : mode === "create"
+                ? "Đăng thông báo"
+                : "Lưu thay đổi"}
             </button>
           </div>
         </form>

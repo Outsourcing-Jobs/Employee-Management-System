@@ -98,6 +98,7 @@ export const AttendanceEndPoints = {
 
 export const NoticeEndPoints = {
     CREATE: "/api/v1/notice/create-notice",
+    SEND: "/api/v1/notice/send-notice",
     GETALL: "/api/v1/notice/all",
     GETONE: (noticeID) => `/api/v1/notice/${noticeID}`,
     UPDATE: "/api/v1/notice/update-notice",

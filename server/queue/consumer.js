@@ -4,75 +4,82 @@ import { Notice } from '../models/Notice.model.js';
 import { NotificationFactory } from '../notifications/Notification.factory.js';
 
 export const startNotificationWorker = async () => {
-  // 1. Lấy channel RabbitMQ
+  console.log('🚀 Notification Worker Starting...');
+
   const ch = await getChannel();
+  console.log('✅ RabbitMQ Channel Connected');
 
-  // 2. Đảm bảo queue tồn tại
   await ch.assertQueue(QUEUES.NOTIFICATION, { durable: true });
+  console.log(`📦 Queue Ready: ${QUEUES.NOTIFICATION}`);
 
-  // 3. prefetch(5):
-  // - Mỗi worker chỉ xử lý tối đa 5 message cùng lúc
-  // - Tránh overload (gửi mail hàng loạt)
   ch.prefetch(5);
+  console.log('⚙️ Prefetch set to 5');
 
-  // 4. Bắt đầu lắng nghe message từ queue
   ch.consume(QUEUES.NOTIFICATION, async (msg) => {
-    if (!msg) return;
+    if (!msg) {
+      console.log('⚠️ Empty message received');
+      return;
+    }
 
-    // 5. Parse message
-    const { noticeId } = JSON.parse(msg.content.toString());
+    console.log('\n📩 Message received');
+
+    const content = msg.content.toString();
+    console.log('📄 Raw message:', content);
+
+    const { noticeId } = JSON.parse(content);
+    console.log('🔎 Notice ID:', noticeId);
 
     try {
-      /**
-       * 6. LOCK logic bằng DB
-       * Chỉ xử lý notice có status = PENDING
-       * → Tránh:
-       * - xử lý trùng
-       * - nhiều worker đụng nhau
-       */
+
+      console.log('🔒 Trying to lock notice with status PENDING...');
+
       const notice = await Notice.findOneAndUpdate(
         { _id: noticeId, status: 'PENDING' },
         { status: 'PROCESSING' },
         { new: true }
       );
 
-      // Nếu không tìm thấy (đã xử lý / bị cancel)
       if (!notice) {
-        ch.ack(msg); // xác nhận message đã xong
+        console.log('⚠️ Notice not found or already processed');
+        ch.ack(msg);
         return;
       }
 
-      // 7. Tạo service theo audience + channel
+      console.log('✅ Notice locked:', notice._id);
+      console.log('📢 Channel:', notice.channels);
+      console.log('🎯 Audience:', notice.audience);
+
+      console.log('🏭 Creating Notification Service...');
       const service = NotificationFactory.create(notice);
 
-      // 8. Gửi notification (mail / system)
+      console.log('📤 Sending notification...');
       await service.send();
 
-      // 9. Đánh dấu DONE
+      console.log('✅ Notification sent');
+
       notice.status = 'DONE';
       await notice.save();
 
-      // 10. ACK message
-      // → RabbitMQ xóa message khỏi queue
+      console.log('💾 Notice status updated → DONE');
+
       ch.ack(msg);
+      console.log('📨 Message ACKED (removed from queue)');
 
     } catch (err) {
-      // 11. Nếu lỗi
+
+      console.error('❌ Notification failed:', err);
+
       await Notice.findByIdAndUpdate(noticeId, {
         status: 'FAILED',
         error: err.message
       });
 
-      console.error('❌ Notification failed:', err.message);
+      console.log('💾 Notice status updated → FAILED');
 
-      /**
-       * 12. ACK dù bị lỗi
-       * → KHÔNG retry
-       * → Tránh vòng lặp vô hạn
-       *
-       * Nếu muốn retry / DLQ thì logic sẽ khác
-       */
       ch.ack(msg);
+      console.log('📨 Message ACKED despite error');
     }
   });
+
+  console.log('👂 Worker is now listening for messages...');
 };

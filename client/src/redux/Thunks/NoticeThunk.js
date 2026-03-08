@@ -22,7 +22,7 @@ export const HandleCreateNotice = createAsyncThunk(
     "notice/create",
     async (noticeData, { rejectWithValue }) => {
         try {
-            const response = await apiService.post(NoticeEndPoints.CREATE, noticeData, { 
+            const response = await apiService.post(NoticeEndPoints.SEND, noticeData, { 
                 withCredentials: true 
             });
             return response.data;

@@ -5,6 +5,7 @@ import { UserNotification } from '../../models/UserNotification.model.js';
 // Kênh gửi email cho thông báo
 export default class MailChannel {
   async send(users, notice) {
+    console.log(`📧 [MailChannel] Gửi thông báo "${notice.title}" đến ${users.length} người dùng qua email...`);
     for (const user of users) {
       if (!user.email) continue;
 

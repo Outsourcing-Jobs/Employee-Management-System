@@ -23,19 +23,46 @@ Built on the MERN stack (MongoDB, Express.js, React.js, Node.js), the EMS provid
 
 ### EMS HR Dashboard : 
 
-![HR-Dashboard](https://github.com/user-attachments/assets/ca4c14e0-dcfd-41b2-83cd-1ad67a474142)
+![HR-Dashboard](https://github.com/user-attachments/assets/631c6832-d170-4682-a517-ac4b983ab298)
 
 ### EMS HR Employees Page : 
 
-![Employees-Data](https://github.com/user-attachments/assets/b84d5027-1cc2-4083-aa89-770db32a2b39)
+![Employees-Data](https://github.com/user-attachments/assets/57cea04a-742e-4902-84c8-5fbb8af95b3f)
 
 ### EMS HR Departments Page : 
 
-![Department-Data](https://github.com/user-attachments/assets/30606767-745a-4898-bb44-4dd453a5db24)
+![Department-Data](https://github.com/user-attachments/assets/d277f084-2e00-4410-a066-fb89ee10a518)
 
-### EMS HR Departments Data : 
+### EMS HR Payroll Page : 
 
-![Department-Data](https://github.com/user-attachments/assets/b21a4de2-1993-463f-99e2-c699ea07e0ec)
+![Department-Data](https://github.com/user-attachments/assets/0ab3887c-1605-430b-b50a-ae2a0462f3d8)
+### EMS HR Notification Page : 
+
+![EMS HR-login](https://github.com/user-attachments/assets/78210115-0162-4abd-a92d-472080814e0f)
+
+### EMS HR On leave Page : 
+
+![HR-Dashboard](https://github.com/user-attachments/assets/78eb7a8f-1b47-49d9-a275-d543cb7d8320)
+
+### EMS HR Timekeeping Page : 
+
+![Employees-Data](https://github.com/user-attachments/assets/68e97d46-7b74-45fc-8ca6-858556f7e21e)
+
+### EMS HR Recruitment Page : 
+
+![Department-Data](https://github.com/user-attachments/assets/21e7c317-952a-4c2e-ab88-6c3e6eddda5d)
+
+### EMS HR Interview information Page : 
+
+![Department-Data](https://github.com/user-attachments/assets/890a6cf1-0ef1-4b90-b554-9a3436988e2a)
+
+### EMS HR Request Page : 
+
+![Department-Data](https://github.com/user-attachments/assets/8c08c7f3-7230-44e9-a4b3-9763e17a36e1)
+
+### EMS HR Personnel management Page : 
+
+![Department-Data](https://github.com/user-attachments/assets/970544ac-b05c-4b06-88be-b939365917a8)
 
 
 ## 🌟 Key Features

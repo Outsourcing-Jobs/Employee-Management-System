@@ -87,3 +87,19 @@ export const HandleGetLeaveByID = createAsyncThunk(
     }
   }
 );
+export const HandleGetMyLeaves = createAsyncThunk(
+  "HandleGetMyLeaves",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await apiService.get(
+        LeavePageEndPoints.GET_BY_EMPLOYEE,
+        { withCredentials: true }
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data || { message: "Lỗi khi lấy dữ liệu nghỉ phép" }
+      );
+    }
+  }
+);

@@ -6,25 +6,26 @@ import {
   RefreshCcw, Calendar, AlertCircle, FileText
 } from 'lucide-react';
 import {
-  HandleGetAllLeaves,
+  HandleGetMyLeaves,
   HandleCreateLeave,
   HandleDeleteLeave,
   HandleGetLeaveByID,
 } from '../../../redux/Thunks/LeaveThunk';
 import { toast } from '../../../hooks/use-toast';
+import { HandleGetMyProfile } from '../../../redux/Thunks/HREmployeesThunk';
 
 const STATUS_CONFIG = {
-  pending: {
+  Pending: {
     label: 'Đang chờ',
     color: 'bg-yellow-50 text-yellow-700 border-yellow-200',
     icon: <Clock size={14} />,
   },
-  approved: {
+  Approved: {
     label: 'Đã duyệt',
     color: 'bg-green-50 text-green-700 border-green-200',
     icon: <CheckCircle2 size={14} />,
   },
-  rejected: {
+  Rejected: {
     label: 'Từ chối',
     color: 'bg-red-50 text-red-700 border-red-200',
     icon: <XCircle size={14} />,
@@ -34,7 +35,7 @@ const STATUS_CONFIG = {
 const LeavePage = () => {
   const dispatch = useDispatch();
 
-  const { data: leaves, isLoading, fetchData } = useSelector(
+  const { myLeaves: leaves, isLoading, fetchData } = useSelector(
     (state) => state.HRLeavePageReducer || {}
   );
 
@@ -54,15 +55,19 @@ const LeavePage = () => {
     startdate: '',
     enddate: '',
   });
-
+  useEffect(() => {
+    if (!employeeId) {
+      dispatch(HandleGetMyProfile());
+    }
+  }, [dispatch, employeeId]);
   // Fetch leaves
   useEffect(() => {
-    dispatch(HandleGetAllLeaves());
+    dispatch(HandleGetMyLeaves());
   }, [dispatch]);
 
   useEffect(() => {
     if (fetchData) {
-      dispatch(HandleGetAllLeaves());
+      dispatch(HandleGetMyLeaves());
     }
   }, [fetchData, dispatch]);
 
@@ -136,14 +141,13 @@ const LeavePage = () => {
   };
 
   const getStatusBadge = (status) => {
-    const config = STATUS_CONFIG[status] || STATUS_CONFIG.pending;
+    const config = STATUS_CONFIG[status] || STATUS_CONFIG.Pending;
     return (
       <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold border ${config.color}`}>
         {config.icon} {config.label}
       </span>
     );
   };
-
   // === FILTER ===
   const filteredLeaves = useMemo(() => {
     return (leaves || []).filter((leave) => {
@@ -155,21 +159,22 @@ const LeavePage = () => {
     });
   }, [leaves, searchTerm, filterStatus]);
 
+
   // === STATS ===
   const stats = useMemo(() => ({
     total: (leaves || []).length,
-    pending: (leaves || []).filter(l => l.status === 'pending' || !l.status).length,
-    approved: (leaves || []).filter(l => l.status === 'approved').length,
-    rejected: (leaves || []).filter(l => l.status === 'rejected').length,
+    pending: (leaves || []).filter(l => l.status === 'Pending' || !l.status).length,
+    approved: (leaves || []).filter(l => l.status === 'Approved').length,
+    rejected: (leaves || []).filter(l => l.status === 'Rejected').length,
   }), [leaves]);
 
   // Tính tổng ngày nghỉ đã duyệt
   const totalApprovedDays = useMemo(() => {
     return (leaves || [])
-      .filter(l => l.status === 'approved')
+      .filter(l => l.status === 'Approved')
       .reduce((sum, l) => sum + calcDays(l.startdate, l.enddate), 0);
   }, [leaves]);
-
+  
   // === LOADING ===
   if (isLoading && !leaves?.length) {
     return (
@@ -227,14 +232,18 @@ const LeavePage = () => {
               className="py-2.5 pl-9 pr-8 border border-slate-200 rounded-xl bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-400 appearance-none cursor-pointer"
             >
               <option value="all">Tất cả</option>
-              <option value="pending">Đang chờ</option>
-              <option value="approved">Đã duyệt</option>
-              <option value="rejected">Từ chối</option>
+              <option value="Pending">Đang chờ</option>
+              <option value="Approved">Đã duyệt</option>
+              <option value="Rejected">Từ chối</option>
             </select>
             <ChevronDown size={16} className="absolute pointer-events-none text-slate-400 right-3 top-3.5" />
           </div>
           <button
-            onClick={() => dispatch(HandleGetAllLeaves())}
+            onClick={() => {
+              setSearchTerm('');
+              setFilterStatus('all');
+              dispatch(HandleGetMyLeaves());
+            }}
             className="flex items-center gap-2 px-4 py-2.5 border border-slate-200 rounded-xl hover:bg-slate-50 text-slate-600 text-sm font-medium"
           >
             <RefreshCcw size={16} /> Tải lại
@@ -286,7 +295,7 @@ const LeavePage = () => {
                         </span>
                       </td>
                       <td className="px-5 py-4">
-                        {getStatusBadge(leave.status || 'pending')}
+                        {getStatusBadge(leave.status || 'Pending')}
                       </td>
                       <td className="px-5 py-4">
                         <div className="flex items-center justify-end gap-1">
@@ -297,7 +306,7 @@ const LeavePage = () => {
                           >
                             <Eye size={16} />
                           </button>
-                          {(leave.status === 'pending' || !leave.status) && (
+                          {(leave.status === 'Pending' || !leave.status) && (
                             <button
                               onClick={() => handleDelete(leave._id)}
                               className="p-2 transition-colors rounded-lg hover:bg-red-50 text-slate-400 hover:text-red-600"
@@ -404,7 +413,7 @@ const LeavePage = () => {
         <Modal onClose={() => setShowDetailModal(false)} title="Chi tiết đơn nghỉ phép">
           <div className="space-y-4">
             <DetailRow label="Tiêu đề" value={selectedLeave.title || 'N/A'} />
-            <DetailRow label="Trạng thái" value={getStatusBadge(selectedLeave.status || 'pending')} />
+            <DetailRow label="Trạng thái" value={getStatusBadge(selectedLeave.status || 'Pending')} />
             <div className="grid grid-cols-2 gap-4">
               <DetailRow label="Ngày bắt đầu" value={formatDate(selectedLeave.startdate)} />
               <DetailRow label="Ngày kết thúc" value={formatDate(selectedLeave.enddate)} />

@@ -123,3 +123,20 @@ export const HandleDeleteRequest = createAsyncThunk(
     }
   }
 );
+export const HandleGetMyRequests = createAsyncThunk(
+  "HandleGetMyRequests",
+  async (params, { rejectWithValue }) => {
+    try {
+      const response = await apiService.get(
+        GenerateRequestEndPoints.GET_BY_EMPLOYEE,
+        {
+          params,
+          withCredentials: true,
+        }
+      );
+      return response.data; 
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);

@@ -76,3 +76,18 @@ export const HandleGetOneNotice = createAsyncThunk(
         }
     }
 );
+export const HandleGetMyNotices = createAsyncThunk(
+    "notice/getMyNotices",
+    async (_, { rejectWithValue }) => {
+        try {
+            const response = await apiService.get(NoticeEndPoints.GET_BY_EMPLOYEE, {
+                withCredentials: true,
+            });
+            return response.data;
+        } catch (error) {
+            return rejectWithValue(
+                error.response?.data || { message: "Lỗi khi lấy thông báo của nhân viên" }
+            );
+        }
+    }
+);

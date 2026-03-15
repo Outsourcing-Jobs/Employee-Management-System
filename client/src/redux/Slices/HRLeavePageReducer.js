@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 import { HRDashboardAsyncReducer } from "../AsyncReducers/asyncreducer";
-import { HandleCreateLeave, HandleDeleteLeave, HandleGetAllLeaves } from "../Thunks/LeaveThunk";
+import { HandleCreateLeave, HandleDeleteLeave, HandleGetAllLeaves, HandleGetMyLeaves } from "../Thunks/LeaveThunk";
 
 const HRLeavePageSlice = createSlice({
     name: "HRLeavePageSlice",
@@ -39,7 +39,25 @@ const HRLeavePageSlice = createSlice({
     // Delete leave
         .addCase(HandleDeleteLeave.fulfilled, (state) => {
             state.fetchData = true;
-        });
+        })
+        .addCase(HandleGetMyLeaves.pending, (state) => {
+            state.isLoading = true;
+            state.error = { status: false, message: null, content: null };
+          })
+          .addCase(HandleGetMyLeaves.fulfilled, (state, action) => {
+            state.isLoading = false;
+            state.myLeaves = action.payload.data || [];
+            state.success = true;
+            state.fetchData = false;
+          })
+          .addCase(HandleGetMyLeaves.rejected, (state, action) => {
+            state.isLoading = false;
+            state.error = {
+              status: true,
+              message: action.payload?.message || "Lỗi lấy dữ liệu nghỉ phép",
+              content: action.payload,
+            };
+          });
 }
 });
 export default HRLeavePageSlice.reducer;

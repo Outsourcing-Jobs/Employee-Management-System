@@ -63,6 +63,7 @@ export const GenerateRequestEndPoints = {
   UPDATE_CONTENT: "/api/v1/generate-request/update-request-content",
   UPDATE_STATUS: "/api/v1/generate-request/update-request-status",
   DELETE: (id) => `/api/v1/generate-request/delete-request/${id}`,
+  GET_BY_EMPLOYEE: "/api/v1/generate-request/by-employee",
 };
 
 export const EmployeesIDsEndPoints = {
@@ -81,6 +82,7 @@ export const LeavePageEndPoints = {
     GETONE: (leaveID) => `/api/v1/leave/${leaveID}`,
     HR_UPDATE: "/api/v1/leave/HR-update-leave",
     DELETE: (leaveID) => `/api/v1/leave/delete-leave/${leaveID}`,
+    GET_BY_EMPLOYEE: "/api/v1/leave/by-employee",
 };
 export const SalaryPageEndPoints = {
     GETALL: "/api/v1/salary/all",
@@ -94,6 +96,7 @@ export const AttendanceEndPoints = {
     GET_DETAILS: (id) => `/api/v1/attendance/${id}`, 
     DELETE: (id) => `/api/v1/attendance/delete-attendance/${id}`,
     UPDATE: "/api/v1/attendance/update-attendance",
+    GET_BY_EMPLOYEE: "/api/v1/attendance/by-employee",
 };
 
 export const NoticeEndPoints = {
@@ -103,6 +106,7 @@ export const NoticeEndPoints = {
     GETONE: (noticeID) => `/api/v1/notice/${noticeID}`,
     UPDATE: "/api/v1/notice/update-notice",
     DELETE: (noticeID) => `/api/v1/notice/delete-notice/${noticeID}`,
+    GET_BY_EMPLOYEE: "/api/v1/notice/by-employee",
 };
 
 export const ReportEndPoints = {

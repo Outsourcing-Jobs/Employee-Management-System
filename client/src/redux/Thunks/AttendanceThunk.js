@@ -45,3 +45,16 @@ export const HandleUpdateAttendance = createAsyncThunk(
         }
     }
 );
+export const HandleGetMyAttendance = createAsyncThunk(
+    "hrAttendance/getByEmployee",
+    async (_, { rejectWithValue }) => {
+        try {
+            const response = await apiService.get(AttendanceEndPoints.GET_BY_EMPLOYEE, { 
+                withCredentials: true 
+            });
+            return response.data;
+        } catch (error) {
+            return rejectWithValue(error.response?.data || "Lỗi lấy lịch sử chấm công");
+        }
+    }
+);

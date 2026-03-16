@@ -7,18 +7,19 @@ import {
   MessageSquare, RefreshCcw
 } from 'lucide-react';
 import { 
-  HandleGetRequests,
+  HandleGetMyRequests,
   HandleGetRequestByID, 
   HandleUpdateRequestContent,
   HandleCreateRequest,
   HandleDeleteRequest,
 } from '../../../redux/Thunks/GenerateRequestThunk';
 import { toast } from '../../../hooks/use-toast';
+import { HandleGetMyProfile } from '../../../redux/Thunks/HREmployeesThunk';
 
 const STATUS_CONFIG = {
-  pending: { label: 'Đang chờ', color: 'bg-yellow-50 text-yellow-700 border-yellow-200', icon: <Clock size={14} /> },
-  approved: { label: 'Đã duyệt', color: 'bg-green-50 text-green-700 border-green-200', icon: <CheckCircle2 size={14} /> },
-  rejected: { label: 'Từ chối', color: 'bg-red-50 text-red-700 border-red-200', icon: <XCircle size={14} /> },
+  Pending: { label: 'Đang chờ', color: 'bg-yellow-50 text-yellow-700 border-yellow-200', icon: <Clock size={14} /> },
+  Approved: { label: 'Đã duyệt', color: 'bg-green-50 text-green-700 border-green-200', icon: <CheckCircle2 size={14} /> },
+  Rejected: { label: 'Từ chối', color: 'bg-red-50 text-red-700 border-red-200', icon: <XCircle size={14} /> },
 };
 
 const RequestPage = () => {
@@ -48,16 +49,20 @@ const RequestPage = () => {
     title: '',
     content: '',
   });
-
+  useEffect(() => {
+    if (!employeeId) {
+      dispatch(HandleGetMyProfile());
+    }
+  }, [dispatch, employeeId]);
   // Fetch requests
   useEffect(() => {
-    dispatch(HandleGetRequests());
+    dispatch(HandleGetMyRequests());
   }, [dispatch]);
 
   // Refetch khi có thay đổi
   useEffect(() => {
     if (fetchData) {
-      dispatch(HandleGetRequests());
+      dispatch(HandleGetMyRequests());
     }
   }, [fetchData, dispatch]);
 
@@ -162,9 +167,9 @@ const RequestPage = () => {
   // === STATS ===
   const stats = {
     total: (requests || []).length,
-    pending: (requests || []).filter(r => r.status === 'pending' || !r.status).length,
-    approved: (requests || []).filter(r => r.status === 'approved').length,
-    rejected: (requests || []).filter(r => r.status === 'rejected').length,
+    pending: (requests || []).filter(r => r.status === 'Pending' || !r.status).length,
+    approved: (requests || []).filter(r => r.status === 'Approved').length,
+    rejected: (requests || []).filter(r => r.status === 'Rejected').length,
   };
 
   if (isLoading && !requests) {
@@ -222,14 +227,18 @@ const RequestPage = () => {
               className="py-2.5 pl-9 pr-8 border border-slate-200 rounded-xl bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-400 appearance-none cursor-pointer"
             >
               <option value="all">Tất cả</option>
-              <option value="pending">Đang chờ</option>
-              <option value="approved">Đã duyệt</option>
-              <option value="rejected">Từ chối</option>
+              <option value="Pending">Đang chờ</option>
+              <option value="Approved">Đã duyệt</option>
+              <option value="Rejected">Từ chối</option>
             </select>
             <ChevronDown size={16} className="absolute pointer-events-none text-slate-400 right-3 top-3.5" />
           </div>
           <button
-            onClick={() => dispatch(HandleGetRequests())}
+            onClick={() => {
+              setSearchTerm('');
+              setFilterStatus('all');
+              dispatch(HandleGetMyRequests());
+            }}
             className="flex items-center gap-2 px-4 py-2.5 border border-slate-200 rounded-xl hover:bg-slate-50 text-slate-600 text-sm font-medium"
           >
             <RefreshCcw size={16} /> Tải lại

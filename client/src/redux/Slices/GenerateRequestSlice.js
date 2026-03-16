@@ -8,6 +8,7 @@ import {
   HandleUpdateRequestContent,
   HandleUpdateRequestStatus,
   HandleGetRequestByID,
+  HandleGetMyRequests,
 } from "../Thunks/GenerateRequestThunk";
 
 const GenerateRequestSlice = createSlice({
@@ -31,6 +32,7 @@ const GenerateRequestSlice = createSlice({
     GenerateRequestAsyncReducer(builder, HandleUpdateRequestContent);
     GenerateRequestAsyncReducer(builder, HandleUpdateRequestStatus);
     GenerateRequestAsyncReducer(builder, HandleGetRequestByID);
+    GenerateRequestAsyncReducer(builder, HandleGetMyRequests);
   },
 });
 

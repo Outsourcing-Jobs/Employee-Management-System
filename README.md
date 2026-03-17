@@ -23,11 +23,11 @@ Built on the MERN stack (MongoDB, Express.js, React.js, Node.js), the EMS provid
 
 ### EMS HR Dashboard : 
 
-![HR-Dashboard](https://github.com/user-attachments/assets/631c6832-d170-4682-a517-ac4b983ab298)
+![HR-Dashboard](https://github.com/user-attachments/assets/66ed6bbd-cf84-421c-a2f0-7e575ff804d2)
 
 ### EMS HR Employees Page : 
 
-![Employees-Data](https://github.com/user-attachments/assets/57cea04a-742e-4902-84c8-5fbb8af95b3f)
+![Employees-Data](https://github.com/user-attachments/assets/a275a87a-ea05-4000-a77d-45f67952afad)
 
 ### EMS HR Departments Page : 
 
@@ -63,6 +63,35 @@ Built on the MERN stack (MongoDB, Express.js, React.js, Node.js), the EMS provid
 ### EMS HR Personnel management Page : 
 
 ![Department-Data](https://github.com/user-attachments/assets/970544ac-b05c-4b06-88be-b939365917a8)
+
+
+### EMS Employee Login : 
+
+![EMS HR-login](https://github.com/user-attachments/assets/1bd2db68-5fe0-4930-8e9b-92aa09cd6f50)
+
+### EMS Employee Dashboard : 
+
+![HR-Dashboard](https://github.com/user-attachments/assets/e7aaf33d-cb09-4920-857c-25c063b47b3a)
+
+### EMS Employee Notification Page : 
+
+![Employees-Data](https://github.com/user-attachments/assets/c07ac79a-fa0d-46b6-9222-f7d9357f470b)
+
+### EMS Employee On leave Page : 
+
+![Department-Data](https://github.com/user-attachments/assets/08e9e0b6-64a1-47da-96bb-876df36792a7)
+
+### EMS Employee Timekeeping Page : 
+
+![Department-Data](https://github.com/user-attachments/assets/d0bc3954-167e-45a2-bd20-ae355709811c)
+
+### EMS Employee Internal requirements Page : 
+
+![EMS HR-login](https://github.com/user-attachments/assets/a27ba27d-e92e-4e08-b27b-bce5e2a1ae0f)
+
+### EMS Employee Personal Information Page : 
+
+![HR-Dashboard](https://github.com/user-attachments/assets/6b5b6d96-d4d8-4a60-822a-f74c8a5b8524)
 
 
 ## 🌟 Key Features

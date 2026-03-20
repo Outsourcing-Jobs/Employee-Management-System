@@ -1,8 +1,8 @@
-import { ListWrapper, HeadingBar,  ListContainer, RecruitmentList } from "../../../components/common/Dashboard/ListDesigns.jsx";
+import { ListWrapper, HeadingBar, ListContainer, RecruitmentList } from "../../../components/common/Dashboard/ListDesigns.jsx";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Loading } from "../../../components/common/loading.jsx";
-// import { CreateRecruitmentDialogBox } from "../../../components/common/Dashboard/dialogboxes";
+import { HandleGetHRDepartments } from "../../../redux/Thunks/HRDepartmentPageThunk.js";
 import { HandleDeleteRecruitment, HandleGetRecruitments, HandlePatchRecruitment, HandlePostRecruitment } from "../../../redux/Thunks/HRRecruitmentPageThunk.js";
 
 export const RecruitmentPage = () => {
@@ -10,11 +10,14 @@ export const RecruitmentPage = () => {
   const RecruitmentState = useSelector(
     (state) => state.HRRecruitmentPageReducer
   );
+  const departmentState = useSelector(
+    (state) => state.HRDepartmentPageReducer
+  );
   const [editingRecruitment, setEditingRecruitment] = useState(null);
   const [openCreate, setOpenCreate] = useState(false);
   const [formData, setFormData] = useState({
     jobtitle: "",
-    department: "",
+    departmentID: "",
     description: ""
   });
 
@@ -24,8 +27,8 @@ export const RecruitmentPage = () => {
     dateTo: ""
   });
 
-    const filteredRecruitments = (RecruitmentState.data || []).filter((item) => {
-  // FILTER PHÒNG BAN
+  const filteredRecruitments = (RecruitmentState.data || []).filter((item) => {
+    // FILTER PHÒNG BAN
     if (
       filters.department !== "ALL" &&
       item.department !== filters.department
@@ -35,7 +38,7 @@ export const RecruitmentPage = () => {
 
     // FILTER NGÀY
     const getDateOnly = (date) =>
-    new Date(date).toISOString().split("T")[0];
+      new Date(date).toISOString().split("T")[0];
 
     const createdDate = getDateOnly(item.createdAt);
     if (filters.dateFrom) {
@@ -82,6 +85,7 @@ export const RecruitmentPage = () => {
 
   useEffect(() => {
     dispatch(HandleGetRecruitments({ apiroute: "GETALL" }));
+    dispatch(HandleGetHRDepartments({ apiroute: "GETALL" }));
   }, []);
 
   useEffect(() => {
@@ -89,30 +93,36 @@ export const RecruitmentPage = () => {
   }, [filters]);
 
   const handleDelete = (id) => {
-  if (!window.confirm("Bạn chắc chắn muốn xoá tuyển dụng này?")) return;
+    if (!window.confirm("Bạn chắc chắn muốn xoá tuyển dụng này?")) return;
 
-  dispatch(
-    HandleDeleteRecruitment({
-      apiroute: `DELETE.${id}`
-    })
-  );
-};
+    dispatch(
+      HandleDeleteRecruitment({
+        apiroute: `DELETE.${id}`
+      })
+    );
+  };
 
   const handleCreate = () => {
     dispatch(
       HandlePostRecruitment({
-        apiroute: "CREATE",
+        apiroute: "ADD",
         data: formData
       })
     );
     setOpenCreate(false);
+    setFormData({ jobtitle: "", departmentID: "", description: "" });
   };
 
   const handleUpdate = () => {
     dispatch(
       HandlePatchRecruitment({
         apiroute: "UPDATE",
-        data: editingRecruitment
+        data: {
+          recruitmentID: editingRecruitment._id,
+          jobtitle: editingRecruitment.jobtitle,
+          description: editingRecruitment.description,
+          departmentID: editingRecruitment.departmentID || editingRecruitment.department?._id || ""
+        }
       })
     );
     setEditingRecruitment(null);
@@ -132,10 +142,10 @@ export const RecruitmentPage = () => {
         {/* <CreateRecruitmentDialogBox /> */}
       </div>
 
-    {/* FILTER BAR */}
-    <div className="flex flex-wrap gap-4 items-end md:pe-5">
-      {/* PHÒNG BAN */}
-      {/* <div className="flex flex-col">
+      {/* FILTER BAR */}
+      <div className="flex flex-wrap gap-4 items-end md:pe-5">
+        {/* PHÒNG BAN */}
+        {/* <div className="flex flex-col">
         <label className="text-sm font-semibold text-gray-600">
           Phòng ban
         </label>
@@ -147,52 +157,54 @@ export const RecruitmentPage = () => {
           }
         >
           <option value="ALL">Tất cả</option>
-          <option value="HR">HR</option>
-          <option value="IT">IT</option>
-          <option value="Phòng Phát triển Phần mềm">Phòng Phát triển Phần mềm</option>
+          {departmentState?.data?.map((dept) => (
+             <option key={dept._id} value={dept._id}>
+                {dept.name}
+             </option>
+          ))} 
         </select>
       </div> */}
 
-      {/* TỪ NGÀY */}
-      <div className="flex flex-col">
-        <label className="text-sm font-semibold text-gray-600">
-          Từ ngày
-        </label>
-        <input
-          type="date"
-          className="border rounded-lg px-3 py-2"
-          value={filters.dateFrom}
-          onChange={(e) =>
-            setFilters({ ...filters, dateFrom: e.target.value })
-          }
-        />
-      </div>
+        {/* TỪ NGÀY */}
+        <div className="flex flex-col">
+          <label className="text-sm font-semibold text-gray-600">
+            Từ ngày
+          </label>
+          <input
+            type="date"
+            className="border rounded-lg px-3 py-2"
+            value={filters.dateFrom}
+            onChange={(e) =>
+              setFilters({ ...filters, dateFrom: e.target.value })
+            }
+          />
+        </div>
 
-      {/* ĐẾN NGÀY */}
-      <div className="flex flex-col">
-        <label className="text-sm font-semibold text-gray-600">
-          Đến ngày
-        </label>
-        <input
-          type="date"
-          className="border rounded-lg px-3 py-2"
-          value={filters.dateTo}
-          onChange={(e) =>
-            setFilters({ ...filters, dateTo: e.target.value })
-          }
-        />
-      </div>
+        {/* ĐẾN NGÀY */}
+        <div className="flex flex-col">
+          <label className="text-sm font-semibold text-gray-600">
+            Đến ngày
+          </label>
+          <input
+            type="date"
+            className="border rounded-lg px-3 py-2"
+            value={filters.dateTo}
+            onChange={(e) =>
+              setFilters({ ...filters, dateTo: e.target.value })
+            }
+          />
+        </div>
 
-      {/* RESET */}
-      <button
-        onClick={() =>
-          setFilters({ department: "ALL", dateFrom: "", dateTo: "" })
-        }
-        className="px-4 py-2 rounded-lg border-2 border-gray-400 text-gray-500 hover:bg-gray-100"
-      >
-        Reset
-      </button>
-    </div>
+        {/* RESET */}
+        <button
+          onClick={() =>
+            setFilters({ department: "ALL", dateFrom: "", dateTo: "" })
+          }
+          className="px-4 py-2 rounded-lg border-2 border-gray-400 text-gray-500 hover:bg-gray-100"
+        >
+          Reset
+        </button>
+      </div>
 
       {/* DATA */}
       <div className="flex flex-col gap-4 md:pe-5">
@@ -216,6 +228,8 @@ export const RecruitmentPage = () => {
               data: currentRecruitments,
               type: "recruitment"
             }}
+            onDelete={handleDelete}
+            onEdit={setEditingRecruitment}
           />
         </ListContainer>
 
@@ -240,10 +254,9 @@ export const RecruitmentPage = () => {
                     key={pageNumber}
                     onClick={() => handlePageChange(pageNumber)}
                     className={`w-10 h-10 flex items-center justify-center rounded-lg font-bold border-2 transition-all
-                      ${
-                        isActive
-                          ? "bg-gray-500 border-gray-500 text-white scale-110"
-                          : "border-gray-500 text-gray-500 hover:bg-gray-100"
+                      ${isActive
+                        ? "bg-gray-500 border-gray-500 text-white scale-110"
+                        : "border-gray-500 text-gray-500 hover:bg-gray-100"
                       }`}
                   >
                     {pageNumber}
@@ -262,6 +275,122 @@ export const RecruitmentPage = () => {
           </div>
         )}
       </div>
+
+      {/* CREATE DIALOG */}
+      {openCreate && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 mt-[50px]">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md max-h-[80vh] overflow-y-auto">
+            <h2 className="text-xl font-bold mb-4">Thêm tuyển dụng</h2>
+            <div className="flex flex-col gap-3">
+              <div>
+                <label className="block text-sm font-semibold mb-1">Vị trí (Job title)</label>
+                <input
+                  type="text"
+                  className="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  value={formData.jobtitle}
+                  onChange={(e) => setFormData({ ...formData, jobtitle: e.target.value })}
+                  placeholder="e.g. Frontend Developer"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold mb-1">Phòng ban (Department)</label>
+                <select
+                  className="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  value={formData.departmentID}
+                  onChange={(e) => setFormData({ ...formData, departmentID: e.target.value })}
+                >
+                  <option value="">-- Chọn phòng ban --</option>
+                  {departmentState?.data?.map((dept) => (
+                    <option key={dept._id} value={dept._id}>
+                      {dept.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-semibold mb-1">Mô tả (Description)</label>
+                <textarea
+                  className="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-[100px]"
+                  value={formData.description}
+                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                  placeholder="Job details..."
+                />
+              </div>
+            </div>
+            <div className="flex justify-end gap-2 mt-5">
+              <button
+                onClick={() => setOpenCreate(false)}
+                className="px-4 py-2 border rounded-lg text-gray-600 hover:bg-gray-100"
+              >
+                Hủy
+              </button>
+              <button
+                onClick={handleCreate}
+                className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600"
+              >
+                Tạo
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* EDIT DIALOG */}
+      {editingRecruitment && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 mt-[50px]">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md max-h-[80vh] overflow-y-auto">
+            <h2 className="text-xl font-bold mb-4">Sửa tuyển dụng</h2>
+            <div className="flex flex-col gap-3">
+              <div>
+                <label className="block text-sm font-semibold mb-1">Vị trí</label>
+                <input
+                  type="text"
+                  className="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  value={editingRecruitment.jobtitle}
+                  onChange={(e) => setEditingRecruitment({ ...editingRecruitment, jobtitle: e.target.value })}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold mb-1">Mô tả</label>
+                <textarea
+                  className="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-[100px]"
+                  value={editingRecruitment.description}
+                  onChange={(e) => setEditingRecruitment({ ...editingRecruitment, description: e.target.value })}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold mb-1">Phòng ban</label>
+                <select
+                  className="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  value={editingRecruitment.departmentID || editingRecruitment.department?._id || ""}
+                  onChange={(e) => setEditingRecruitment({ ...editingRecruitment, departmentID: e.target.value })}
+                >
+                  <option value="">-- Chọn phòng ban --</option>
+                  {departmentState?.data?.map((dept) => (
+                    <option key={dept._id} value={dept._id}>
+                      {dept.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+            <div className="flex justify-end gap-2 mt-5">
+              <button
+                onClick={() => setEditingRecruitment(null)}
+                className="px-4 py-2 border rounded-lg text-gray-600 hover:bg-gray-100"
+              >
+                Hủy
+              </button>
+              <button
+                onClick={handleUpdate}
+                className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+              >
+                Cập nhật
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

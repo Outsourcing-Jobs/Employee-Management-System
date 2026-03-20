@@ -1,11 +1,17 @@
 import { Applicant } from "../models/Applicant.model.js";
+import { Recruitment } from "../models/Recruitment.model.js";
 
 export const HandleCreateApplicant = async (req, res) => {
   try {
-    const { firstname, lastname, email, contactnumber, appliedrole } = req.body;
+    const { firstname, lastname, email, contactnumber, appliedrole, recruitmentID } = req.body;
 
-    if (!firstname || !lastname || !email || !contactnumber || !appliedrole) {
-      throw new Error("Tất cả các trường thông tin là bắt buộc");
+    if (!firstname || !lastname || !email || !contactnumber || !appliedrole || !recruitmentID) {
+      throw new Error("Tất cả các trường thông tin là bắt buộc, vui lòng chọn vị trí tuyển dụng");
+    }
+
+    const recruitment = await Recruitment.findById(recruitmentID);
+    if (!recruitment) {
+       return res.status(404).json({ success: false, message: "Không tìm thấy thông tin đợt tuyển dụng" });
     }
 
     const applicant = await Applicant.findOne({
@@ -28,8 +34,12 @@ export const HandleCreateApplicant = async (req, res) => {
       email,
       contactnumber,
       appliedrole,
+      recruitmentID,
       organizationID: req.ORGID,
     });
+
+    recruitment.application.push(newApplicant._id);
+    await recruitment.save();
 
     res
       .status(201)
@@ -141,6 +151,12 @@ export const HandleDeleteApplicant = async (req, res) => {
       return res
         .status(404)
         .json({ success: false, message: "Không tìm thấy ứng viên để xóa" });
+    }
+
+    if (deletedApplicant.recruitmentID) {
+      await Recruitment.findByIdAndUpdate(deletedApplicant.recruitmentID, {
+        $pull: { application: deletedApplicant._id }
+      });
     }
 
     return res

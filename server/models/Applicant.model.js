@@ -29,6 +29,11 @@ const ApplicantSchema = new Schema({
         type: String,
         required: true
     },
+    recruitmentID: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Recruitment",
+        required: true
+    },
     recruitmentstatus: {
         type: String,
         enum: ['Conduct-Interview', 'Rejected', 'Pending', 'Interview Completed', 'Not Specified'],

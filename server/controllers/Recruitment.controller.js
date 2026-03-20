@@ -3,9 +3,9 @@ import { Applicant } from "../models/Applicant.model.js"
 
 export const HandleCreateRecruitment = async (req, res) => {
     try {
-        const { jobtitle, description } = req.body
+        const { jobtitle, description, departmentID } = req.body
 
-        if (!jobtitle || !description) {
+        if (!jobtitle || !description || !departmentID) {
             return res.status(400).json({ success: false, message: "Tất cả các trường thông tin là bắt buộc" })
         }
 
@@ -18,6 +18,7 @@ export const HandleCreateRecruitment = async (req, res) => {
         const newRecruitment = await Recruitment.create({
             jobtitle,
             description,
+            department: departmentID,
             organizationID: req.ORGID
         })
 

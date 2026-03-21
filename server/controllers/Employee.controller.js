@@ -1,6 +1,13 @@
 import { Department } from "../models/Department.model.js";
 import { Employee } from "../models/Employee.model.js";
 import { Organization } from "../models/Organization.model.js";
+import { Attendance } from "../models/Attendance.model.js";
+import { Salary } from "../models/Salary.model.js";
+import { Leave } from "../models/Leave.model.js";
+import { GenerateRequest } from "../models/GenerateRequest.model.js";
+import { UserNotification } from "../models/UserNotification.model.js";
+import { Notice } from "../models/Notice.model.js";
+import { BaseSalary } from "../models/BaseSalary.model.js";
 
 export const HandleAllEmployees = async (req, res) => {
   try {
@@ -132,35 +139,44 @@ export const HandleEmployeeDelete = async (req, res) => {
         .json({ success: false, message: "Không tìm thấy nhân viên" });
     }
 
+    // 1. Remove employee from Department
     const department = await Department.findById(employee.department);
-
     if (department) {
-      department.employees.splice(department.employees.indexOf(employeeId), 1);
+      department.employees.pull(employeeId);
       await department.save();
     }
 
+    // 2. Remove employee from Organization
     const organization = await Organization.findById(employee.organizationID);
-
-    if (!organization) {
-      return res
-        .status(404)
-        .json({ success: false, message: "Không tìm thấy tổ chức" });
+    if (organization) {
+      organization.employees.pull(employeeId);
+      await organization.save();
     }
 
-    organization.employees.splice(
-      organization.employees.indexOf(employeeId),
-      1,
+    // 3. Delete related records
+    await Attendance.deleteMany({ employee: employeeId });
+    await Salary.deleteMany({ employee: employeeId });
+    await Leave.deleteMany({ employee: employeeId });
+    await GenerateRequest.deleteMany({ employee: employeeId });
+    await UserNotification.deleteMany({ employee: employeeId });
+    await BaseSalary.deleteMany({ employee: employeeId });
+
+    // 4. Update Notices: Remove employee from audience list
+    await Notice.updateMany(
+      { employee: employeeId },
+      { $pull: { employee: employeeId } },
     );
 
-    await organization.save();
+    // 5. Delete the Employee record itself
     await employee.deleteOne();
 
     return res.status(200).json({
       success: true,
-      message: "Xóa nhân viên thành công",
+      message: "Xóa nhân viên và các dữ liệu liên quan thành công",
       type: "EmployeeDelete",
     });
   } catch (error) {
+    console.error("Error in HandleEmployeeDelete:", error);
     return res
       .status(500)
       .json({ success: false, error: error, message: "Lỗi máy chủ nội bộ" });

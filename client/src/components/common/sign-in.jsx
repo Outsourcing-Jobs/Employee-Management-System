@@ -1,7 +1,10 @@
+import { useState } from "react"
 import { ErrorPopup } from "./error-popup"
 import { Link } from "react-router-dom"
+import { Eye, EyeOff } from "lucide-react"
 
 export const SignIn = ({ image, handlesigninform, handlesigninsubmit, targetedstate, statevalue, redirectpath }) => {
+    const [showPassword, setShowPassword] = useState(false)
     return (
         <>
             {targetedstate.error.status ? <ErrorPopup error={targetedstate.error.message} /> : null}
@@ -52,17 +55,24 @@ export const SignIn = ({ image, handlesigninform, handlesigninsubmit, targetedst
                                     </Link>
                                 </div>
                             </div>
-                            <div className="mt-2">
+                            <div className="mt-2 relative">
                                 <input
                                     id="password"
                                     name="password"
-                                    type="password"
+                                    type={showPassword ? "text" : "password"}
                                     required
                                     autoComplete="current-password"
                                     value={statevalue.password}
                                     onChange={handlesigninform}
-                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm/6 p-2"
+                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm/6 p-2 pr-10"
                                 />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-600 focus:outline-none"
+                                >
+                                    {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                                </button>
                             </div>
                         </div>
 

@@ -11,22 +11,22 @@ export const SignIn = ({ image, handlesigninform, handlesigninsubmit, targetedst
             <div className="flex min-h-full flex-1 min-[200px]:flex-col md:flex-row md:items-center justify-center px-6 py-12 lg:px-8 md:gap-5">
 
                 <div className="sm:mx-auto sm:w-full sm:max-w-sm lg:mx-10">
-                <Link to="/">
-                    <img
-                        alt="Your Company"
-                        src={image}
-                        className="w-auto h-auto mx-auto"
-                    />
+                    <Link to="/">
+                        <img
+                            alt="Your Company"
+                            src={image}
+                            className="w-auto h-auto mx-auto"
+                        />
                     </Link>
                 </div>
                 <div className="my-5 sm:mx-auto sm:w-full sm:max-w-sm lg:mx-10">
                     <h2 className="mb-5 font-bold tracking-tight text-center text-gray-900 text-2xl/9">
-                    Đăng nhập vào tài khoản
+                        Đăng nhập vào tài khoản
                     </h2>
                     <form className="space-y-6" onSubmit={handlesigninsubmit}>
                         <div>
                             <label htmlFor="email" className="block font-medium text-gray-900 text-sm/6">
-                            Địa chỉ Email
+                                Địa chỉ Email
                             </label>
                             <div className="mt-2">
                                 <input
@@ -42,15 +42,15 @@ export const SignIn = ({ image, handlesigninform, handlesigninsubmit, targetedst
                             </div>
                         </div>
 
-                        <div> 
+                        <div>
                             <div className="flex items-center justify-between">
                                 <label htmlFor="password" className="block font-medium text-gray-900 text-sm/6">
-                                Mật khẩu
+                                    Mật khẩu
                                 </label>
                                 <div className="text-sm">
                                     <Link to={redirectpath}>
                                         <a className="font-semibold text-indigo-600 hover:text-indigo-500">
-                                        Quên mật khẩu? 
+                                            Quên mật khẩu?
                                         </a>
                                     </Link>
                                 </div>
@@ -83,6 +83,16 @@ export const SignIn = ({ image, handlesigninform, handlesigninsubmit, targetedst
                             >
                                 Đăng nhập
                             </button>
+                        </div>
+                        <div className="flex items-center justify-center gap-2 sing-in">
+                            <p className="text-gray-600 min-[250px]:text-xs sm:text-sm">
+                                Chưa có tài khoản?
+                            </p>
+                            <Link to={"/auth/HR/signup"}>
+                                <button className="text-blue-700 font-bold hover:underline bg-transparent p-0 min-[250px]:text-xs sm:text-sm md:text-md">
+                                    Đăng ký
+                                </button>
+                            </Link>
                         </div>
                     </form>
                 </div>

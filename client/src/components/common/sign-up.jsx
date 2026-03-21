@@ -1,5 +1,7 @@
+import { useState } from "react";
 import { ErrorPopup } from "./error-popup";
 import { useSelector } from "react-redux";
+import { Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import EmployeeWelcome from "../../assets/Employee-Welcome.jpg";
@@ -10,6 +12,8 @@ export const SignUP = ({
   stateformdata,
   errorpopup,
 }) => {
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const employeestate = useSelector((state) => state.HRReducer);
   return (
     <>
@@ -212,29 +216,47 @@ export const SignUP = ({
               </div>
               <div className="flex flex-col label-field-pair">
                 <label htmlFor="textpassword">Mật khẩu</label>
-                <input
-                  id="textpassword"
-                  name="textpassword"
-                  type="text"
-                  required
-                  autoComplete="textpassword"
-                  value={stateformdata.textpassword}
-                  onChange={handlesignupform}
-                  className="w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-600 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm/6 p-2"
-                />
+                <div className="relative">
+                  <input
+                    id="textpassword"
+                    name="textpassword"
+                    type={showPassword ? "text" : "password"}
+                    required
+                    autoComplete="textpassword"
+                    value={stateformdata.textpassword}
+                    onChange={handlesignupform}
+                    className="w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-600 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm/6 p-2 pr-10"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-600 focus:outline-none"
+                  >
+                    {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                  </button>
+                </div>
               </div>
               <div className="flex flex-col label-field-pair">
                 <label htmlFor="password">Xác nhận mật khẩu</label>
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  required
-                  autoComplete="password"
-                  value={stateformdata.password}
-                  onChange={handlesignupform}
-                  className="w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-600 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm/6 p-2"
-                />
+                <div className="relative">
+                  <input
+                    id="password"
+                    name="password"
+                    type={showConfirmPassword ? "text" : "password"}
+                    required
+                    autoComplete="password"
+                    value={stateformdata.password}
+                    onChange={handlesignupform}
+                    className="w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-600 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm/6 p-2 pr-10"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-600 focus:outline-none"
+                  >
+                    {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                  </button>
+                </div>
               </div>
             </div>
 

@@ -42,10 +42,10 @@ const SalarySchema = new Schema({
     duedate: {
         type: Date,
         required: true,
-        validate: {
-            validator: (v) => v >= new Date(),
-            message: "Due date must be in the future",
-        }
+        // validate: {
+        //     validator: (v) => v >= new Date(),
+        //     message: "Due date must be in the future",
+        // }
     },
     paymentdate: {
         type: Date,
